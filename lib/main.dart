@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'themes/themes.dart';
-import 'homeScreen.dart';
+import "package:flutter/material.dart";
+import "themes/themes.dart";
+import "home_screen.dart";
 
 // 🏁 START HERE 🏁
 void main() {
@@ -14,8 +14,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomeScreen(),
-      title: 'Home',
+      home: const HomeScreen(),
+      title: "Home",
       theme: Themes.lightTheme,
       darkTheme: Themes.darkTheme,
       themeMode: ThemeMode.light,
