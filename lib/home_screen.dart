@@ -20,7 +20,7 @@ class HomeScreen extends StatelessWidget {
         shadowColor: Colors.black,
         child: Center(
           child: Text(
-            "Nav Bar Placeholder Text",
+            'Nav Bar Placeholder Text',
             style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
           ),
         ),
@@ -33,7 +33,7 @@ class HomeScreen extends StatelessWidget {
           children: [
             Container(
               decoration: BoxDecoration(
-                color: Themes().darkAccent,
+                color: Theme.of(context).colorScheme.primaryContainer,
                 borderRadius: const BorderRadius.all(Radius.elliptical(20, 20)),
                 boxShadow: const [
                   BoxShadow(blurRadius: 10)
@@ -46,7 +46,7 @@ class HomeScreen extends StatelessWidget {
 
             Container(
               decoration: BoxDecoration(
-                color: Themes().darkAccent,
+                color: Theme.of(context).colorScheme.primaryContainer,
                 borderRadius: const BorderRadius.all(Radius.elliptical(20, 20)),
                 boxShadow: const [
                   BoxShadow(blurRadius: 10)
