@@ -1,4 +1,5 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
+import 'package:wolfpackapp/themes/themes.dart';
 
 // Home Screen Page; Holds The Many Crucial Widgets and Announcements
 class HomeScreen extends StatelessWidget {
@@ -9,11 +10,9 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            "Home",
-            style: TextStyle(color: Theme.of(context).colorScheme.onSurface)
+          'Home',
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
         ),
-        shadowColor: Colors.black,
-        elevation: 5,
         centerTitle: true,
       ),
 
@@ -30,7 +29,39 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
 
-      body: const Text("Yar"),
+      body: SingleChildScrollView(
+        controller: ScrollController(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: Themes().darkAccent,
+                borderRadius: const BorderRadius.all(Radius.elliptical(20, 20)),
+                boxShadow: const [
+                  BoxShadow(blurRadius: 10)
+                ],
+              ),
+              height: 300,
+              margin: const EdgeInsets.only(top: 50, left: 30, right: 30,),
+              padding: const EdgeInsets.all(50),
+            ),
+
+            Container(
+              decoration: BoxDecoration(
+                color: Themes().darkAccent,
+                borderRadius: const BorderRadius.all(Radius.elliptical(20, 20)),
+                boxShadow: const [
+                  BoxShadow(blurRadius: 10)
+                ],
+              ),
+              height: 600,
+              margin: const EdgeInsets.all(60),
+              padding: const EdgeInsets.all(50),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -1,4 +1,4 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 
 class Themes {
   // Light Theme Colours
@@ -7,9 +7,10 @@ class Themes {
   Color lightAppBar = const Color.fromRGBO(238, 238, 238, 1.0);
 
   // Dark Theme Colours
-  Color darkPrimaryColour = const Color.fromRGBO(23, 23, 23, 1.0);
-  Color darkBackgroundColour = const Color.fromRGBO(40, 40, 40, 1.0);
-  Color darkAppBar = const Color.fromRGBO(26, 26, 26, 1.0);
+  Color darkPrimaryColour = const Color.fromRGBO(0, 0, 0, 1.0);
+  Color darkBackgroundColour = const Color.fromRGBO(47, 47, 47, 1.0);
+  Color darkAppBar = const Color.fromRGBO(23, 23, 23, 1.0);
+  Color darkAccent = const Color.fromRGBO(36, 36, 37, 1.0);
 
   /*
   ##################################
@@ -28,7 +29,7 @@ class Themes {
         backgroundColor: _themes.lightAppBar,
         toolbarHeight: 70,
         shape:
-            const BorderDirectional(bottom: BorderSide(color: Colors.black))),
+        const BorderDirectional(bottom: BorderSide(color: Colors.black))),
   );
 
   /*
@@ -47,7 +48,7 @@ class Themes {
         backgroundColor: _themes.darkAppBar,
         toolbarHeight: 70,
         shape:
-            const BorderDirectional(bottom: BorderSide(color: Colors.black))),
+        const BorderDirectional(bottom: BorderSide(color: Colors.black))),
   );
 }
 
