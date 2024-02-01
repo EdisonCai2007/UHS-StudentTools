@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:wolfpackapp/themes/themes.dart';
 
 class ScheduleOverviewContainer extends Container{
+  ScheduleOverviewContainer({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Themes().darkAccent,
+        color: Theme.of(context).colorScheme.primaryContainer,
         borderRadius: const BorderRadius.all(Radius.elliptical(20, 20)),
         boxShadow: const [
           BoxShadow(blurRadius: 10)

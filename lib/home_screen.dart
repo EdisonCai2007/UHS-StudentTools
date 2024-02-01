@@ -30,13 +30,14 @@ class HomeScreen extends StatelessWidget {
 
       body: SingleChildScrollView(
         controller: ScrollController(),
+
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ScheduleOverviewContainer(),
             Container(
               decoration: BoxDecoration(
-                color: Themes().darkAccent,
+                color: Theme.of(context).colorScheme.primaryContainer,
                 borderRadius: const BorderRadius.all(Radius.elliptical(20, 20)),
                 boxShadow: const [
                   BoxShadow(blurRadius: 10)
