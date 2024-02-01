@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:wolfpackapp/screens/settings_screen.dart';
 import 'themes/themes.dart';
-import 'home_screen.dart';
+import 'screens/home_screen.dart';
 
 // 🏁 START HERE 🏁
 void main() {
@@ -15,8 +16,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+
       home: const HomeScreen(),
+      routes: {
+        '/homeScreen': (context) => const HomeScreen(),
+        '/settingsScreen': (context) => const SettingsScreen()
+      },
+
       title: 'Home',
+
       theme: Themes.lightTheme,
       darkTheme: Themes.darkTheme,
       themeMode: ThemeMode.dark,

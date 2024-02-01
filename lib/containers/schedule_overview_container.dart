@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:wolfpackapp/themes/themes.dart';
 
 class ScheduleOverviewContainer extends Container{
   ScheduleOverviewContainer({super.key});

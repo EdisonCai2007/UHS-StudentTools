@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wolfpackapp/themes/themes.dart';
-import 'package:wolfpackapp/themes/theme_manager.dart';
-import 'package:wolfpackapp/schedule_overview_container.dart';
+import 'package:wolfpackapp/containers/schedule_overview_container.dart';
+import 'package:wolfpackapp/menu_drawer.dart';
 
 // Home Screen Page; Holds The Many Crucial Widgets and Announcements
 class HomeScreen extends StatelessWidget {
@@ -11,6 +10,9 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
         title: Text(
           'Home',
           style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
@@ -22,11 +24,13 @@ class HomeScreen extends StatelessWidget {
         shadowColor: Colors.black,
         child: Center(
           child: Text(
-            "Nav Bar Placeholder Text",
+            'Nav Bar Placeholder Text',
             style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
           ),
         ),
       ),
+
+      drawer: const MenuDrawer(),
 
       body: SingleChildScrollView(
         controller: ScrollController(),
