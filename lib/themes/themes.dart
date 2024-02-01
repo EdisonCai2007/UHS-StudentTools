@@ -5,6 +5,7 @@ class Themes {
   Color lightPrimaryColour = const Color.fromRGBO(255, 255, 255, 1.0);
   Color lightBackgroundColour = const Color.fromRGBO(255, 255, 255, 1.0);
   Color lightAppBar = const Color.fromRGBO(238, 238, 238, 1.0);
+  Color lightAccent = const Color.fromRGBO(237, 237, 237, 1.0);
 
   // Dark Theme Colours
   Color darkPrimaryColour = const Color.fromRGBO(0, 0, 0, 1.0);
@@ -22,6 +23,7 @@ class Themes {
     useMaterial3: false,
     colorScheme: const ColorScheme.light().copyWith(
       primary: _themes.lightPrimaryColour,
+      primaryContainer: _themes.lightAccent,
       background: _themes.lightBackgroundColour,
     ),
     // AppBar Theme
@@ -29,7 +31,12 @@ class Themes {
         backgroundColor: _themes.lightAppBar,
         toolbarHeight: 70,
         shape:
-        const BorderDirectional(bottom: BorderSide(color: Colors.black))),
+            const BorderDirectional(bottom: BorderSide(color: Colors.black))),
+    bottomAppBarTheme: BottomAppBarTheme(
+      color: _themes.lightAppBar,
+      height: 70,
+      padding: const EdgeInsets.all(20),
+    ),
   );
 
   /*
@@ -41,6 +48,7 @@ class Themes {
     useMaterial3: false,
     colorScheme: const ColorScheme.dark().copyWith(
       primary: _themes.darkPrimaryColour,
+      primaryContainer: _themes.darkAccent,
       background: _themes.darkBackgroundColour,
     ),
     // AppBar Theme
@@ -48,13 +56,12 @@ class Themes {
         backgroundColor: _themes.darkAppBar,
         toolbarHeight: 70,
         shape:
-        const BorderDirectional(bottom: BorderSide(color: Colors.black))),
-      bottomAppBarTheme:
-      BottomAppBarTheme(
-        color: _themes.darkAppBar,
-        height: 70,
-        padding: const EdgeInsets.all(20),
-      ),
+            const BorderDirectional(bottom: BorderSide(color: Colors.black))),
+    bottomAppBarTheme: BottomAppBarTheme(
+      color: _themes.darkAppBar,
+      height: 70,
+      padding: const EdgeInsets.all(20),
+    ),
   );
 }
 
