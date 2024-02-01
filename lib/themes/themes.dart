@@ -49,6 +49,12 @@ class Themes {
         toolbarHeight: 70,
         shape:
         const BorderDirectional(bottom: BorderSide(color: Colors.black))),
+      bottomAppBarTheme:
+      BottomAppBarTheme(
+        color: _themes.darkAppBar,
+        height: 70,
+        padding: const EdgeInsets.all(20),
+      ),
   );
 }
 

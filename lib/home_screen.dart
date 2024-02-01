@@ -17,10 +17,7 @@ class HomeScreen extends StatelessWidget {
       ),
 
       bottomNavigationBar: BottomAppBar(
-        color: Theme.of(context).colorScheme.primary,
         shadowColor: Colors.black,
-        elevation: 50,
-        height: 60,
         child: Center(
           child: Text(
             "Nav Bar Placeholder Text",
