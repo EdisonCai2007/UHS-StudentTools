@@ -9,9 +9,10 @@ class Themes {
 
   // Dark Theme Colours
   Color darkPrimaryColour = const Color.fromRGBO(0, 0, 0, 1.0);
-  Color darkBackgroundColour = const Color.fromRGBO(47, 47, 47, 1.0);
+  Color darkBackgroundColour = const Color.fromRGBO(
+      36, 38, 42, 1.0);
   Color darkAppBar = const Color.fromRGBO(23, 23, 23, 1.0);
-  Color darkAccent = const Color.fromRGBO(36, 36, 37, 1.0);
+  Color darkAccent = const Color.fromRGBO(51, 51, 61, 1.0);
 
   /*
   ##################################
