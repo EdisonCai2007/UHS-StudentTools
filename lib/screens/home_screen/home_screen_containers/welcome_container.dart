@@ -21,6 +21,7 @@ class WelcomeContainer extends Container{
             // Displays "Month Day, Year"
             Text(date,style: GoogleFonts.lato(fontSize: 20,fontWeight: FontWeight.w500)),
             const SizedBox(height: 3),
+
             //Displays Day of the Week
             Text(day,style: GoogleFonts.lato(fontSize: 70,fontWeight: FontWeight.w900)),
             const SizedBox(height: 2),
