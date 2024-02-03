@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 
 class Themes {
   // Light Theme Colours
   Color lightPrimaryColour = const Color.fromRGBO(255, 255, 255, 1.0);
   Color lightBackgroundColour = const Color.fromRGBO(255, 255, 255, 1.0);
   Color lightAppBar = const Color.fromRGBO(238, 238, 238, 1.0);
-  Color lightAccent = const Color.fromRGBO(237, 237, 237, 1.0);
+  Color lightContainer = const Color.fromRGBO(237, 237, 237, 1.0);
+  Color lightAccent = const Color.fromRGBO(213, 75, 75, 1.0);
 
   // Dark Theme Colours
   Color darkPrimaryColour = const Color.fromRGBO(0, 0, 0, 1.0);
-  Color darkBackgroundColour = const Color.fromRGBO(
-      36, 38, 42, 1.0);
+  Color darkBackgroundColour = const Color.fromRGBO(36, 38, 42, 1.0);
   Color darkAppBar = const Color.fromRGBO(23, 23, 23, 1.0);
-  Color darkAccent = const Color.fromRGBO(51, 51, 61, 1.0);
+  Color darkContainer = const Color.fromRGBO(51, 51, 61, 1.0);
+  Color darkAccent = const Color.fromRGBO(176, 18, 18, 1.0);
 
   /*
   ##################################
@@ -24,7 +27,8 @@ class Themes {
     useMaterial3: false,
     colorScheme: const ColorScheme.light().copyWith(
       primary: _themes.lightPrimaryColour,
-      primaryContainer: _themes.lightAccent,
+      primaryContainer: _themes.lightContainer,
+      secondary: _themes.lightAccent,
       background: _themes.lightBackgroundColour,
     ),
     // AppBar Theme
@@ -49,7 +53,8 @@ class Themes {
     useMaterial3: false,
     colorScheme: const ColorScheme.dark().copyWith(
       primary: _themes.darkPrimaryColour,
-      primaryContainer: _themes.darkAccent,
+      primaryContainer: _themes.darkContainer,
+      secondary: _themes.darkAccent,
       background: _themes.darkBackgroundColour,
     ),
     // AppBar Theme

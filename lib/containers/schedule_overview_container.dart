@@ -13,7 +13,7 @@ class ScheduleOverviewContainer extends Container{
           BoxShadow(blurRadius: 10)
         ],
       ),
-      height: 300,
+      height: 250,
       margin: const EdgeInsets.only(top: 50, left: 30, right: 30,),
       padding: const EdgeInsets.all(50),
     );

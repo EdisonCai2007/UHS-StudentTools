@@ -29,8 +29,7 @@ class MyApp extends StatelessWidget {
         '/homeScreen': (context) => const HomeScreen(),
         '/settingsScreen': (context) => const SettingsScreen()
       },
-
-      title: 'Home',
+      title: 'UHus App',
 
       theme: Provider.of<ThemeManager>(context).themeData,
     );

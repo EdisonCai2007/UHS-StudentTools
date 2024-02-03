@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wolfpackapp/containers/welcome_container.dart';
 import 'package:wolfpackapp/containers/daily_weather_overview_container.dart';
 import 'package:wolfpackapp/containers/schedule_overview_container.dart';
 import 'package:wolfpackapp/containers/teachassist_overview_container.dart';
 import 'package:wolfpackapp/menu_drawer.dart';
 import 'package:wolfpackapp/themes/theme_manager.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 
 /*
 ########################
@@ -23,7 +26,8 @@ class HomeScreen extends StatelessWidget {
       ####################
       */
       appBar: AppBar(
-        title: const Text('Home'),
+        title: Text('Home',style: GoogleFonts.lato(fontSize: 25)),
+        foregroundColor: Theme.of(context).colorScheme.onSurface,
         centerTitle: true,
         actions: [
           IconButton(
@@ -33,7 +37,6 @@ class HomeScreen extends StatelessWidget {
                   },
               icon: const Icon(Icons.dark_mode))
         ],
-        foregroundColor: Theme.of(context).colorScheme.onSurface,
       ),
 
       /*
@@ -70,6 +73,17 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            // Welcome Container
+            WelcomeContainer(),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Container(
+                height: 10,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+            ),
+
             // Schedule & Time Overview Container
             ScheduleOverviewContainer(),
 
@@ -82,13 +96,13 @@ class HomeScreen extends StatelessWidget {
 
                   // Daily Weather Overview Container
                   Expanded(
-                    flex: 2,
+                    flex: 4,
                     child: DailyWeatherOverviewContainer(),
                   ),
 
                   // Teach Assist Overview Container
                   Expanded(
-                    flex: 3,
+                    flex: 5,
                     child: TeachAssistOverviewContainer(),
                   ),
                 ],
