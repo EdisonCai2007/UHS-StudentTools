@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wolfpackapp/containers/welcome_container.dart';
-import 'package:wolfpackapp/containers/daily_weather_overview_container.dart';
-import 'package:wolfpackapp/containers/schedule_overview_container.dart';
-import 'package:wolfpackapp/containers/teachassist_overview_container.dart';
-import 'package:wolfpackapp/menu_drawer.dart';
-import 'package:wolfpackapp/themes/theme_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '/themes/theme_manager.dart';
+
+import '/menu_drawer.dart';
+
+import '/containers/welcome_container.dart';
+import '/containers/daily_weather_overview_container.dart';
+import '/containers/schedule_overview_container.dart';
+import '/containers/teachassist_overview_container.dart';
 
 
 /*
