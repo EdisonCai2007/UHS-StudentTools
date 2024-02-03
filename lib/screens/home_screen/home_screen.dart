@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import '/themes/theme_manager.dart';
 
 import '/menu_drawer.dart';
 import 'home_screen_containers/welcome_container.dart';
@@ -32,13 +29,6 @@ class HomeScreen extends StatelessWidget {
         title: Text('Home', style: GoogleFonts.lato(fontSize: 25)),
         foregroundColor: Theme.of(context).colorScheme.onSurface,
         centerTitle: true,
-        actions: [
-          IconButton(
-              onPressed: () => {
-                Provider.of<ThemeManager>(context, listen: false).toggleThemeMode(),
-              },
-              icon: const Icon(Icons.dark_mode))
-        ],
       ),
 
       /*
@@ -95,7 +85,6 @@ class HomeScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-
                   // Daily Weather Overview Container
                   Expanded(
                     flex: 4,
