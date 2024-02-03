@@ -5,8 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import '/themes/theme_manager.dart';
 
 import '/menu_drawer.dart';
+import 'home_screen_containers/welcome_container.dart';
 
-import '/containers/welcome_container.dart';
 import '/containers/daily_weather_overview_container.dart';
 import '/containers/schedule_overview_container.dart';
 import '/containers/teachassist_overview_container.dart';
@@ -29,15 +29,14 @@ class HomeScreen extends StatelessWidget {
       ####################
       */
       appBar: AppBar(
-        title: Text('Home',style: GoogleFonts.lato(fontSize: 25)),
+        title: Text('Home', style: GoogleFonts.lato(fontSize: 25)),
         foregroundColor: Theme.of(context).colorScheme.onSurface,
         centerTitle: true,
         actions: [
           IconButton(
               onPressed: () => {
-                    Provider.of<ThemeManager>(context, listen: false)
-                        .toggleThemeMode(),
-                  },
+                Provider.of<ThemeManager>(context, listen: false).toggleThemeMode(),
+              },
               icon: const Icon(Icons.dark_mode))
         ],
       ),
