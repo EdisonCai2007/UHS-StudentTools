@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:wolfpackapp/screens/settings_screen.dart';
-import 'package:wolfpackapp/themes/themes.dart';
-import 'package:wolfpackapp/themes/theme_manager.dart';
 import 'package:provider/provider.dart';
-import 'screens/home_screen.dart';
 
-// 🏁 START HERE 🏁
+import 'themes/theme_manager.dart';
+
+import 'screens/settings_screen/settings_screen.dart';
+import 'screens/home_screen/home_screen.dart';
+
+
+// - 🏁 START HERE 🏁 -
 void main() {
   runApp(
     ChangeNotifierProvider(
@@ -29,7 +31,7 @@ class MyApp extends StatelessWidget {
         '/homeScreen': (context) => const HomeScreen(),
         '/settingsScreen': (context) => const SettingsScreen()
       },
-      title: 'UHus App',
+      title: 'UHS App',
 
       theme: Provider.of<ThemeManager>(context).themeData,
     );
