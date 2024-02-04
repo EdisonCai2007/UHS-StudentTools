@@ -4,10 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 import '/menu_drawer.dart';
 import 'home_screen_containers/welcome_container.dart';
 
-import '/containers/daily_weather_overview_container.dart';
-import '/containers/schedule_overview_container.dart';
-import '/containers/teachassist_overview_container.dart';
-
+import 'home_screen_containers/daily_weather_overview_container.dart';
+import 'home_screen_containers/schedule_overview_container.dart';
+import 'home_screen_containers/teachassist_overview_container.dart';
 
 /*
 ########################
@@ -62,42 +61,67 @@ class HomeScreen extends StatelessWidget {
       */
       body: SingleChildScrollView(
         controller: ScrollController(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+        child: Stack(
           children: [
-            // Welcome Container
-            WelcomeContainer(),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
+            Positioned(
+              top: -250,
+              right: -120,
               child: Container(
-                height: 10,
-                color: Theme.of(context).colorScheme.secondary,
+                height: 600,
+                width: 500,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color:
+                      Theme.of(context).colorScheme.secondary.withOpacity(0.2),
+                  //backgroundBlendMode: BlendMode.color,
+                  boxShadow: [
+                    BoxShadow(
+                        color: Theme.of(context).colorScheme.secondary,
+                        blurRadius: 150,
+                        blurStyle: BlurStyle.outer)
+                  ],
+                ),
               ),
             ),
 
-            // Schedule & Time Overview Container
-            ScheduleOverviewContainer(),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Welcome Container
+                WelcomeContainer(),
 
-            //Second Row
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Daily Weather Overview Container
-                  Expanded(
-                    flex: 4,
-                    child: DailyWeatherOverviewContainer(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: Container(
+                    height: 10,
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
+                ),
 
-                  // Teach Assist Overview Container
-                  Expanded(
-                    flex: 5,
-                    child: TeachAssistOverviewContainer(),
+                // Schedule & Time Overview Container
+                ScheduleOverviewContainer(),
+
+                //Second Row
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Daily Weather Overview Container
+                      Expanded(
+                        flex: 4,
+                        child: DailyWeatherOverviewContainer(),
+                      ),
+
+                      // Teach Assist Overview Container
+                      Expanded(
+                        flex: 5,
+                        child: TeachAssistOverviewContainer(),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),
