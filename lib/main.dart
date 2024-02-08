@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'themes/theme_manager.dart';
 
+import 'model_teachassist.dart';
 import 'screens/settings_screen/settings_screen.dart';
 import 'screens/home_screen/home_screen.dart';
 
@@ -17,9 +18,24 @@ void main() {
   );
 }
 
+
+
 // MyApp Widget; Holds Themes and Pages
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late Future<TeachAssistMarks> futureTeachAssistMarks;
+
+  @override
+  void initState() {
+    super.initState();
+    futureTeachAssistMarks = fetchMarks();
+  }
 
   @override
   Widget build(BuildContext context) {
