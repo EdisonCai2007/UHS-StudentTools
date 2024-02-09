@@ -7,9 +7,12 @@ import 'model_teachassist.dart';
 import 'screens/settings_screen/settings_screen.dart';
 import 'screens/home_screen/home_screen.dart';
 
+import 'dart:io';
+
 
 // - 🏁 START HERE 🏁 -
 void main() {
+  HttpOverrides.global = MyHttpOverrides();
   runApp(
     ChangeNotifierProvider(
         create: (context) => ThemeManager(),
@@ -18,6 +21,15 @@ void main() {
   );
 }
 
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host,
+          int port) => true;
+  }
+}
 
 
 // MyApp Widget; Holds Themes and Pages

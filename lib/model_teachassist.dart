@@ -1,21 +1,20 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:html';
 
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+
+final String _baseUrl = 'ta.yrdsb.ca';
+final String _charactersPath = '/live/index.php?';
+final Map<String, String> _queryParameters = <String, String>{'username': '348737974', 'password': '5a2rn777'};
+
 Future<TeachAssistMarks> fetchMarks() async {
-  final response = await http.get(
-    Uri.https(
-      'api.pegasis.site',
-      '/yrdsb_ta/getmark_v2',
-        jsonEncode({'number': '123456789', 'password': 'adksfb93'}) as Map<String, dynamic>?,
-    ),
-  );
+  final uri = Uri.https('https://$_baseUrl$_charactersPath${_queryParameters.entries.map((entry) => '${entry.key}=${entry.value}').join('&')}');
+  final response = await http.get(uri);
 
   if (response.statusCode == 200) {
-    return TeachAssistMarks.fromJSON(
-        jsonDecode(response.body) as Map<String, dynamic>);
+    return TeachAssistMarks.fromJSON(jsonDecode(response.body) as Map<String, dynamic>);
   } else {
     print(response.statusCode);
     throw Exception('Failed to load TeachAssist Marks');
@@ -23,51 +22,51 @@ Future<TeachAssistMarks> fetchMarks() async {
 }
 
 class TeachAssistMarks {
-  final String start_time;
-  final String end_time;
+  final String startTime;
+  final String endTime;
   final String code;
   final String name;
   final String block;
   final String room;
-  final String overall_mark;
+  final String overallMark;
   final List assignments;
-  final List weight_table;
+  final List weightTable;
 
   const TeachAssistMarks({
-    required this.start_time,
-    required this.end_time,
+    required this.startTime,
+    required this.endTime,
     required this.code,
     required this.name,
     required this.block,
     required this.room,
-    required this.overall_mark,
+    required this.overallMark,
     required this.assignments,
-    required this.weight_table,
+    required this.weightTable,
   });
 
   factory TeachAssistMarks.fromJSON(Map<String, dynamic> json) {
     return switch (json) {
       {
-        'start_time': String start_time,
-        'end_time': String end_time,
+        'start_time': String startTime,
+        'end_time': String endTime,
         'code': String code,
         'name': String name,
         'block': String block,
         'room': String room,
-        'overall_mark': String overall_mark,
+        'overall_mark': String overallMark,
         'assignments': List assignments,
-        'weight_table': List weight_table,
+        'weight_table': List weightTable,
       } =>
         TeachAssistMarks(
-          start_time: start_time,
-          end_time: end_time,
+          startTime: startTime,
+          endTime: endTime,
           code: code,
           name: name,
           block: block,
           room: room,
-          overall_mark: overall_mark,
+          overallMark: overallMark,
           assignments: assignments,
-          weight_table: weight_table,
+          weightTable: weightTable,
         ),
       _ => throw const FormatException('Failed to load TeachAssist Marks')
     };
