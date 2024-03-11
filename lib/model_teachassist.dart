@@ -6,11 +6,11 @@ import 'package:http/http.dart' as http;
 
 
 final String _baseUrl = 'ta.yrdsb.ca';
-final String _charactersPath = '/live/index.php?';
-final Map<String, String> _queryParameters = <String, String>{'username': '348737974', 'password': '5a2rn777'};
+final String _charactersPath = '/live/index.php';
+final Map<String, String> _queryParameters = <String, String>{'username': 'placeholder', 'password': 'placeholder'};
 
 Future<TeachAssistMarks> fetchMarks() async {
-  final uri = Uri.https('https://$_baseUrl$_charactersPath${_queryParameters.entries.map((entry) => '${entry.key}=${entry.value}').join('&')}');
+  final uri = Uri.https(_baseUrl, _charactersPath, _queryParameters);
   final response = await http.get(uri);
 
   if (response.statusCode == 200) {
