@@ -1,7 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:wolfpackapp/model_weather.dart';
+import 'package:wolfpackapp/models/weather_model.dart';
+import 'package:wolfpackapp/models/weather_service.dart';
 
 class DailyWeatherOverviewContainer extends StatefulWidget {
   const DailyWeatherOverviewContainer({super.key});
@@ -11,7 +12,25 @@ class DailyWeatherOverviewContainer extends StatefulWidget {
 }
 
 class _DailyWeatherOverviewContainerState extends State<DailyWeatherOverviewContainer> {
-  double temperature = WeatherModel().fetchTemperature() as double;
+  WeatherService weatherService = WeatherService();
+  WeatherModel? weather;
+
+  fetchWeather() async {
+    try {
+      var weatherResponse = await weatherService.fetchWeather("markham");
+      setState(() {
+        weather = weatherResponse;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchWeather();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +45,7 @@ class _DailyWeatherOverviewContainerState extends State<DailyWeatherOverviewCont
       padding: const EdgeInsets.all(50),
       child: Column(
         children: [
-          Text("$temperature"),
+          Text("${weather?.temperature.round()}°C")
         ],
       ),
     );
