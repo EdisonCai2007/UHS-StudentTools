@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   http: ^1.2.0
   html: ^0.15.4
+  weather: ^3.1.1
 
 dev_dependencies:
   flutter_test:

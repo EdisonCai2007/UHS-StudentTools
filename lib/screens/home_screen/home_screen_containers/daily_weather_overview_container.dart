@@ -1,7 +1,17 @@
-import 'package:flutter/material.dart';
+import 'dart:async';
 
-class DailyWeatherOverviewContainer extends Container {
-  DailyWeatherOverviewContainer({super.key});
+import 'package:flutter/material.dart';
+import 'package:wolfpackapp/model_weather.dart';
+
+class DailyWeatherOverviewContainer extends StatefulWidget {
+  const DailyWeatherOverviewContainer({super.key});
+
+  @override
+  State<DailyWeatherOverviewContainer> createState() => _DailyWeatherOverviewContainerState();
+}
+
+class _DailyWeatherOverviewContainerState extends State<DailyWeatherOverviewContainer> {
+  double temperature = WeatherModel().fetchTemperature() as double;
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +24,11 @@ class DailyWeatherOverviewContainer extends Container {
       height: 400,
       margin: const EdgeInsets.all(10),
       padding: const EdgeInsets.all(50),
+      child: Column(
+        children: [
+          Text("$temperature"),
+        ],
+      ),
     );
   }
 }
