@@ -8,10 +8,7 @@ class WeatherService {
   final String apiKey = "b339ff60e5a74e53a3f553077025b0f6";
 
   Future<WeatherModel> fetchWeather(String cityName) async {
-    print("$BASEURL?q=$cityName&appid=$apiKey&units=metric");
     final response = await http.get(Uri.parse("$BASEURL?q=$cityName&appid=$apiKey&units=metric"));
-    print(response.statusCode);
-    print(response.body);
     if (response.statusCode == 200) {
       return WeatherModel.fromJSON(jsonDecode(response.body));
     } else {
