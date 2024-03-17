@@ -6,7 +6,7 @@ class Themes {
   Color lightPrimaryColour = const Color.fromRGBO(255, 255, 255, 1.0);
   Color lightBackgroundColour = const Color.fromRGBO(255, 255, 255, 1.0);
   Color lightAppBar = const Color.fromRGBO(238, 238, 238, 1.0);
-  Color lightContainer = const Color.fromRGBO(237, 237, 237, 1.0);
+  Color lightContainer = const Color.fromRGBO(255, 255, 255, 1.0);
   Color lightAccent = const Color.fromRGBO(210, 8, 8, 1.0);
 
   // Dark Theme Colours

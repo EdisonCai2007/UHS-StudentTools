@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'themes/theme_manager.dart';
 
-import 'models/teachassist_model.dart';
+import 'models_services/teachassist_model.dart';
 import 'screens/settings_screen/settings_screen.dart';
 import 'screens/home_screen/home_screen.dart';
 
