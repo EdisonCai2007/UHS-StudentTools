@@ -1,8 +1,8 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:wolfpackapp/models/min_max_temperature_model.dart';
+import 'package:wolfpackapp/models/min_max_temperature_service.dart';
 import 'package:wolfpackapp/models/weather_model.dart';
 import 'package:wolfpackapp/models/weather_service.dart';
 
@@ -14,10 +14,12 @@ class DailyWeatherOverviewContainer extends StatefulWidget {
       _DailyWeatherOverviewContainerState();
 }
 
-class _DailyWeatherOverviewContainerState
-    extends State<DailyWeatherOverviewContainer> {
+class _DailyWeatherOverviewContainerState extends State<DailyWeatherOverviewContainer> {
   WeatherService weatherService = WeatherService();
   WeatherModel? weather;
+
+  MinMaxTemperatureService minMaxTemperatureService = MinMaxTemperatureService();
+  MinMaxTemperatureModel? minMaxTemperature;
 
   fetchWeather() async {
     try {
@@ -30,10 +32,22 @@ class _DailyWeatherOverviewContainerState
     }
   }
 
+  fetchMinMaxTemperature() async {
+    try {
+      var minMaxTemperatureResponse = await minMaxTemperatureService.fetchMinMaxTemperature();
+      setState(() {
+        minMaxTemperature = minMaxTemperatureResponse;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     fetchWeather();
+    fetchMinMaxTemperature();
   }
 
   @override
@@ -64,9 +78,9 @@ class _DailyWeatherOverviewContainerState
             transformAlignment: Alignment.center,
             child: Lottie.asset(weather!.weatherIcon,),
           ),
-          Text("${weather?.temperature.round()}°C",
-              style: GoogleFonts.lato(
-                fontSize: 40, fontWeight: FontWeight.w800)),
+          Text("${weather?.temperature.round()}°C", style: GoogleFonts.lato(fontSize: 40, fontWeight: FontWeight.w800)),
+          Text("Min:  ${minMaxTemperature?.minTemperature.round()}°C", style: GoogleFonts.lato(fontSize: 15, fontWeight: FontWeight.w400)),
+          Text("Max:  ${minMaxTemperature?.maxTemperature.round()}°C", style: GoogleFonts.lato(fontSize: 15, fontWeight: FontWeight.w400))
         ],
       ),
     );
