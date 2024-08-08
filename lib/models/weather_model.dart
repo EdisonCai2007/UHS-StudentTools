@@ -15,7 +15,7 @@ class WeatherModel {
   factory WeatherModel.fromJSON(Map<String, dynamic> json) {
     int fetchedWeatherCondition = json["weather"][0]["id"];
     String _weatherCondition;
-    String _weatherIcon;
+    String _weatherIcon = "assets/weather_sun.json";
 
     if (fetchedWeatherCondition >= 200 && fetchedWeatherCondition < 300) {
       _weatherCondition = "Thunderstorm";

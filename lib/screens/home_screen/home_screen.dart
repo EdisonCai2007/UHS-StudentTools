@@ -108,7 +108,7 @@ class HomeScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       // Daily Weather Overview Container
-                      Expanded(
+                      const Expanded(
                         flex: 4,
                         child: DailyWeatherOverviewContainer(),
                       ),

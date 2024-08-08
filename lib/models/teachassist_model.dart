@@ -5,18 +5,24 @@ import 'dart:html';
 import 'package:http/http.dart' as http;
 
 
-final String _baseUrl = 'ta.yrdsb.ca';
-final String _charactersPath = '/live/index.php';
-final Map<String, String> _queryParameters = <String, String>{'username': 'placeholder', 'password': 'placeholder'};
+const String BASEURL = 'https://ta-api.vercel.app/api/getCourses';
 
 Future<TeachAssistMarks> fetchMarks() async {
-  final uri = Uri.https(_baseUrl, _charactersPath, _queryParameters);
-  final response = await http.get(uri);
 
+  final response = await http.post(
+    Uri.parse("https://ta-api.vercel.app/api/getCourses"),
+    headers: {
+      'Content-Type': 'application/json'
+    },
+      body: jsonEncode(<String,String>{
+        'username':'348737974',
+        'password':'5a2rn777',
+      }),
+  );
+  print(response.statusCode);
   if (response.statusCode == 200) {
     return TeachAssistMarks.fromJSON(jsonDecode(response.body) as Map<String, dynamic>);
   } else {
-    print(response.statusCode);
     throw Exception('Failed to load TeachAssist Marks');
   }
 }
