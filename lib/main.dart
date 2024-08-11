@@ -1,5 +1,7 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wolfpackapp/firebase_options.dart';
 
 import 'themes/theme_manager.dart';
 
@@ -11,7 +13,11 @@ import 'dart:io';
 
 
 // - 🏁 START HERE 🏁 -
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   HttpOverrides.global = MyHttpOverrides();
   runApp(
     ChangeNotifierProvider(

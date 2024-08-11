@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "56116314664",
+    "project_id": "uhsplus",
+    "storage_bucket": "uhsplus.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:56116314664:android:9af9f3efe17a8d4254ab1d",
+        "android_client_info": {
+          "package_name": "com.edisoncai.unionville_student_tools"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6rAYNeCd-UftZpZX_AkScuEbf5gDpmTg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
