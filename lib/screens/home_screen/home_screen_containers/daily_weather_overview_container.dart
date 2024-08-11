@@ -59,7 +59,7 @@ class _DailyWeatherOverviewContainerState extends State<DailyWeatherOverviewCont
         borderRadius: const BorderRadius.all(Radius.elliptical(20, 20)),
         boxShadow: const [BoxShadow(blurRadius: 10)],
       ),
-      height: 300,
+      height: 370,
       margin: const EdgeInsets.all(10),
       padding: const EdgeInsets.only(top:20, left: 20,right: 20),
       child: weather == null ? const CircularProgressIndicator(
@@ -71,14 +71,14 @@ class _DailyWeatherOverviewContainerState extends State<DailyWeatherOverviewCont
             height: 60,
             transformAlignment: Alignment.center,
             child: FittedBox(
-              fit: BoxFit.none,
+              fit: BoxFit.contain,
               child: Text("${weather?.weatherCondition}",
                   style: GoogleFonts.lato(
                       fontSize: 30, fontWeight: FontWeight.w800)),
             ),
           ),
           Container(
-            height: 100,
+            height: 180,
             transformAlignment: Alignment.center,
             child: Lottie.asset("weather_cloud.json",
                 delegates: LottieDelegates(values: [
@@ -91,12 +91,9 @@ class _DailyWeatherOverviewContainerState extends State<DailyWeatherOverviewCont
                       ))
                 ])),
           ),
-          FittedBox(
-            fit: BoxFit.contain,
-            child: Text("${weather?.temperature.round()}°C",
-                  style:
-                      GoogleFonts.lato(fontSize: 40, fontWeight: FontWeight.w800)),
-          ),
+          Text("${weather?.temperature.round()}°C",
+              style:
+                  GoogleFonts.lato(fontSize: 40, fontWeight: FontWeight.w800)),
           const SizedBox(height: 15),
           Row(
             children: [
@@ -120,7 +117,7 @@ class _DailyWeatherOverviewContainerState extends State<DailyWeatherOverviewCont
                     data: const SliderThemeData(
                       thumbColor: Colors.white,
                       thumbShape: RoundSliderThumbShape(
-                          elevation: 5, pressedElevation: 5, enabledThumbRadius: 6),
+                          elevation: 5, pressedElevation: 5),
                       activeTrackColor: Colors.transparent,
                       inactiveTrackColor: Colors.transparent,
                       overlayColor: Colors.transparent,
