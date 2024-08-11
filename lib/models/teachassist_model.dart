@@ -1,28 +1,41 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:html';
 
 import 'package:http/http.dart' as http;
 
 
-const String BASEURL = 'https://ta-api.vercel.app/api/getCourses';
+const String LOGINURL = 'https://ta.yrdsb.ca/yrdsb/';
+const String COURSEURL = 'https://ta.yrdsb.ca/live/students/listReports.php?';
+//'Cookie': 'session_token=94TSQCA3DpD5s; student_id=194871'
 
 Future<TeachAssistMarks> fetchMarks() async {
 
-  final response = await http.post(
-    Uri.parse("https://ta-api.vercel.app/api/getCourses"),
-    headers: {
-      'Content-Type': 'application/json'
-    },
-      body: jsonEncode(<String,String>{
-        'username':'348737974',
-        'password':'5a2rn777',
-      }),
-  );
-  print(response.statusCode);
-  if (response.statusCode == 200) {
-    return TeachAssistMarks.fromJSON(jsonDecode(response.body) as Map<String, dynamic>);
-  } else {
+  try {
+    var response = await http.post(
+        Uri.parse(LOGINURL),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: {
+          'subject_id': '0',
+          'username': 'e',
+          'password': 'e',
+          'submit': 'Login',
+        }
+    );
+
+    print(response.body);
+    print(response.statusCode);
+    print(response.headers);
+    if (response.statusCode == 200) {
+      return TeachAssistMarks.fromJSON(
+          jsonDecode(response.body) as Map<String, dynamic>);
+    } else {
+      throw Exception('Failed to load TeachAssist Marks');
+    }
+  } catch (e, stackTrace) {
+    print('Request failed with error: $e');
+    print('Stack trace: $stackTrace');
     throw Exception('Failed to load TeachAssist Marks');
   }
 }
