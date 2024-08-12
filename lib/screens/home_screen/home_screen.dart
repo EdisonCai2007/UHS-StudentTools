@@ -99,7 +99,14 @@ class HomeScreen extends StatelessWidget {
                 ),
 
                 // Schedule & Time Overview Container
-                ScheduleOverviewContainer(),
+                const Row(
+                  children: [
+                  // Daily Weather Overview Container
+                  Expanded(
+                  flex: 1,
+                  child: ScheduleOverviewContainer(),
+                  ),
+                ]),
 
                 //Second Row
                 Padding(
@@ -108,7 +115,7 @@ class HomeScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       // Daily Weather Overview Container
-                      Expanded(
+                      const Expanded(
                         flex: 4,
                         child: DailyWeatherOverviewContainer(),
                       ),

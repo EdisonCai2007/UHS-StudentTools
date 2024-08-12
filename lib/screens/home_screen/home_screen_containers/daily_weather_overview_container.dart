@@ -15,15 +15,16 @@ class DailyWeatherOverviewContainer extends StatefulWidget {
 }
 
 class _DailyWeatherOverviewContainerState extends State<DailyWeatherOverviewContainer> {
-  WeatherService weatherService = WeatherService();
+  final WeatherService weatherService = WeatherService();
   WeatherModel? weather;
 
-  MinMaxTemperatureService minMaxTemperatureService = MinMaxTemperatureService();
+  MinMaxTemperatureService minMaxTemperatureService =
+      MinMaxTemperatureService();
   MinMaxTemperatureModel? minMaxTemperature;
 
   fetchWeather() async {
     try {
-      var weatherResponse = await weatherService.fetchWeather("markham");
+      final weatherResponse = await weatherService.fetchWeather("markham");
       setState(() {
         weather = weatherResponse;
       });
@@ -58,29 +59,87 @@ class _DailyWeatherOverviewContainerState extends State<DailyWeatherOverviewCont
         borderRadius: const BorderRadius.all(Radius.elliptical(20, 20)),
         boxShadow: const [BoxShadow(blurRadius: 10)],
       ),
-      height: 400,
+      height: 300,
       margin: const EdgeInsets.all(10),
-      padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-      child: Column(
+      padding: const EdgeInsets.only(top:20, left: 20,right: 20),
+      child: weather == null ? const CircularProgressIndicator(
+
+      ) :
+      Column(
         children: [
           Container(
             height: 60,
             transformAlignment: Alignment.center,
             child: FittedBox(
-              fit: BoxFit.contain,
+              fit: BoxFit.none,
               child: Text("${weather?.weatherCondition}",
                   style: GoogleFonts.lato(
                       fontSize: 30, fontWeight: FontWeight.w800)),
             ),
           ),
           Container(
-            height: 180,
+            height: 100,
             transformAlignment: Alignment.center,
-            child: Lottie.asset(weather!.weatherIcon,),
+            child: Lottie.asset("weather_cloud.json",
+                delegates: LottieDelegates(values: [
+                  ValueDelegate.dropShadow(['**'],
+                      value: DropShadow(
+                        color: Theme.of(context).shadowColor,
+                        distance: 0,
+                        direction: 0,
+                        radius: 5,
+                      ))
+                ])),
           ),
-          Text("${weather?.temperature.round()}°C", style: GoogleFonts.lato(fontSize: 40, fontWeight: FontWeight.w800)),
-          Text("Min:  ${minMaxTemperature?.minTemperature.round()}°C", style: GoogleFonts.lato(fontSize: 15, fontWeight: FontWeight.w400)),
-          Text("Max:  ${minMaxTemperature?.maxTemperature.round()}°C", style: GoogleFonts.lato(fontSize: 15, fontWeight: FontWeight.w400))
+          FittedBox(
+            fit: BoxFit.contain,
+            child: Text("${weather?.temperature.round()}°C",
+                  style:
+                      GoogleFonts.lato(fontSize: 40, fontWeight: FontWeight.w800)),
+          ),
+          const SizedBox(height: 15),
+          Row(
+            children: [
+              Text("${minMaxTemperature?.minTemperature.round()}",
+                  style: GoogleFonts.lato(
+                      fontSize: 15, fontWeight: FontWeight.w800)),
+              const SizedBox(width: 5),
+              Expanded(
+                child: Container(
+                  width: 300,
+                  height: 10,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    gradient: const LinearGradient(
+                      colors: [Colors.blue, Colors.red],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    ),
+                  ),
+                  child: SliderTheme(
+                    data: const SliderThemeData(
+                      thumbColor: Colors.white,
+                      thumbShape: RoundSliderThumbShape(
+                          elevation: 5, pressedElevation: 5, enabledThumbRadius: 6),
+                      activeTrackColor: Colors.transparent,
+                      inactiveTrackColor: Colors.transparent,
+                      overlayColor: Colors.transparent,
+                    ),
+                    child: Slider(
+                      min: minMaxTemperature?.minTemperature.round().toDouble() ?? 0,
+                      max: minMaxTemperature?.maxTemperature.round().toDouble() ?? 100,
+                      value: weather?.temperature ?? 0,
+                      onChanged: (value) => weather!.temperature,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 5),
+              Text("${minMaxTemperature?.maxTemperature.round()}",
+                  style: GoogleFonts.lato(
+                      fontSize: 15, fontWeight: FontWeight.w800)),
+            ],
+          ),
         ],
       ),
     );

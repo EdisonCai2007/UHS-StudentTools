@@ -1,22 +1,46 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:html';
 
 import 'package:http/http.dart' as http;
 
 
-final String _baseUrl = 'ta.yrdsb.ca';
-final String _charactersPath = '/live/index.php';
-final Map<String, String> _queryParameters = <String, String>{'username': 'placeholder', 'password': 'placeholder'};
+const String LOGINURL = 'https://ta.yrdsb.ca/yrdsb/';
+const String COURSEURL = 'https://ta.yrdsb.ca/live/students/listReports.php?';
+//'Cookie': 'session_token=94TSQCA3DpD5s; student_id=194871'
 
 Future<TeachAssistMarks> fetchMarks() async {
-  final uri = Uri.https(_baseUrl, _charactersPath, _queryParameters);
-  final response = await http.get(uri);
 
-  if (response.statusCode == 200) {
-    return TeachAssistMarks.fromJSON(jsonDecode(response.body) as Map<String, dynamic>);
-  } else {
+  try {
+    var response = await http.post(
+        Uri.parse(LOGINURL),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: {
+          'subject_id': '0',
+<<<<<<< HEAD
+          'username': 'e',
+          'password': 'e',
+=======
+          'username': '341042810',
+          'password': 'b72wxq8d',
+>>>>>>> parent of 8493e20 (Revert "- Added Firebase")
+          'submit': 'Login',
+        }
+    );
+
+    print(response.body);
     print(response.statusCode);
+    print(response.headers);
+    if (response.statusCode == 200) {
+      return TeachAssistMarks.fromJSON(
+          jsonDecode(response.body) as Map<String, dynamic>);
+    } else {
+      throw Exception('Failed to load TeachAssist Marks');
+    }
+  } catch (e, stackTrace) {
+    print('Request failed with error: $e');
+    print('Stack trace: $stackTrace');
     throw Exception('Failed to load TeachAssist Marks');
   }
 }

@@ -1,3 +1,6 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
 class WeatherModel {
   final double temperature;
   final String weatherCondition;
@@ -11,43 +14,43 @@ class WeatherModel {
 
   factory WeatherModel.fromJSON(Map<String, dynamic> json) {
     int fetchedWeatherCondition = json["weather"][0]["id"];
-    String weatherCondition;
-    String weatherIcon;
+    String _weatherCondition;
+    String _weatherIcon = "assets/weather_sun.json";
 
     if (fetchedWeatherCondition >= 200 && fetchedWeatherCondition < 300) {
-      weatherCondition = "Thunderstorm";
-      weatherIcon = "weather_storm.json";
+      _weatherCondition = "Thunderstorm";
+      _weatherIcon = "weather_storm.json";
     } else if (fetchedWeatherCondition >= 300 &&
         fetchedWeatherCondition < 400) {
-      weatherCondition = "Light Rain";
-      weatherIcon = "weather_rain.json";
+      _weatherCondition = "Light Rain";
+      _weatherIcon = "weather_rain.json";
     } else if (fetchedWeatherCondition >= 500 &&
         fetchedWeatherCondition < 600) {
-      weatherCondition = "Rain";
-      weatherIcon = "weather_rain.json";
+      _weatherCondition = "Rain";
+      _weatherIcon = "weather_rain.json";
     } else if (fetchedWeatherCondition >= 600 &&
         fetchedWeatherCondition < 700) {
-      weatherCondition = "Snowy";
-      weatherIcon = "weather_snow.json";
+      _weatherCondition = "Snowy";
+      _weatherIcon = "weather_snow.json";
     } else if (fetchedWeatherCondition >= 700 &&
         fetchedWeatherCondition < 800) {
-      weatherCondition = "Foggy";
-      weatherIcon = "weather_fog.json";
+      _weatherCondition = "Foggy";
+      _weatherIcon = "weather_fog.json";
     } else if (fetchedWeatherCondition == 800) {
-      weatherCondition = "Sunny";
-      weatherIcon = "weather_sun.json";
+      _weatherCondition = "Sunny";
+      _weatherIcon = "weather_sun.json";
     } else if (fetchedWeatherCondition > 800) {
-      weatherCondition = "Cloudy";
-      weatherIcon = "weather_cloud.json";
+      _weatherCondition = "Cloudy";
+      _weatherIcon = "weather_cloud.json";
     } else {
-      weatherCondition = "Null";
-      weatherIcon = "assets/weather_sun.json";
+      _weatherCondition = "Null";
+      _weatherIcon = "assets/weather_sun.json";
     }
 
     return WeatherModel(
       temperature: json["main"]["temp"].toDouble(),
-      weatherCondition: weatherCondition,
-      weatherIcon: weatherIcon,
+      weatherCondition: _weatherCondition,
+      weatherIcon: _weatherIcon,
     );
   }
 }
