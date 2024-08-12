@@ -14,7 +14,6 @@ class WelcomeContainer extends Container {
     return Container(
       height: 180,
       margin: const EdgeInsets.only(
-        top: 30,
         left: 30,
         right: 30,
       ),
@@ -24,14 +23,19 @@ class WelcomeContainer extends Container {
         children: [
           // Displays "Month Day, Year"
           Text(date,
-              style:
-                  GoogleFonts.lato(fontSize: 20, fontWeight: FontWeight.w500)),
+              style: GoogleFonts.lato(fontSize: 20, fontWeight: FontWeight.w500)),
           const SizedBox(height: 3),
 
           //Displays Day of the Week
-          Text(day,
-              style:
-                  GoogleFonts.lato(fontSize: 70, fontWeight: FontWeight.w900)),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: FittedBox (
+              fit: BoxFit.scaleDown,
+              child: Text(day,
+                  style: GoogleFonts.lato(fontSize: 65, fontWeight: FontWeight.w900)),
+            ),
+          ),
+
           const SizedBox(height: 2),
           Text('341042810', style: GoogleFonts.lato(fontSize: 15)),
         ],
