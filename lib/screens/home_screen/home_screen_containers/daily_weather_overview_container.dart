@@ -24,7 +24,7 @@ class _DailyWeatherOverviewContainerState extends State<DailyWeatherOverviewCont
 
   fetchWeather() async {
     try {
-      final weatherResponse = await weatherService.fetchWeather("markham");
+      final weatherResponse = await weatherService.fetchWeather("Markham");
       setState(() {
         weather = weatherResponse;
       });
@@ -80,7 +80,7 @@ class _DailyWeatherOverviewContainerState extends State<DailyWeatherOverviewCont
           Container(
             height: 100,
             transformAlignment: Alignment.center,
-            child: Lottie.asset("weather_cloud.json",
+            child: Lottie.asset(weather!.weatherIcon,
                 delegates: LottieDelegates(values: [
                   ValueDelegate.dropShadow(['**'],
                       value: DropShadow(

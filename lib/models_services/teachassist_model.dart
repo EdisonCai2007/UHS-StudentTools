@@ -18,13 +18,10 @@ Future<TeachAssistMarks> fetchMarks() async {
         },
         body: {
           'subject_id': '0',
-<<<<<<< HEAD
-          'username': 'e',
-          'password': 'e',
-=======
-          'username': '341042810',
-          'password': 'b72wxq8d',
->>>>>>> parent of 8493e20 (Revert "- Added Firebase")
+
+          'username': '',
+          'password': '',
+
           'submit': 'Login',
         }
     );

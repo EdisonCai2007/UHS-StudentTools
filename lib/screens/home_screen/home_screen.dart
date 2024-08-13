@@ -101,7 +101,7 @@ class HomeScreen extends StatelessWidget {
                 // Schedule & Time Overview Container
                 const Row(
                   children: [
-                  // Daily Weather Overview Container
+                  // Schedule Overview Container
                   Expanded(
                   flex: 1,
                   child: ScheduleOverviewContainer(),
