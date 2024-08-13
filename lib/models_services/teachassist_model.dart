@@ -6,28 +6,46 @@ import 'package:http/http.dart' as http;
 
 const String LOGINURL = 'https://ta.yrdsb.ca/yrdsb/';
 const String COURSEURL = 'https://ta.yrdsb.ca/live/students/listReports.php?';
-//'Cookie': 'session_token=94TSQCA3DpD5s; student_id=194871'
+
+Future<List<String?>> authorizeUser() async {
+  try {
+    var res = await http.post(
+      Uri.parse(LOGINURL),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: {
+        'subject_id': '0',
+        'username': '',
+        'password': '',
+        'submit': 'Login',
+      }
+    );
+    if (res.statusCode == 302) {
+      var cookies = [res.headersSplitValues['set-cookie']?[5].substring(14,27),res.headersSplitValues['set-cookie']?[6].substring(11,17)];
+      return cookies;
+    } else {
+      throw Exception('Failed to Authorize User');
+    }
+  } catch (e) {
+    throw Exception('Failed to Authorize User');
+  }
+}
 
 Future<TeachAssistMarks> fetchMarks() async {
+  var cookies = await authorizeUser();
 
   try {
     var response = await http.post(
-        Uri.parse(LOGINURL),
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: {
-          'subject_id': '0',
-
-          'username': '',
-          'password': '',
-
-          'submit': 'Login',
-        }
+      Uri.parse(COURSEURL),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Cookie': 'session_token=${cookies[0]} ; student_id=${cookies[1]}',
+      },
     );
 
-    print(response.body);
     print(response.statusCode);
+    print(response.body);
     print(response.headers);
     if (response.statusCode == 200) {
       return TeachAssistMarks.fromJSON(
@@ -35,9 +53,7 @@ Future<TeachAssistMarks> fetchMarks() async {
     } else {
       throw Exception('Failed to load TeachAssist Marks');
     }
-  } catch (e, stackTrace) {
-    print('Request failed with error: $e');
-    print('Stack trace: $stackTrace');
+  } catch (e) {
     throw Exception('Failed to load TeachAssist Marks');
   }
 }
@@ -93,15 +109,3 @@ class TeachAssistMarks {
     };
   }
 }
-
-/*
-"start_time": "2019-09-03",
-"end_time": "2020-01-31",
-"code": "AVI2O1-01",
-"name": "Visual Arts",
-"block": "1",
-"room": "319",
-"overall_mark": 87.5664467885056,
-"assignments": [],
-"weight_table": {}
-*/
