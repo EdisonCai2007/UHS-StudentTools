@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:wolfpackapp/models/timeConstants.dart';
+import 'package:wolfpackapp/models_services/timeConstants.dart';
 
 
 class ScheduleOverviewContainer extends StatefulWidget{
@@ -22,6 +22,8 @@ class _ScheduleOverviewContainerState extends State<ScheduleOverviewContainer> {
   @override
   void initState() {
     super.initState();
+    twelveHrTime = DateFormat.jm().format(DateTime.now());
+    minuteTime = (DateTime.now().hour * 60) + DateTime.now().minute;
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
 
       setState(() {
