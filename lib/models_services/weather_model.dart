@@ -10,6 +10,8 @@ class WeatherModel {
   });
 
   factory WeatherModel.fromJSON(Map<String, dynamic> json) {
+    double fetchedTemperature = json["main"]["temp"].toDouble();
+
     int fetchedWeatherCondition = json["weather"][0]["id"];
     String weatherCondition;
     String weatherIcon;
@@ -41,7 +43,7 @@ class WeatherModel {
     }
 
     return WeatherModel(
-      temperature: json["main"]["temp"].toDouble(),
+      temperature: fetchedTemperature,
       weatherCondition: weatherCondition,
       weatherIcon: weatherIcon,
     );

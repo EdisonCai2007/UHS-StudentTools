@@ -18,8 +18,7 @@ class _DailyWeatherOverviewContainerState extends State<DailyWeatherOverviewCont
   final WeatherService weatherService = WeatherService();
   WeatherModel? weather;
 
-  MinMaxTemperatureService minMaxTemperatureService =
-      MinMaxTemperatureService();
+  MinMaxTemperatureService minMaxTemperatureService = MinMaxTemperatureService();
   MinMaxTemperatureModel? minMaxTemperature;
 
   fetchWeather() async {
@@ -40,7 +39,7 @@ class _DailyWeatherOverviewContainerState extends State<DailyWeatherOverviewCont
         minMaxTemperature = minMaxTemperatureResponse;
       });
     } catch (e) {
-      print(e);
+      print('Unable to fetch min/max temperature!');
     }
   }
 
@@ -93,7 +92,11 @@ class _DailyWeatherOverviewContainerState extends State<DailyWeatherOverviewCont
           ),
           FittedBox(
             fit: BoxFit.contain,
-            child: Text("${weather?.temperature.round()}°C",
+            child: Text(weather!.temperature.round() > minMaxTemperature!.maxTemperature.round() ?
+            "${minMaxTemperature?.maxTemperature.round()}°C" :
+            weather!.temperature.round() < minMaxTemperature!.minTemperature.round() ?
+            "${minMaxTemperature?.minTemperature.round()}°C" :
+            "${weather!.temperature.round()}°C",
                   style:
                       GoogleFonts.lato(fontSize: 40, fontWeight: FontWeight.w800)),
           ),
@@ -120,16 +123,16 @@ class _DailyWeatherOverviewContainerState extends State<DailyWeatherOverviewCont
                     data: const SliderThemeData(
                       thumbColor: Colors.white,
                       thumbShape: RoundSliderThumbShape(
-                          elevation: 5, pressedElevation: 5, enabledThumbRadius: 6),
+                          elevation: 5, pressedElevation: 5, enabledThumbRadius: 3),
                       activeTrackColor: Colors.transparent,
                       inactiveTrackColor: Colors.transparent,
                       overlayColor: Colors.transparent,
                     ),
                     child: Slider(
-                      min: minMaxTemperature?.minTemperature.floorToDouble() ?? 0,
-                      max: minMaxTemperature?.maxTemperature.ceilToDouble() ?? 100,
-                      value: weather?.temperature.floorToDouble() ?? 0,
-                      onChanged: (value) => weather!.temperature,
+                      min: minMaxTemperature?.minTemperature.roundToDouble() ?? 0,
+                      max: minMaxTemperature?.maxTemperature.roundToDouble() ?? 100,
+                      value: weather!.temperature.roundToDouble(),
+                      onChanged: (value) => weather!.temperature.round(),
                     ),
                   ),
                 ),
