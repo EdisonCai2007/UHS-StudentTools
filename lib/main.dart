@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wolfpackapp/firebase_options.dart';
+import 'package:wolfpackapp/screens/login_screen/login_screen.dart';
 
 import 'themes/theme_manager.dart';
 
@@ -62,6 +63,7 @@ class _MyAppState extends State<MyApp> {
 
       home: const HomeScreen(),
       routes: {
+        '/loginScreen': (context) => const LoginScreen(),
         '/homeScreen': (context) => const HomeScreen(),
         '/settingsScreen': (context) => const SettingsScreen()
       },

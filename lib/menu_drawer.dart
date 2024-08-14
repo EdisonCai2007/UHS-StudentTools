@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import 'themes/theme_manager.dart';
@@ -11,7 +12,7 @@ class MenuDrawer extends Drawer {
   Widget build(BuildContext context) {
     return Drawer(
 
-      shape: const BeveledRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
             topRight: Radius.circular(20),
             bottomRight: Radius.circular(20)),
@@ -22,17 +23,19 @@ class MenuDrawer extends Drawer {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // Icon (change later to an actually icon)
-          const DrawerHeader(
+          DrawerHeader(
             child: Text(
-              '\nWolf Pack App V2\n   (Better Edition)',
-              style: TextStyle(fontSize: 30),
-            ),
+              '\n\nUHS Student Tools',
+              style: GoogleFonts.lato(
+                  fontSize: 30, fontWeight: FontWeight.w900)),
           ),
 
           // Home page button
           ListTile(
             leading: const Icon(Icons.home),
-            title: const Text('H O M E'),
+            title: Text('Home',
+              style: GoogleFonts.lato(
+                fontSize: 20, fontWeight: FontWeight.w400)),
             onTap: () {
               Navigator.pushNamed(context, '/homeScreen');
             },
@@ -41,32 +44,46 @@ class MenuDrawer extends Drawer {
           // Settings button
           ListTile(
               leading: const Icon(Icons.settings),
-              title: const Text('S E T T I N G S'),
+              title: Text('Settings',
+                  style: GoogleFonts.lato(
+                      fontSize: 20, fontWeight: FontWeight.w400)),
             onTap: () {
               Navigator.pushNamed(context, '/settingsScreen');
             },
           ),
+
+          ListTile(
+            leading: const Icon(Icons.login),
+            title: Text('Sign In',
+                style: GoogleFonts.lato(
+                    fontSize: 20, fontWeight: FontWeight.w400)),
+            onTap: () {
+              Navigator.pushNamed(context, '/loginScreen');
+            },
+          ),
           
-           Expanded(child: Align(
-             alignment: FractionalOffset.bottomLeft,
-             child: Padding(
-               padding: const EdgeInsets.only(
-                 bottom: 8
-               ),
-               child: ElevatedButton(
-                 style: ButtonStyle(
-                   shape: const MaterialStatePropertyAll(CircleBorder()),
-                   backgroundColor: const MaterialStatePropertyAll(Color.fromRGBO(0, 0, 0, 0)),
-                   shadowColor: const MaterialStatePropertyAll(Color.fromRGBO(0, 0, 0, 0)),
-                   minimumSize: const MaterialStatePropertyAll(Size(50, 50)),
-                   iconColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.onSurface)
+           Expanded(
+             child: Align(
+               alignment: FractionalOffset.bottomLeft,
+               child: Padding(
+                 padding: const EdgeInsets.only(
+                   bottom: 8
                  ),
-                 onPressed: () {
-                   Provider.of<ThemeManager>(context, listen: false).toggleThemeMode();
-                 }, child: const Icon(Icons.dark_mode),
+                 child: ElevatedButton(
+                   style: ButtonStyle(
+                     shape: const MaterialStatePropertyAll(CircleBorder()),
+                     backgroundColor: const MaterialStatePropertyAll(Color.fromRGBO(0, 0, 0, 0)),
+                     shadowColor: const MaterialStatePropertyAll(Color.fromRGBO(0, 0, 0, 0)),
+                     minimumSize: const MaterialStatePropertyAll(Size(50, 50)),
+                     iconColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.onSurface)
+                   ),
+                   onPressed: () {
+                     Provider.of<ThemeManager>(context, listen: false).toggleThemeMode();
+                   }, child: const Icon(Icons.dark_mode),
+                 ),
                ),
              ),
-           ))
+           ),
         ],
       ),
     );

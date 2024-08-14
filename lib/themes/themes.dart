@@ -8,7 +8,7 @@ class Themes {
   Color lightBackgroundColour = const Color.fromRGBO(255, 255, 255, 1.0);
   Color lightAppBar = const Color.fromRGBO(238, 238, 238, 1.0);
   Color lightContainer = const Color.fromRGBO(255, 255, 255, 1.0);
-  Color lightContainerAccent = const Color.fromRGBO(147, 147, 147, 1.0);
+  Color lightContainerAccent = const Color.fromRGBO(198, 198, 198, 1.0);
   Color lightAccent = const Color.fromRGBO(210, 8, 8, 1.0);
 
   // Dark Theme Colours
@@ -51,6 +51,11 @@ class Themes {
     progressIndicatorTheme: ProgressIndicatorThemeData(
       refreshBackgroundColor: _themes.lightContainerAccent,
     ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: _themes.lightContainerAccent,
+      )
+    ),
   );
 
   /*
@@ -80,7 +85,12 @@ class Themes {
       padding: const EdgeInsets.all(20),
     ),
     progressIndicatorTheme: ProgressIndicatorThemeData(
-      refreshBackgroundColor: _themes.lightContainerAccent,
+      refreshBackgroundColor: _themes.darkContainerAccent,
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: _themes.darkContainerAccent,
+        )
     ),
   );
 }

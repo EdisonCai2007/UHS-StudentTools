@@ -126,9 +126,9 @@ class _DailyWeatherOverviewContainerState extends State<DailyWeatherOverviewCont
                       overlayColor: Colors.transparent,
                     ),
                     child: Slider(
-                      min: minMaxTemperature?.minTemperature.round().toDouble() ?? 0,
-                      max: minMaxTemperature?.maxTemperature.round().toDouble() ?? 100,
-                      value: weather?.temperature ?? 0,
+                      min: minMaxTemperature?.minTemperature.floorToDouble() ?? 0,
+                      max: minMaxTemperature?.maxTemperature.ceilToDouble() ?? 100,
+                      value: weather?.temperature.floorToDouble() ?? 0,
                       onChanged: (value) => weather!.temperature,
                     ),
                   ),
