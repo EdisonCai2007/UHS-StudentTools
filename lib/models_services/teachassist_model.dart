@@ -1,10 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
+import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 
 
-const String LOGINURL = 'https://ta.yrdsb.ca/yrdsb/';
+const String LOGINURL = 'https://ta.yrdsb.ca/yrdsb/index.php';
 const String COURSEURL = 'https://ta.yrdsb.ca/live/students/listReports.php?';
 
 Future<List<String?>> authorizeUser() async {
@@ -21,6 +21,7 @@ Future<List<String?>> authorizeUser() async {
         'submit': 'Login',
       }
     );
+
     if (res.statusCode == 302) {
       var cookies = [res.headersSplitValues['set-cookie']?[5].substring(14,27),res.headersSplitValues['set-cookie']?[6].substring(11,17)];
       return cookies;
@@ -32,24 +33,23 @@ Future<List<String?>> authorizeUser() async {
   }
 }
 
-Future<TeachAssistMarks> fetchMarks() async {
+Future<String> fetchMarks() async {
   var cookies = await authorizeUser();
 
   try {
-    var response = await http.post(
-      Uri.parse(COURSEURL),
+    http.Response response = await http.get(
+      Uri.parse('${COURSEURL}student_id=${cookies[1]}'),
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Cookie': 'session_token=${cookies[0]} ; student_id=${cookies[1]}',
+        'Cookie': 'session_token=${cookies[0]}; student_id=${cookies[1]}',
       },
     );
 
     print(response.statusCode);
-    print(response.body);
-    print(response.headers);
+    print(response.request);
+    log(response.body);
     if (response.statusCode == 200) {
-      return TeachAssistMarks.fromJSON(
-          jsonDecode(response.body) as Map<String, dynamic>);
+      return "Bob";
     } else {
       throw Exception('Failed to load TeachAssist Marks');
     }

@@ -47,7 +47,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late Future<TeachAssistMarks> futureTeachAssistMarks;
+  late Future<String> futureTeachAssistMarks;
 
   @override
   void initState() {
