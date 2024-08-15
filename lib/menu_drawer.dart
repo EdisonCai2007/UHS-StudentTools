@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 
 import 'themes/theme_manager.dart';
 
-
 class MenuDrawer extends Drawer {
   const MenuDrawer({super.key});
 

@@ -67,7 +67,7 @@ class _MyAppState extends State<MyApp> {
         '/homeScreen': (context) => const HomeScreen(),
         '/settingsScreen': (context) => const SettingsScreen()
       },
-      title: 'UHS App',
+      title: 'UHS Student Tools',
 
       theme: Provider.of<ThemeManager>(context).themeData,
     );

@@ -92,9 +92,9 @@ class _DailyWeatherOverviewContainerState extends State<DailyWeatherOverviewCont
           ),
           FittedBox(
             fit: BoxFit.contain,
-            child: Text(weather!.temperature.round() > minMaxTemperature!.maxTemperature.round() ?
+            child: Text(weather!.temperature.round() > (minMaxTemperature?.maxTemperature.round() ?? 100) ?
             "${minMaxTemperature?.maxTemperature.round()}°C" :
-            weather!.temperature.round() < minMaxTemperature!.minTemperature.round() ?
+            weather!.temperature.round() < (minMaxTemperature?.minTemperature.round() ?? 0) ?
             "${minMaxTemperature?.minTemperature.round()}°C" :
             "${weather!.temperature.round()}°C",
                   style:
