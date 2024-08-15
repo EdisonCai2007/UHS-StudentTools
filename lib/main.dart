@@ -6,7 +6,6 @@ import 'package:wolfpackapp/screens/login_screen/login_screen.dart';
 
 import 'themes/theme_manager.dart';
 
-import 'models_services/teachassist_model.dart';
 import 'screens/settings_screen/settings_screen.dart';
 import 'screens/home_screen/home_screen.dart';
 
@@ -48,12 +47,10 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late Future<String> futureTeachAssistMarks;
 
   @override
   void initState() {
     super.initState();
-    futureTeachAssistMarks = fetchMarks();
   }
 
   @override
@@ -61,7 +58,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
 
-      home: const HomeScreen(),
+      home: const LoginScreen(),
       routes: {
         '/loginScreen': (context) => const LoginScreen(),
         '/homeScreen': (context) => const HomeScreen(),
