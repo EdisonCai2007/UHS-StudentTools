@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 const String LOGINURL = 'https://ta.yrdsb.ca/yrdsb/index.php';
 const String COURSEURL = 'https://ta.yrdsb.ca/live/students/listReports.php?';
 
-Future<List<String?>> authorizeUser() async {
+Future<List<String?>> authorizeUser(String username, String password) async {
   try {
     var res = await http.post(
       Uri.parse(LOGINURL),
@@ -16,25 +16,28 @@ Future<List<String?>> authorizeUser() async {
       },
       body: {
         'subject_id': '0',
-        'username': '',
-        'password': '',
+        'username': username,
+        'password': password,
         'submit': 'Login',
       }
     );
 
+    // print(res.statusCode);
+    // print(res.headers);
+    // print(res.body);
     if (res.statusCode == 302) {
       var cookies = [res.headersSplitValues['set-cookie']?[5].substring(14,27),res.headersSplitValues['set-cookie']?[6].substring(11,17)];
       return cookies;
     } else {
-      throw Exception('Failed to Authorize User');
+      throw Exception('1 ~ Failed to Authorize User');
     }
   } catch (e) {
-    throw Exception('Failed to Authorize User');
+    throw Exception('2 ~ Invalid Login');
   }
 }
 
-Future<String> fetchMarks() async {
-  var cookies = await authorizeUser();
+Future<String> fetchMarks(username, password) async {
+  var cookies = await authorizeUser(username, password);
 
   try {
     http.Response response = await http.get(
@@ -45,8 +48,6 @@ Future<String> fetchMarks() async {
       },
     );
 
-    print(response.statusCode);
-    print(response.request);
     log(response.body);
     if (response.statusCode == 200) {
       return "Bob";
