@@ -40,27 +40,16 @@ class MenuDrawer extends Drawer {
             },
           ),
 
-          // Settings button
           ListTile(
-              leading: const Icon(Icons.settings),
-              title: Text('Settings',
-                  style: GoogleFonts.lato(
-                      fontSize: 20, fontWeight: FontWeight.w400)),
+            leading: const Icon(Icons.settings),
+            title: Text('Settings',
+                style: GoogleFonts.lato(
+                    fontSize: 20, fontWeight: FontWeight.w400)),
             onTap: () {
               Navigator.pushNamed(context, '/settingsScreen');
             },
           ),
 
-          ListTile(
-            leading: const Icon(Icons.login),
-            title: Text('Sign In',
-                style: GoogleFonts.lato(
-                    fontSize: 20, fontWeight: FontWeight.w400)),
-            onTap: () {
-              Navigator.pushNamed(context, '/loginScreen');
-            },
-          ),
-          
            Expanded(
              child: Align(
                alignment: FractionalOffset.bottomLeft,
@@ -68,17 +57,42 @@ class MenuDrawer extends Drawer {
                  padding: const EdgeInsets.only(
                    bottom: 8
                  ),
-                 child: ElevatedButton(
-                   style: ButtonStyle(
-                     shape: const MaterialStatePropertyAll(CircleBorder()),
-                     backgroundColor: const MaterialStatePropertyAll(Color.fromRGBO(0, 0, 0, 0)),
-                     shadowColor: const MaterialStatePropertyAll(Color.fromRGBO(0, 0, 0, 0)),
-                     minimumSize: const MaterialStatePropertyAll(Size(50, 50)),
-                     iconColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.onSurface)
-                   ),
-                   onPressed: () {
-                     Provider.of<ThemeManager>(context, listen: false).toggleThemeMode();
-                   }, child: const Icon(Icons.dark_mode),
+                 child: Row(
+                   children: [
+                     // Login Button
+                     Align(
+                       alignment: Alignment.bottomLeft,
+                       child: ElevatedButton(
+                         style: ButtonStyle(
+                             shape: const MaterialStatePropertyAll(CircleBorder()),
+                             backgroundColor: const MaterialStatePropertyAll(Color.fromRGBO(0, 0, 0, 0)),
+                             shadowColor: const MaterialStatePropertyAll(Color.fromRGBO(0, 0, 0, 0)),
+                             minimumSize: const MaterialStatePropertyAll(Size(50, 50)),
+                             iconColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.onSurface)
+                         ),
+                         onPressed: () {
+                           Navigator.pushNamed(context, '/loginScreen');
+                         }, child: const Icon(Icons.login),
+                       ),
+                     ),
+
+                     // Theme Change Button
+                     Align(
+                       alignment: Alignment.bottomRight,
+                       child: ElevatedButton(
+                         style: ButtonStyle(
+                             shape: const MaterialStatePropertyAll(CircleBorder()),
+                             backgroundColor: const MaterialStatePropertyAll(Color.fromRGBO(0, 0, 0, 0)),
+                             shadowColor: const MaterialStatePropertyAll(Color.fromRGBO(0, 0, 0, 0)),
+                             minimumSize: const MaterialStatePropertyAll(Size(50, 50)),
+                             iconColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.onSurface)
+                         ),
+                         onPressed: () {
+                           Provider.of<ThemeManager>(context, listen: false).toggleThemeMode();
+                         }, child: const Icon(Icons.dark_mode),
+                       ),
+                     ),
+                   ],
                  ),
                ),
              ),
