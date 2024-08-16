@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wolfpackapp/models_services/teachassist_model.dart';
 
 /*
@@ -39,10 +40,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 ####################
                 */
                   SizedBox(
-                    height: 450,
+                    height: 350,
                     child: Padding(
                       padding: const EdgeInsets.only(
-                          top: 90, left: 60, right: 60, bottom: 30),
+                          top: 60, left: 60, right: 60, bottom: 60),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(20),
                         child: SizedBox.fromSize(
@@ -63,9 +64,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 */
 
                   SizedBox(
-                    height: 350,
+                    height: 300,
                     child: Padding(
-                      padding: const EdgeInsets.all(50),
+                      padding: const EdgeInsets.only(left: 50, right: 50, bottom: 50),//EdgeInsets.all(50),
                       child: Column(
                         children: [
                           // Username
@@ -73,39 +74,56 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           // Password
                           PasswordField(controller: _passwordController),
+
+                          const SizedBox(height: 15),
+
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: ElevatedButton(
+                              style: Theme.of(context).elevatedButtonTheme.style,
+                              child: Text('Sign In as Guest',
+                                style: GoogleFonts.lato(
+                                    color: Theme.of(context).colorScheme.inversePrimary,
+                                    fontSize: 11  , fontWeight: FontWeight.w600
+                                ),
+                              ),
+                              onPressed: () async {
+                                Navigator.pushNamed(context, '/homeScreen');
+                              },
+                            ),
+                          ),
                         ],
                       ),
                     ),
                   ),
 
                   /*
-                ####################
-                #=-=-= Button =-=-=#
-                ####################
+                ############################
+                #=-=-= Sign In Button =-=-=#
+                ############################
                 */
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 50),
                     child: SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        style: Theme
-                            .of(context)
-                            .elevatedButtonTheme
-                            .style,
+                        style: Theme.of(context).elevatedButtonTheme.style,
                         child: Padding(
                           padding: const EdgeInsets.all(15),
                           child: Text('Sign In',
                               style: GoogleFonts.lato(
-                                  color: Theme
-                                      .of(context)
-                                      .colorScheme
-                                      .inversePrimary,
+                                  color: Theme.of(context).colorScheme.inversePrimary,
                                   fontSize: 20, fontWeight: FontWeight.w600)),
                         ),
                         onPressed: () async {
                           if (Form.of(context).validate()) {
                             String username = _usernameController.text.trim();
                             String password = _passwordController.text.trim();
+
+                            SharedPreferences accountInfoPreferences = await SharedPreferences.getInstance();
+                            accountInfoPreferences.setString('taUsername', username);
+                            accountInfoPreferences.setString('taPassword', password);
+
                             var response = await authorizeUser(username, password);
                             print(response);
                           }
@@ -162,8 +180,8 @@ class _UsernameFieldState extends State<UsernameField> {
             borderSide: BorderSide(color: _colorText)
           ),
         ),
-        validator: (PassCurrentValue){
-          RegExp regex = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#&*~]).{8,}$');
+        validator: (PassCurrentValue) {
+          //RegExp regex = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#&*~]).{8,}$');
           var passNonNullValue=PassCurrentValue??"";
           if(passNonNullValue.isEmpty){
             return ("Please Enter Your Student Number");
@@ -217,7 +235,7 @@ class _PasswordFieldState extends State<PasswordField> {
           ),
         ),
         validator: (PassCurrentValue){
-          RegExp regex = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#&*~]).{8,}$');
+          //RegExp regex = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#&*~]).{8,}$');
           var passNonNullValue=PassCurrentValue??"";
           if(passNonNullValue.isEmpty){
             return ("Please Enter Your Password");

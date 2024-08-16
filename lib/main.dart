@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wolfpackapp/firebase_options.dart';
 import 'package:wolfpackapp/screens/login_screen/login_screen.dart';
-
-import 'themes/theme_manager.dart';
+import 'package:wolfpackapp/themes/theme_manager.dart';
 
 import 'screens/settings_screen/settings_screen.dart';
 import 'screens/home_screen/home_screen.dart';
@@ -18,6 +17,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   HttpOverrides.global = MyHttpOverrides();
   runApp(
     ChangeNotifierProvider(
@@ -51,6 +51,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    ThemeManager().loadThemePreference();
   }
 
   @override
