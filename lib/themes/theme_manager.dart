@@ -3,13 +3,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wolfpackapp/themes/themes.dart';
 
 class ThemeManager with ChangeNotifier {
-  late ThemeData _themeData;
+  ThemeData? _themeData;
 
   ThemeManager() {
     loadThemePreference();
   }
 
-  ThemeData get themeData => _themeData;
+  ThemeData get themeData => _themeData ?? Themes.darkTheme;
 
   set themeData(ThemeData themeData) {
     _themeData = themeData;
@@ -28,12 +28,11 @@ class ThemeManager with ChangeNotifier {
 
   Future<void> loadThemePreference() async {
     SharedPreferences themePreference = await SharedPreferences.getInstance();
-    if (themePreference.getBool('isLightTheme') ?? true) {
+    if (themePreference.getBool('isLightTheme') ?? false) {
       _themeData = Themes.lightTheme;
     } else {
       _themeData = Themes.darkTheme;
     }
-
     notifyListeners();
   }
 
