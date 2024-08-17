@@ -29,10 +29,10 @@ Future<List<String?>> authorizeUser(String username, String password) async {
       var cookies = [res.headersSplitValues['set-cookie']?[5].substring(14,27),res.headersSplitValues['set-cookie']?[6].substring(11,17)];
       return cookies;
     } else {
-      throw Exception('1 ~ Failed to Authorize User');
+      throw ['1 ~ Failed to Authorize User'];
     }
   } catch (e) {
-    throw Exception('2 ~ Invalid Login');
+    return ['2 ~ Invalid Login'];
   }
 }
 
