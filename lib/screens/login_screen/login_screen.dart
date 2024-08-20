@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wolfpackapp/models_services/teachassist_model.dart';
+import 'package:wolfpackapp/shared_prefs.dart';
 
 /*
 #########################
@@ -143,9 +143,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               showDialog(context: context, builder: (context) => const InvalidLoginAlert());
                             } else {
                               print('Valid Login');
-                              SharedPreferences accountInfoPreferences = await SharedPreferences.getInstance();
-                              accountInfoPreferences.setString('taUsername', username);
-                              accountInfoPreferences.setString('taPassword', password);
+                              sharedPrefs.username = username;
+                              sharedPrefs.password = password;
 
                               if (!context.mounted) return;
                               Navigator.pushNamed(context, '/homeScreen');

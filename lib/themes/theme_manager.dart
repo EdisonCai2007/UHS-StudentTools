@@ -9,7 +9,7 @@ class ThemeManager with ChangeNotifier {
     loadThemePreference();
   }
 
-  ThemeData get themeData => _themeData ?? Themes.darkTheme;
+  ThemeData get themeData => _themeData ?? Themes.lightTheme;
 
   set themeData(ThemeData themeData) {
     _themeData = themeData;
