@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wolfpackapp/firebase_options.dart';
 import 'package:wolfpackapp/models_services/uhs_teachers_model.dart';
-import 'package:wolfpackapp/screens/contact_teachers_screen/contact_teachers_screen.dart';
-import 'package:wolfpackapp/screens/login_screen/login_screen.dart';
+import 'package:wolfpackapp/screens/contact_teachers_screen.dart';
+import 'package:wolfpackapp/screens/guidance_screen/guidance_screen.dart';
+import 'package:wolfpackapp/screens/login_screen.dart';
 import 'package:wolfpackapp/shared_prefs.dart';
 import 'package:wolfpackapp/themes/theme_manager.dart';
 
-import 'screens/settings_screen/settings_screen.dart';
+import 'screens/settings_screen.dart';
 import 'screens/home_screen/home_screen.dart';
 
 import 'dart:io';
@@ -70,7 +71,8 @@ class _MyAppState extends State<MyApp> {
         '/loginScreen': (context) => const LoginScreen(),
         '/homeScreen': (context) => const HomeScreen(),
         '/contactTeachersScreen': (context) => const ContactTeachersScreen(),
-        '/settingsScreen': (context) => const SettingsScreen()
+        '/guidanceScreen': (context) => const GuidanceScreen(),
+        '/settingsScreen': (context) => const SettingsScreen(),
       },
       title: 'UHS Student Tools',
 

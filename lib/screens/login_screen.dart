@@ -29,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
         builder: (context) {
           return Scaffold(
             resizeToAvoidBottomInset: false,
-            backgroundColor: Theme.of(context).colorScheme.primary,
+            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
             extendBody: true,
             body: Column(
               children: [
@@ -125,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             fit: BoxFit.fitHeight,
                             child: Text('Sign In',
                                 style: GoogleFonts.lato(
-                                    color: Theme.of(context).colorScheme.inversePrimary,
+                                    color: Theme.of(context).colorScheme.primary,
                                     fontSize: 20, fontWeight: FontWeight.w600)),
                           ),
                         ),
@@ -135,14 +135,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             String password = _passwordController.text.trim();
 
                             var response = await authorizeUser(username, password);
-                            if (response[0]?[0] == '1') {
+                            if (response[0] == 'Failed to Authorize User') {
                               if (!context.mounted) return;
                               showDialog(context: context, builder: (context) => const TeachAssistErrorAlert());
-                            } else if (response[0]?[0] == '2') {
+                            } else if (response[0] == 'Invalid Login') {
                               if (!context.mounted) return;
                               showDialog(context: context, builder: (context) => const InvalidLoginAlert());
                             } else {
-                              print('Valid Login');
+                              // print('Valid Login');
                               sharedPrefs.username = username;
                               sharedPrefs.password = password;
 

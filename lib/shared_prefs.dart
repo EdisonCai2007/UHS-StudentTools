@@ -7,6 +7,12 @@ class SharedPrefs {
     _sharedPrefs = await SharedPreferences.getInstance();
   }
 
+  bool get isLightTheme => _sharedPrefs.getBool('isLightTheme') ?? false;
+
+  set isLightTheme(bool value) {
+    _sharedPrefs.setBool('isLightTheme', value);
+  }
+
   String get username => _sharedPrefs.getString('taUsername') ?? "";
 
   set username(String value) {

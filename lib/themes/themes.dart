@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 class Themes {
   // Light Theme Colours
-  Color lightPrimaryColour = const Color.fromRGBO(255, 255, 255, 1.0);
-  Color lightInversePrimaryColour = const Color.fromRGBO(24, 24, 24, 1.0);
+  Color lightPrimaryColour = const Color.fromRGBO(0, 0, 0, 1.0);
+  Color lightInversePrimaryColour = const Color.fromRGBO(255, 255, 255, 1.0);
   Color lightBackgroundColour = const Color.fromRGBO(255, 255, 255, 1.0);
   Color lightAppBar = const Color.fromRGBO(238, 238, 238, 1.0);
   Color lightContainer = const Color.fromRGBO(255, 255, 255, 1.0);
@@ -12,8 +12,8 @@ class Themes {
   Color lightAccent = const Color.fromRGBO(210, 8, 8, 1.0);
 
   // Dark Theme Colours
-  Color darkPrimaryColour = const Color.fromRGBO(0, 0, 0, 1.0);
-  Color darkInversePrimaryColour = const Color.fromRGBO(255, 255, 255, 1.0);
+  Color darkPrimaryColour = const Color.fromRGBO(255, 255, 255, 1.0);
+  Color darkInversePrimaryColour = const Color.fromRGBO(0, 0, 0, 1.0);
   Color darkBackgroundColour = const Color.fromRGBO(36, 38, 42, 1.0);
   Color darkAppBar = const Color.fromRGBO(23, 23, 23, 1.0);
   Color darkContainer = const Color.fromRGBO(51, 51, 61, 1.0);

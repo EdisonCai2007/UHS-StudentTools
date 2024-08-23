@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wolfpackapp/models_services/uhs_teachers_model.dart';
 
-import '../../menu_drawer.dart';
+import '../menu_drawer.dart';
 
 
 class ContactTeachersScreen extends StatefulWidget {
@@ -27,9 +27,9 @@ class _ContactTeachersScreenState extends State<ContactTeachersScreen> {
       ####################
       */
       appBar: AppBar(
-          title: const Text('Contact Teachers'),
-          centerTitle: true,
-          foregroundColor: Theme.of(context).colorScheme.onSurface
+        title: Text('Contact Teachers', style: GoogleFonts.lato(fontSize: 20)),
+        foregroundColor: Theme.of(context).colorScheme.onSurface,
+        centerTitle: true,
       ),
 
       /*

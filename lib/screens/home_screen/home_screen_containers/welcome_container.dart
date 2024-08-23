@@ -18,7 +18,7 @@ class WelcomeContainer extends Container {
         right: 30,
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // Displays "Month Day, Year"
@@ -37,7 +37,7 @@ class WelcomeContainer extends Container {
           ),
 
           const SizedBox(height: 2),
-          Text(sharedPrefs.username, style: GoogleFonts.lato(fontSize: 15)),
+          Text(sharedPrefs.username != '' ? sharedPrefs.username : 'Guest', style: GoogleFonts.lato(fontSize: 15)),
         ],
       ),
     );

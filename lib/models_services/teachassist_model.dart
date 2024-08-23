@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 
 
 const String LOGINURL = 'https://ta.yrdsb.ca/yrdsb/index.php';
 const String COURSEURL = 'https://ta.yrdsb.ca/live/students/listReports.php?';
+const String GUIDANCEDATEURL = 'https://ta.yrdsb.ca/live/students/bookAppointment.php?';
 
 Future<List<String?>> authorizeUser(String username, String password) async {
   try {
@@ -27,12 +27,13 @@ Future<List<String?>> authorizeUser(String username, String password) async {
     // print(res.body);
     if (res.statusCode == 302) {
       var cookies = [res.headersSplitValues['set-cookie']?[5].substring(14,27),res.headersSplitValues['set-cookie']?[6].substring(11,17)];
+      // print(cookies);
       return cookies;
     } else {
-      throw ['1 ~ Failed to Authorize User'];
+      throw ['Failed to Authorize User'];
     }
   } catch (e) {
-    return ['2 ~ Invalid Login'];
+    return ['Invalid Login'];
   }
 }
 
@@ -48,7 +49,8 @@ Future<String> fetchMarks(username, password) async {
       },
     );
 
-    log(response.body);
+    
+    // log('body==${response.body}');
     if (response.statusCode == 200) {
       return "Bob";
     } else {
@@ -59,54 +61,26 @@ Future<String> fetchMarks(username, password) async {
   }
 }
 
-class TeachAssistMarks {
-  final String startTime;
-  final String endTime;
-  final String code;
-  final String name;
-  final String block;
-  final String room;
-  final String overallMark;
-  final List assignments;
-  final List weightTable;
+Future<List<String>> fetchGuidanceDate(username, password) async {
+  var cookies = await authorizeUser(username, password);
 
-  const TeachAssistMarks({
-    required this.startTime,
-    required this.endTime,
-    required this.code,
-    required this.name,
-    required this.block,
-    required this.room,
-    required this.overallMark,
-    required this.assignments,
-    required this.weightTable,
-  });
+  try {
+    http.Response response = await http.get(
+      Uri.parse('${GUIDANCEDATEURL}school_id=2&student_id=${cookies[1]}&inputDate=2024-08-20'),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Cookie': 'session_token=${cookies[0]}; student_id=${cookies[1]}',
+      },
+    );
 
-  factory TeachAssistMarks.fromJSON(Map<String, dynamic> json) {
-    return switch (json) {
-      {
-        'start_time': String startTime,
-        'end_time': String endTime,
-        'code': String code,
-        'name': String name,
-        'block': String block,
-        'room': String room,
-        'overall_mark': String overallMark,
-        'assignments': List assignments,
-        'weight_table': List weightTable,
-      } =>
-        TeachAssistMarks(
-          startTime: startTime,
-          endTime: endTime,
-          code: code,
-          name: name,
-          block: block,
-          room: room,
-          overallMark: overallMark,
-          assignments: assignments,
-          weightTable: weightTable,
-        ),
-      _ => throw const FormatException('Failed to load TeachAssist Marks')
-    };
+
+    // log('body==${response.body}');
+    if (response.statusCode == 200) {
+      return response.body.split("\n");
+    } else {
+      throw Exception('Failed to load TeachAssist Marks');
+    }
+  } catch (e) {
+    throw Exception('Failed to load TeachAssist Marks');
   }
 }
