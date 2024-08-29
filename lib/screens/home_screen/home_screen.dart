@@ -110,13 +110,13 @@ class HomeScreen extends StatelessWidget {
                 ]),
 
                 //Second Row
-                Padding(
-                  padding: const EdgeInsets.all(20),
+                const Padding(
+                  padding: EdgeInsets.all(20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       // Daily Weather Overview Container
-                      const Expanded(
+                      Expanded(
                         flex: 4,
                         child: DailyWeatherOverviewContainer(),
                       ),

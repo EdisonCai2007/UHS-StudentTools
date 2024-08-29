@@ -25,7 +25,7 @@ class AppointmentOverviewContainer extends StatelessWidget {
 
             FittedBox (
               fit: BoxFit.scaleDown,
-              child: Text('You have no current appointments',
+              child: Text('You have no appointments today',
                 style: GoogleFonts.lato(fontSize: 20, fontWeight: FontWeight.w500)),
             ),
           ],

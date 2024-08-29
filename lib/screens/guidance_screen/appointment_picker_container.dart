@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:html/dom.dart' as dom;
 
 import '../../models_services/teachassist_model.dart';
 import '../../shared_prefs.dart';
@@ -12,19 +15,16 @@ class AppointmentPickerContainer extends StatefulWidget {
       _AppointmentPickerContainerState();
 }
 
-class _AppointmentPickerContainerState extends State<AppointmentPickerContainer> {
-  List<String> dateSchedule = [];
+class _AppointmentPickerContainerState
+    extends State<AppointmentPickerContainer> {
+  dom.Document htmlData = dom.Document();
+  List<List<String>> dateSchedule = [];
 
   final searchController = TextEditingController();
 
-  _fetchGuidanceDate() async {
-    dateSchedule = await fetchGuidanceDate(sharedPrefs.username, sharedPrefs.password);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchGuidanceDate();
+  Future<void> _fetchGuidanceDate(date) async {
+    htmlData = await fetchGuidanceDate(
+        sharedPrefs.username, sharedPrefs.password, date);
   }
 
   @override
@@ -37,7 +37,6 @@ class _AppointmentPickerContainerState extends State<AppointmentPickerContainer>
           borderRadius: const BorderRadius.all(Radius.elliptical(20, 20)),
           boxShadow: const [BoxShadow(blurRadius: 10)],
         ),
-        height: 230,
         padding: const EdgeInsets.all(20),
         child: Padding(
           padding: const EdgeInsets.all(10),
@@ -57,7 +56,7 @@ class _AppointmentPickerContainerState extends State<AppointmentPickerContainer>
                 controller: searchController,
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.search),
-                  hintText: 'Search for a Teacher',
+                  hintText: 'Select a Date',
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                         color: Theme.of(context).colorScheme.inversePrimary),
@@ -66,7 +65,12 @@ class _AppointmentPickerContainerState extends State<AppointmentPickerContainer>
                 onTap: selectDate,
               ),
 
-
+              dateSchedule.isEmpty
+                  ? const Text('NOT A SCHOOL DAY')
+                  : SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(children: buildDateSchedule(dateSchedule))
+              ),
             ],
           ),
         ),
@@ -76,17 +80,46 @@ class _AppointmentPickerContainerState extends State<AppointmentPickerContainer>
 
   Future<void> selectDate() async {
     DateTime? selectedDate = await showDatePicker(
-        context: context,
-        firstDate: DateTime.now(),
-        lastDate: DateTime(2100),
+      context: context,
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2100),
     );
 
     if (selectedDate != null) {
+      await _fetchGuidanceDate(selectedDate.toString().split(" ")[0]);
+      dateSchedule = [];
       setState(() {
-        dateSchedule = _fetchGuidanceDate();
-        print(dateSchedule);
+        for (final data in htmlData
+            .querySelectorAll('body > div > div.box.blue > div')
+            .map((element) => element.innerHtml.trim())
+            .toList()) {
+          dateSchedule.add(data.split('\n'));
+        }
         searchController.text = selectedDate.toString().split(" ")[0];
       });
     }
   }
+
+  List<Widget> buildDateSchedule(List<List<String>> dateSchedule) {
+    List<Widget> columns = [];
+    for (int counselor = 0; counselor < dateSchedule.length; counselor++) {
+      columns.add(
+        Column(
+          children: <Widget>[
+            Text('${dateSchedule[counselor][0].substring(4,dateSchedule[counselor][0].indexOf(':'))}'
+                '${dateSchedule[counselor][0].substring(dateSchedule[counselor][0].indexOf('('),dateSchedule[counselor][0].indexOf('.'))}'),
+
+            // for (int i = 1; i < dateSchedule[counselor].length; i++) TextButton(
+            //   child: Text(dateSchedule[counselor][i]),
+            //   onPressed: ,
+            // )
+
+          ],
+        ),
+      );
+    }
+    return columns;
+  }
+
+
 }
