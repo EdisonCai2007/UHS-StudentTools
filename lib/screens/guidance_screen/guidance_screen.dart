@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:wolfpackapp/screens/guidance_screen/appointment_overview_container.dart';
+import 'package:wolfpackapp/screens/guidance_screen/appointment_picker_container.dart';
 
 import '/menu_drawer.dart';
-import 'home_screen_containers/welcome_container.dart';
-
-import 'home_screen_containers/daily_weather_overview_container.dart';
-import 'home_screen_containers/schedule_overview_container.dart';
-import 'home_screen_containers/teachassist_overview_container.dart';
 
 /*
 ########################
@@ -14,9 +11,14 @@ import 'home_screen_containers/teachassist_overview_container.dart';
 ########################
 */
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class GuidanceScreen extends StatefulWidget {
+  const GuidanceScreen({super.key});
 
+  @override
+  State<GuidanceScreen> createState() => _GuidanceScreenState();
+}
+
+class _GuidanceScreenState extends State<GuidanceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +28,7 @@ class HomeScreen extends StatelessWidget {
       ####################
       */
       appBar: AppBar(
-        title: Text('Home', style: GoogleFonts.lato(fontSize: 20)),
+        title: Text('Guidance', style: GoogleFonts.lato(fontSize: 20)),
         foregroundColor: Theme.of(context).colorScheme.onSurface,
         centerTitle: true,
       ),
@@ -84,12 +86,12 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Welcome Container
-                WelcomeContainer(),
+
+                // Appointment Overview Container
+                const AppointmentOverviewContainer(),
 
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -99,36 +101,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
 
-                // Schedule & Time Overview Container
-                const Row(
-                  children: [
-                  // Schedule Overview Container
-                  Expanded(
-                  flex: 1,
-                  child: ScheduleOverviewContainer(),
-                  ),
-                ]),
-
-                //Second Row
-                const Padding(
-                  padding: EdgeInsets.all(20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Daily Weather Overview Container
-                      Expanded(
-                        flex: 4,
-                        child: DailyWeatherOverviewContainer(),
-                      ),
-
-                      // Teach Assist Overview Container
-                      Expanded(
-                        flex: 5,
-                        child: TeachAssistOverviewContainer(),
-                      ),
-                    ],
-                  ),
-                ),
+                const AppointmentPickerContainer(),
               ],
             ),
           ],

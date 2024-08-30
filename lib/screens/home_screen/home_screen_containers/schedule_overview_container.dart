@@ -127,7 +127,7 @@ class _ScheduleOverviewContainerState extends State<ScheduleOverviewContainer> {
               color: Colors.white,
               border: Border.all(
                 width: 2,
-                color: Theme.of(context).colorScheme.inversePrimary
+                color: Theme.of(context).colorScheme.primary
               ),
             ),
             child: ClipRRect(

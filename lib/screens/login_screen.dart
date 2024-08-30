@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wolfpackapp/models_services/teachassist_model.dart';
+import 'package:wolfpackapp/shared_prefs.dart';
 
 /*
 #########################
@@ -24,26 +24,28 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
-      extendBody: true,
-      body: SingleChildScrollView(
-        child: Form(
-          child: Builder(
-            builder: (context) {
-              return Column(
-                children: [
+    return Form(
+      child: Builder(
+        builder: (context) {
+          return Scaffold(
+            resizeToAvoidBottomInset: false,
+            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+            extendBody: true,
+            body: Column(
+              children: [
 
-                  /*
+                /*
                 ####################
                 #=-=-= Header =-=-=#
                 ####################
                 */
-                  SizedBox(
-                    height: 350,
+                Flexible(
+                  flex: 3,
+                  child: AspectRatio(
+                    aspectRatio: 1 / 1,
                     child: Padding(
                       padding: const EdgeInsets.only(
-                          top: 60, left: 60, right: 60, bottom: 60),
+                          top: 90, left: 60, right: 60, bottom: 20),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(20),
                         child: SizedBox.fromSize(
@@ -56,86 +58,107 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
+                ),
 
-                  /*
+                /*
                 ##################
                 #=-=-= Form =-=-=#
                 ##################
                 */
 
-                  SizedBox(
-                    height: 300,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 50, right: 50, bottom: 50),//EdgeInsets.all(50),
-                      child: Column(
-                        children: [
-                          // Username
-                          UsernameField(controller: _usernameController),
+                Flexible(
+                  flex: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 20),//EdgeInsets.all(50),
+                    child: Column(
+                      children: [
+                        // Username
+                        UsernameField(controller: _usernameController),
 
-                          // Password
-                          PasswordField(controller: _passwordController),
+                        const SizedBox(height: 15),
 
-                          const SizedBox(height: 15),
+                        // Password
+                        PasswordField(controller: _passwordController),
 
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: ElevatedButton(
-                              style: Theme.of(context).elevatedButtonTheme.style,
-                              child: Text('Sign In as Guest',
-                                style: GoogleFonts.lato(
-                                    color: Theme.of(context).colorScheme.inversePrimary,
-                                    fontSize: 11  , fontWeight: FontWeight.w600
-                                ),
+                        const SizedBox(height: 10),
+
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: TextButton(
+                            child: Text('Sign In as Guest',
+                              style: GoogleFonts.lato(
+                                color: Theme.of(context).colorScheme.secondary,
+                                fontSize: 14, fontWeight: FontWeight.w600,
+                                decoration: TextDecoration.underline,
                               ),
-                              onPressed: () async {
-                                Navigator.pushNamed(context, '/homeScreen');
-                              },
+
                             ),
+                            onPressed: () async {
+                              Navigator.pushNamed(context, '/homeScreen');
+                            },
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
+                ),
 
-                  /*
+
+                /*
                 ############################
                 #=-=-= Sign In Button =-=-=#
                 ############################
                 */
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 50),
-                    child: SizedBox(
-                      width: double.infinity,
+
+                Flexible(
+                  flex: 1,
+                  child: SizedBox(
+                    height: 100,
+                    width: double.infinity,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
                       child: ElevatedButton(
                         style: Theme.of(context).elevatedButtonTheme.style,
                         child: Padding(
                           padding: const EdgeInsets.all(15),
-                          child: Text('Sign In',
-                              style: GoogleFonts.lato(
-                                  color: Theme.of(context).colorScheme.inversePrimary,
-                                  fontSize: 20, fontWeight: FontWeight.w600)),
+                          child: FittedBox(
+                            fit: BoxFit.fitHeight,
+                            child: Text('Sign In',
+                                style: GoogleFonts.lato(
+                                    color: Theme.of(context).colorScheme.primary,
+                                    fontSize: 20, fontWeight: FontWeight.w600)),
+                          ),
                         ),
                         onPressed: () async {
                           if (Form.of(context).validate()) {
                             String username = _usernameController.text.trim();
                             String password = _passwordController.text.trim();
 
-                            SharedPreferences accountInfoPreferences = await SharedPreferences.getInstance();
-                            accountInfoPreferences.setString('taUsername', username);
-                            accountInfoPreferences.setString('taPassword', password);
-
                             var response = await authorizeUser(username, password);
-                            print(response);
+                            if (response[0] == 'Failed to Authorize User') {
+                              if (!context.mounted) return;
+                              showDialog(context: context, builder: (context) => const TeachAssistErrorAlert());
+                            } else if (response[0] == 'Invalid Login') {
+                              if (!context.mounted) return;
+                              showDialog(context: context, builder: (context) => const InvalidLoginAlert());
+                            } else {
+                              // print('Valid Login');
+                              sharedPrefs.username = username;
+                              sharedPrefs.password = password;
+
+                              if (!context.mounted) return;
+                              Navigator.pushNamed(context, '/homeScreen');
+                            }
                           }
                         },
                       ),
                     ),
                   ),
-                ],
-              );
-            }
-          ),
-        ),
+                ),
+              ],
+            ),
+          );
+        }
       ),
     );
   }
@@ -181,7 +204,6 @@ class _UsernameFieldState extends State<UsernameField> {
           ),
         ),
         validator: (PassCurrentValue) {
-          //RegExp regex = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#&*~]).{8,}$');
           var passNonNullValue=PassCurrentValue??"";
           if(passNonNullValue.isEmpty){
             return ("Please Enter Your Student Number");
@@ -235,7 +257,6 @@ class _PasswordFieldState extends State<PasswordField> {
           ),
         ),
         validator: (PassCurrentValue){
-          //RegExp regex = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#&*~]).{8,}$');
           var passNonNullValue=PassCurrentValue??"";
           if(passNonNullValue.isEmpty){
             return ("Please Enter Your Password");
@@ -243,6 +264,52 @@ class _PasswordFieldState extends State<PasswordField> {
           return null;
         },
       ),
+    );
+  }
+}
+
+class InvalidLoginAlert extends StatelessWidget {
+  const InvalidLoginAlert({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('INVALID LOGIN'),
+      content: const Text('The username and password doesn\'t match. Please try again.'),
+      actions: [
+        TextButton(
+          child: Text('RETRY',
+            style: GoogleFonts.lato(
+            fontSize: 16, fontWeight: FontWeight.w800,
+            color: Theme.of(context).colorScheme.secondary)
+          ),
+          onPressed: () => Navigator.pop(context),)
+      ],
+    );
+  }
+}
+
+class TeachAssistErrorAlert extends StatelessWidget {
+  const TeachAssistErrorAlert({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('ERROR'),
+      content: const Text('Trouble accessing TeachAssist. Please try again later.'),
+      actions: [
+        TextButton(
+          child: Text('RETRY',
+            style: GoogleFonts.lato(
+            fontSize: 16, fontWeight: FontWeight.w800,
+            color: Theme.of(context).colorScheme.secondary)
+          ),
+          onPressed: () => Navigator.pop(context),)
+      ],
     );
   }
 }

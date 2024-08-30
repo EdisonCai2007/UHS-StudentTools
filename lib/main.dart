@@ -2,10 +2,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wolfpackapp/firebase_options.dart';
-import 'package:wolfpackapp/screens/login_screen/login_screen.dart';
+import 'package:wolfpackapp/models_services/uhs_teachers_model.dart';
+import 'package:wolfpackapp/screens/contact_teachers_screen.dart';
+import 'package:wolfpackapp/screens/guidance_screen/guidance_screen.dart';
+import 'package:wolfpackapp/screens/login_screen.dart';
+import 'package:wolfpackapp/shared_prefs.dart';
 import 'package:wolfpackapp/themes/theme_manager.dart';
 
-import 'screens/settings_screen/settings_screen.dart';
+import 'screens/settings_screen.dart';
 import 'screens/home_screen/home_screen.dart';
 
 import 'dart:io';
@@ -19,6 +23,10 @@ void main() async {
   );
 
   HttpOverrides.global = MyHttpOverrides();
+
+  await sharedPrefs.init();
+  UHSTeachersModel().init();
+
   runApp(
     ChangeNotifierProvider(
         create: (context) => ThemeManager(),
@@ -51,7 +59,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    ThemeManager().loadThemePreference();
   }
 
   @override
@@ -63,7 +70,9 @@ class _MyAppState extends State<MyApp> {
       routes: {
         '/loginScreen': (context) => const LoginScreen(),
         '/homeScreen': (context) => const HomeScreen(),
-        '/settingsScreen': (context) => const SettingsScreen()
+        '/contactTeachersScreen': (context) => const ContactTeachersScreen(),
+        '/guidanceScreen': (context) => const GuidanceScreen(),
+        '/settingsScreen': (context) => const SettingsScreen(),
       },
       title: 'UHS Student Tools',
 

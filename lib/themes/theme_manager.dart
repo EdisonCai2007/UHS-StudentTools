@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wolfpackapp/shared_prefs.dart';
 import 'package:wolfpackapp/themes/themes.dart';
 
 class ThemeManager with ChangeNotifier {
-  late ThemeData _themeData;
+  ThemeData? _themeData;
 
   ThemeManager() {
     loadThemePreference();
   }
 
-  ThemeData get themeData => _themeData;
+  ThemeData get themeData => _themeData ?? Themes.lightTheme;
 
   set themeData(ThemeData themeData) {
     _themeData = themeData;
@@ -19,26 +19,19 @@ class ThemeManager with ChangeNotifier {
   void toggleThemeMode() {
     if (_themeData == Themes.lightTheme) {
       themeData = Themes.darkTheme;
+      sharedPrefs.isLightTheme = false;
     } else {
       themeData = Themes.lightTheme;
+      sharedPrefs.isLightTheme = true;
     }
-
-    saveThemePreference();
   }
 
   Future<void> loadThemePreference() async {
-    SharedPreferences themePreference = await SharedPreferences.getInstance();
-    if (themePreference.getBool('isLightTheme') ?? true) {
+    if (sharedPrefs.isLightTheme) {
       _themeData = Themes.lightTheme;
     } else {
       _themeData = Themes.darkTheme;
     }
-
     notifyListeners();
-  }
-
-  Future<void> saveThemePreference() async {
-    SharedPreferences themePreference = await SharedPreferences.getInstance();
-    await themePreference.setBool('isLightTheme', _themeData == Themes.lightTheme);
   }
 }

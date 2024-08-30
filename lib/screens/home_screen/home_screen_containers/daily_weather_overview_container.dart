@@ -131,8 +131,12 @@ class _DailyWeatherOverviewContainerState extends State<DailyWeatherOverviewCont
                     child: Slider(
                       min: minMaxTemperature?.minTemperature.roundToDouble() ?? 0,
                       max: minMaxTemperature?.maxTemperature.roundToDouble() ?? 100,
-                      value: weather!.temperature.roundToDouble(),
-                      onChanged: (value) => weather!.temperature.round(),
+                      value: weather!.temperature.round() > (minMaxTemperature?.maxTemperature.round() ?? 100) ?
+                        minMaxTemperature!.maxTemperature.roundToDouble() :
+                        weather!.temperature.round() < (minMaxTemperature?.minTemperature.round() ?? 0) ?
+                        minMaxTemperature!.minTemperature.roundToDouble() :
+                        weather!.temperature.roundToDouble(),
+                      onChanged: (value) => weather!.temperature.roundToDouble(),
                     ),
                   ),
                 ),

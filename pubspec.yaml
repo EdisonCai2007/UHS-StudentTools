@@ -35,10 +35,12 @@ dependencies:
   intl: 0.19.0
   cupertino_icons: 1.0.6
   http: 1.2.0
-  html: 0.15.4
+  html: ^0.15.4
   lottie: ^3.1.0
   firebase_core: ^2.27.0
   shared_preferences: ^2.2.3
+  gsheets: ^0.5.0
+  url_launcher: ^6.3.0
 
 dev_dependencies:
   flutter_test:
