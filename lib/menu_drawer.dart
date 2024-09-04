@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:wolfpackapp/models_services/teachassist_model.dart';
 import 'package:wolfpackapp/shared_prefs.dart';
 
 import 'themes/theme_manager.dart';
@@ -74,6 +75,7 @@ class MenuDrawer extends Drawer {
             onTap: () {
               sharedPrefs.username = '';
               sharedPrefs.password = '';
+              TeachAssistModel.clearCourses();
               Navigator.pushNamed(context, '/loginScreen');
             },
           ),

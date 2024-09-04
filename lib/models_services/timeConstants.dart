@@ -1,5 +1,7 @@
 import 'dart:collection';
 
+import 'package:wolfpackapp/models_services/teachassist_model.dart';
+
 const int beforeSchool = 0; // 12:00 AM
 const int period1Start = 505; // 8:25 AM
 const int period2Start = 585; // 9:45 AM
@@ -44,5 +46,22 @@ class TimeConstants {
       }
     }
     return 0;
+  }
+
+  List<String> getPeriodClass(currentTime) {
+    final period = getPeriod(currentTime).replaceAll(RegExp('[^0-9]'), '');
+
+    if (period != '') {
+      for (var course in TeachAssistModel.courses) {
+        if (course['Period'].contains(period) && course['Semester'] == 1) {
+          return ['${course['Code']} : ${course['Name']}',
+            'Period ${course['Period'].toString().substring(1,course['Period'].toString().length-1).replaceAll(',', ' & ')}',
+          'Rm. ${course['Room']}'];
+        }
+      }
+      return ['Lunch / Spare','',''];
+    } else {
+      return ['','',''];
+    }
   }
 }

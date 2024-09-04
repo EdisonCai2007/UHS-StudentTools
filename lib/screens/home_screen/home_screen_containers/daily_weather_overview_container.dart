@@ -61,8 +61,11 @@ class _DailyWeatherOverviewContainerState extends State<DailyWeatherOverviewCont
       height: 300,
       margin: const EdgeInsets.all(10),
       padding: const EdgeInsets.only(top:20, left: 20,right: 20),
-      child: weather == null ? const CircularProgressIndicator(
-
+      child: weather == null ? const Center(
+        child: AspectRatio(
+          aspectRatio: 1 / 1,
+          child: CircularProgressIndicator(),
+        ),
       ) :
       Column(
         children: [
@@ -109,8 +112,8 @@ class _DailyWeatherOverviewContainerState extends State<DailyWeatherOverviewCont
               const SizedBox(width: 5),
               Expanded(
                 child: Container(
-                  width: 300,
                   height: 10,
+                  padding: EdgeInsets.zero,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
                     gradient: const LinearGradient(
@@ -123,20 +126,21 @@ class _DailyWeatherOverviewContainerState extends State<DailyWeatherOverviewCont
                     data: const SliderThemeData(
                       thumbColor: Colors.white,
                       thumbShape: RoundSliderThumbShape(
-                          elevation: 5, pressedElevation: 5, enabledThumbRadius: 3),
+                          elevation: 5, pressedElevation: 5, enabledThumbRadius: 10),
                       activeTrackColor: Colors.transparent,
-                      inactiveTrackColor: Colors.transparent,
-                      overlayColor: Colors.transparent,
                     ),
-                    child: Slider(
-                      min: minMaxTemperature?.minTemperature.roundToDouble() ?? 0,
-                      max: minMaxTemperature?.maxTemperature.roundToDouble() ?? 100,
-                      value: weather!.temperature.round() > (minMaxTemperature?.maxTemperature.round() ?? 100) ?
-                        minMaxTemperature!.maxTemperature.roundToDouble() :
-                        weather!.temperature.round() < (minMaxTemperature?.minTemperature.round() ?? 0) ?
-                        minMaxTemperature!.minTemperature.roundToDouble() :
-                        weather!.temperature.roundToDouble(),
-                      onChanged: (value) => weather!.temperature.roundToDouble(),
+                    child: FittedBox(
+                      fit: BoxFit.fitWidth,
+                      child: Slider(
+                        min: minMaxTemperature?.minTemperature.roundToDouble() ?? 0,
+                        max: minMaxTemperature?.maxTemperature.roundToDouble() ?? 100,
+                        value: weather!.temperature.round() > (minMaxTemperature?.maxTemperature.round() ?? 100) ?
+                          minMaxTemperature!.maxTemperature.roundToDouble() :
+                          weather!.temperature.round() < (minMaxTemperature?.minTemperature.round() ?? 0) ?
+                          minMaxTemperature!.minTemperature.roundToDouble() :
+                          weather!.temperature.roundToDouble(),
+                        onChanged: (value) => weather!.temperature.roundToDouble(),
+                      ),
                     ),
                   ),
                 ),
