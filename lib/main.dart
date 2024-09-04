@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wolfpackapp/firebase_options.dart';
+import 'package:wolfpackapp/models_services/teachassist_model.dart';
 import 'package:wolfpackapp/models_services/uhs_teachers_model.dart';
 import 'package:wolfpackapp/screens/contact_teachers_screen.dart';
 import 'package:wolfpackapp/screens/guidance_screen/guidance_screen.dart';
@@ -25,6 +26,7 @@ void main() async {
   HttpOverrides.global = MyHttpOverrides();
 
   await sharedPrefs.init();
+  if (sharedPrefs.username != '' && sharedPrefs.password != '') await TeachAssistModel().init();
   UHSTeachersModel().init();
 
   runApp(
@@ -66,7 +68,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
 
-      home: const LoginScreen(),
+      home: (sharedPrefs.username == '' && sharedPrefs.password == '') ? const LoginScreen() : const HomeScreen(),
       routes: {
         '/loginScreen': (context) => const LoginScreen(),
         '/homeScreen': (context) => const HomeScreen(),

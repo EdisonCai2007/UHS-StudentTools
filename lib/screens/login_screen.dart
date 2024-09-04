@@ -146,6 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               sharedPrefs.username = username;
                               sharedPrefs.password = password;
 
+                              await TeachAssistModel().init();
                               if (!context.mounted) return;
                               Navigator.pushNamed(context, '/homeScreen');
                             }
@@ -282,7 +283,7 @@ class InvalidLoginAlert extends StatelessWidget {
         TextButton(
           child: Text('RETRY',
             style: GoogleFonts.lato(
-            fontSize: 16, fontWeight: FontWeight.w800,
+            fontSize: 16, fontWeight: FontWeight.w900,
             color: Theme.of(context).colorScheme.secondary)
           ),
           onPressed: () => Navigator.pop(context),)
@@ -305,7 +306,7 @@ class TeachAssistErrorAlert extends StatelessWidget {
         TextButton(
           child: Text('RETRY',
             style: GoogleFonts.lato(
-            fontSize: 16, fontWeight: FontWeight.w800,
+            fontSize: 16, fontWeight: FontWeight.w900,
             color: Theme.of(context).colorScheme.secondary)
           ),
           onPressed: () => Navigator.pop(context),)

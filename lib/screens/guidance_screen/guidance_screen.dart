@@ -63,50 +63,52 @@ class _GuidanceScreenState extends State<GuidanceScreen> {
       #######################
       */
       body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         controller: ScrollController(),
         child: Stack(
-          children: [
-            Positioned(
-              top: -250,
-              right: -120,
-              child: Container(
-                height: 600,
-                width: 500,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color:
-                      Theme.of(context).colorScheme.secondary.withOpacity(0.2),
-                  //backgroundBlendMode: BlendMode.color,
-                  boxShadow: [
-                    BoxShadow(
-                        color: Theme.of(context).colorScheme.secondary,
-                        blurRadius: 150,
-                        blurStyle: BlurStyle.outer)
+                  children: [
+                    Positioned(
+                      top: -250,
+                      right: -120,
+                      child: Container(
+                        height: 600,
+                        width: 500,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color:
+                              Theme.of(context).colorScheme.secondary.withOpacity(0.2),
+                          //backgroundBlendMode: BlendMode.color,
+                          boxShadow: [
+                            BoxShadow(
+                                color: Theme.of(context).colorScheme.secondary,
+                                blurRadius: 150,
+                                blurStyle: BlurStyle.outer)
+                          ],
+                        ),
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+
+                        // Appointment Overview Container
+                        const AppointmentOverviewContainer(),
+
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 30),
+                          child: Container(
+                            height: 10,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                        ),
+
+                        const AppointmentPickerContainer(),
+                      ],
+                    ),
                   ],
                 ),
-              ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-
-                // Appointment Overview Container
-                const AppointmentOverviewContainer(),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Container(
-                    height: 10,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-                ),
-
-                const AppointmentPickerContainer(),
-              ],
-            ),
-          ],
-        ),
       ),
+          
     );
   }
 }

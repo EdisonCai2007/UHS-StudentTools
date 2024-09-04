@@ -61,6 +61,7 @@ class HomeScreen extends StatelessWidget {
       #######################
       */
       body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         controller: ScrollController(),
         child: Stack(
           children: [

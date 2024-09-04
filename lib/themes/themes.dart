@@ -8,7 +8,7 @@ class Themes {
   Color lightBackgroundColour = const Color.fromRGBO(255, 255, 255, 1.0);
   Color lightAppBar = const Color.fromRGBO(238, 238, 238, 1.0);
   Color lightContainer = const Color.fromRGBO(255, 255, 255, 1.0);
-  Color lightContainerAccent = const Color.fromRGBO(198, 198, 198, 1.0);
+  Color lightContainerAccent = const Color.fromRGBO(227, 227, 227, 1.0);
   Color lightAccent = const Color.fromRGBO(210, 8, 8, 1.0);
 
   // Dark Theme Colours
@@ -34,7 +34,7 @@ class Themes {
       primaryContainer: _themes.lightContainer,
       secondary: _themes.lightAccent,
       background: _themes.lightBackgroundColour,
-      tertiary: _themes.lightAppBar,
+      tertiary: _themes.lightContainerAccent,
     ),
     // AppBar Theme
     appBarTheme: const AppBarTheme().copyWith(
