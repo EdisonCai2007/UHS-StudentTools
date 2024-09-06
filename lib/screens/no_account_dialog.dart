@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:wolfpackapp/screens/login_screen.dart';
 
 import '../models_services/teachassist_model.dart';
+import '../page_navigator.dart';
 import '../shared_prefs.dart';
 
 class NoAccountDialog extends Container {
@@ -44,7 +46,7 @@ class NoAccountDialog extends Container {
                   sharedPrefs.username = '';
                   sharedPrefs.password = '';
                   TeachAssistModel.clearCourses();
-                  Navigator.pushNamed(context, '/loginScreen');
+                  PageNavigator.changePage(context, const LoginScreen());
                 },
                 icon: const Icon(Icons.login),
                 label: Text('Sign In',

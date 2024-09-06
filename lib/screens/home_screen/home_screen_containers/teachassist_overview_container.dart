@@ -5,7 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:wolfpackapp/models_services/teachassist_model.dart';
+import 'package:wolfpackapp/screens/guidance_screen/courses_screen.dart';
 
+import '../../../page_navigator.dart';
 import '../../no_account_dialog.dart';
 
 class TeachAssistOverviewContainer extends StatefulWidget {
@@ -39,7 +41,7 @@ class _TeachAssistOverviewContainerState
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/coursesScreen');
+        PageNavigator.changePage(context, const CoursesScreen());
       },
       child: Container(
         decoration: BoxDecoration(

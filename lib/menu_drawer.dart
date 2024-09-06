@@ -2,7 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:wolfpackapp/models_services/teachassist_model.dart';
+import 'package:wolfpackapp/screens/contact_teachers_screen.dart';
+import 'package:wolfpackapp/screens/guidance_screen/courses_screen.dart';
+import 'package:wolfpackapp/screens/guidance_screen/guidance_screen.dart';
+import 'package:wolfpackapp/screens/home_screen/home_screen.dart';
+import 'package:wolfpackapp/screens/login_screen.dart';
+import 'package:wolfpackapp/screens/settings_screen.dart';
 import 'package:wolfpackapp/shared_prefs.dart';
+import 'package:wolfpackapp/page_navigator.dart';
 
 import 'themes/theme_manager.dart';
 
@@ -33,7 +40,7 @@ class MenuDrawer extends Drawer {
                 style: GoogleFonts.lato(
                     fontSize: 20, fontWeight: FontWeight.w400)),
             onTap: () {
-              Navigator.pushNamed(context, '/homeScreen');
+              PageNavigator.changePage(context, const HomeScreen());
             },
           ),
 
@@ -43,7 +50,7 @@ class MenuDrawer extends Drawer {
                 style: GoogleFonts.lato(
                     fontSize: 20, fontWeight: FontWeight.w400)),
             onTap: () {
-              Navigator.pushNamed(context, '/contactTeachersScreen');
+              PageNavigator.changePage(context, const ContactTeachersScreen());
             },
           ),
 
@@ -53,7 +60,7 @@ class MenuDrawer extends Drawer {
                 style: GoogleFonts.lato(
                     fontSize: 20, fontWeight: FontWeight.w400)),
             onTap: () {
-              Navigator.pushNamed(context, '/guidanceScreen');
+              PageNavigator.changePage(context, const GuidanceScreen());
             },
           ),
 
@@ -63,7 +70,7 @@ class MenuDrawer extends Drawer {
                 style: GoogleFonts.lato(
                     fontSize: 20, fontWeight: FontWeight.w400)),
             onTap: () {
-              Navigator.pushNamed(context, '/coursesScreen');
+              PageNavigator.changePage(context, const CoursesScreen());
             },
           ),
 
@@ -73,7 +80,7 @@ class MenuDrawer extends Drawer {
                 style: GoogleFonts.lato(
                     fontSize: 20, fontWeight: FontWeight.w400)),
             onTap: () {
-              Navigator.pushNamed(context, '/settingsScreen');
+              PageNavigator.changePage(context, const SettingsScreen());
             },
           ),
 
@@ -86,7 +93,7 @@ class MenuDrawer extends Drawer {
               sharedPrefs.username = '';
               sharedPrefs.password = '';
               TeachAssistModel.clearCourses();
-              Navigator.pushNamed(context, '/loginScreen');
+              PageNavigator.changePage(context, const LoginScreen());
             },
           ),
 
