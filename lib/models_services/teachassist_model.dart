@@ -24,17 +24,17 @@ Future<List<String?>> authorizeUser(String username, String password) async {
           'password': password,
           'submit': 'Login',
         }
-    );
+    ).timeout(const Duration(milliseconds: 1000));
 
-    // print(res.statusCode);
-    // print(res.headers);
-    // print(res.body);
+     //print("statusCode === ${res.statusCode}");
+     //print("headers === ${res.headers}");
+     //print("body === ${res.body}");
     if (res.statusCode == 302) {
       var cookies = [
         res.headersSplitValues['set-cookie']?[5].substring(14, res.headersSplitValues['set-cookie']?[5].indexOf(';',14)),
         res.headersSplitValues['set-cookie']?[6].substring(11, 17)
       ];
-      // print(cookies);
+      //print("cookies === $cookies");
       return cookies;
     } else {
       throw ['Failed to Authorize User'];

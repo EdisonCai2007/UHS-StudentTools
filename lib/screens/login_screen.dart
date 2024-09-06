@@ -18,6 +18,8 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
+bool buttonClickable = true;
+
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _usernameController = TextEditingController();
 
@@ -69,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 */
 
                 Flexible(
-                  flex: 2,
+                  flex: 3,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 20),//EdgeInsets.all(50),
                     child: Column(
@@ -132,25 +134,34 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                         onPressed: () async {
-                          if (Form.of(context).validate()) {
-                            String username = _usernameController.text.trim();
-                            String password = _passwordController.text.trim();
+                          print(buttonClickable);
+                          if (buttonClickable) {
+                            if (Form.of(context).validate()) {
+                              String username = _usernameController.text.trim();
+                              String password = _passwordController.text.trim();
 
-                            var response = await authorizeUser(username, password);
-                            if (response[0] == 'Failed to Authorize User') {
-                              if (!context.mounted) return;
-                              showDialog(context: context, builder: (context) => const TeachAssistErrorAlert());
-                            } else if (response[0] == 'Invalid Login') {
-                              if (!context.mounted) return;
-                              showDialog(context: context, builder: (context) => const InvalidLoginAlert());
-                            } else {
-                              // print('Valid Login');
-                              sharedPrefs.username = username;
-                              sharedPrefs.password = password;
+                              var response = await authorizeUser(
+                                  username, password);
+                              if (response[0] == 'Failed to Authorize User') {
+                                if (!context.mounted) return;
+                                showDialog(context: context,
+                                    builder: (
+                                        context) => const TeachAssistErrorAlert());
+                              } else if (response[0] == 'Invalid Login') {
+                                if (!context.mounted) return;
+                                if (buttonClickable) {
+                                  buttonClickable = false;
+                                  showDialog(context: context, builder: (context) => const InvalidLoginAlert(), barrierDismissible: false);
+                                }
+                              } else {
+                                // print('Valid Login');
+                                sharedPrefs.username = username;
+                                sharedPrefs.password = password;
 
-                              await TeachAssistModel().init();
-                              if (!context.mounted) return;
-                              Navigator.pushNamed(context, '/homeScreen');
+                                await TeachAssistModel().init();
+                                if (!context.mounted) return;
+                                Navigator.pushNamed(context, '/homeScreen');
+                              }
                             }
                           }
                         },
@@ -261,7 +272,7 @@ class _PasswordFieldState extends State<PasswordField> {
         ),
         validator: (PassCurrentValue){
           var passNonNullValue=PassCurrentValue??"";
-          if(passNonNullValue.isEmpty){
+          if (passNonNullValue.isEmpty){
             return ("Please Enter Your Password");
           }
           return null;
@@ -280,7 +291,7 @@ class InvalidLoginAlert extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('INVALID LOGIN'),
-      content: const Text('The username and password doesn\'t match. Please try again.'),
+      content: const Text('Incorrect username and/or password. Please try again.'),
       actions: [
         TextButton(
           child: Text('RETRY',
@@ -288,7 +299,11 @@ class InvalidLoginAlert extends StatelessWidget {
             fontSize: 16, fontWeight: FontWeight.w900,
             color: Theme.of(context).colorScheme.secondary)
           ),
-          onPressed: () => Navigator.pop(context),)
+          onPressed: () {
+            buttonClickable = true;
+            Navigator.pop(context);
+          }
+        )
       ],
     );
   }

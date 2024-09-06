@@ -16,8 +16,7 @@ class AppointmentPickerContainer extends StatefulWidget {
       _AppointmentPickerContainerState();
 }
 
-class _AppointmentPickerContainerState
-    extends State<AppointmentPickerContainer> {
+class _AppointmentPickerContainerState extends State<AppointmentPickerContainer> {
   dom.Document guidanceDateHtmlData = dom.Document();
   dom.Document guidanceTimeHtmlData = dom.Document();
   List dateSchedule = [];
