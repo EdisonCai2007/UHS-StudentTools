@@ -128,6 +128,7 @@ class _DailyWeatherOverviewContainerState extends State<DailyWeatherOverviewCont
                       thumbShape: RoundSliderThumbShape(
                           elevation: 5, pressedElevation: 5, enabledThumbRadius: 10),
                       activeTrackColor: Colors.transparent,
+                      inactiveTrackColor: Colors.transparent,
                     ),
                     child: FittedBox(
                       fit: BoxFit.fitWidth,

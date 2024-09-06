@@ -45,7 +45,6 @@ class Themes {
     ),
     bottomAppBarTheme: BottomAppBarTheme(
       color: _themes.lightAppBar,
-      height: 70,
       padding: const EdgeInsets.all(20),
     ),
     progressIndicatorTheme: ProgressIndicatorThemeData(
@@ -81,7 +80,6 @@ class Themes {
             const BorderDirectional(bottom: BorderSide(color: Colors.black))),
     bottomAppBarTheme: BottomAppBarTheme(
       color: _themes.darkAppBar,
-      height: 70,
       padding: const EdgeInsets.all(20),
     ),
     progressIndicatorTheme: ProgressIndicatorThemeData(

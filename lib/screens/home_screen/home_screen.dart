@@ -64,6 +64,7 @@ class HomeScreen extends StatelessWidget {
         physics: const BouncingScrollPhysics(),
         controller: ScrollController(),
         child: Stack(
+          clipBehavior: Clip.none,
           children: [
             Positioned(
               top: -250,

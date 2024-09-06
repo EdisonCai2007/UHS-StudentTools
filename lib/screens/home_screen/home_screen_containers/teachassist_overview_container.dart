@@ -37,107 +37,112 @@ class _TeachAssistOverviewContainerState
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primaryContainer,
-        borderRadius: const BorderRadius.all(Radius.elliptical(20, 20)),
-        boxShadow: const [BoxShadow(blurRadius: 10)],
-      ),
-      height: 300,
-      margin: const EdgeInsets.all(10),
-      padding: const EdgeInsets.only(top: 30),
-      child: (TeachAssistModel.courses.isEmpty) ? NoAccountDialog() : Column(
-        children: [
-          SizedBox(
-            width: 100,
-            height: 100,
-            child: Stack(
-              children: [
-                Container(
-                  foregroundDecoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      width: 2,
-                      color: Theme.of(context).colorScheme.tertiary,
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, '/coursesScreen');
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.primaryContainer,
+          borderRadius: const BorderRadius.all(Radius.elliptical(20, 20)),
+          boxShadow: const [BoxShadow(blurRadius: 10)],
+        ),
+        height: 300,
+        margin: const EdgeInsets.all(10),
+        padding: const EdgeInsets.only(top: 30),
+        child: (TeachAssistModel.courses.isEmpty) ? NoAccountDialog() : Column(
+          children: [
+            SizedBox(
+              width: 100,
+              height: 100,
+              child: Stack(
+                children: [
+                  Container(
+                    foregroundDecoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        width: 2,
+                        color: Theme.of(context).colorScheme.tertiary,
+                      ),
+                    ),
+                    child: CircularPercentIndicator(
+                        radius: 50,
+                        lineWidth: 10,
+                        percent: average / 100,
+                        center: Text('$average%',
+                            style: GoogleFonts.lato(
+                                fontSize: 18, fontWeight: FontWeight.w800)),
+                        linearGradient: LinearGradient(
+                            begin: Alignment.topRight,
+                            end: Alignment.center,
+                            colors: <Color>[
+                              Theme.of(context).colorScheme.secondary,
+                              Theme.of(context).colorScheme.secondary,
+                            ]),
+                        rotateLinearGradient: true,
+                        circularStrokeCap: CircularStrokeCap.round),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        width: 2,
+                        color: Theme.of(context).colorScheme.tertiary,
+                      ),
                     ),
                   ),
-                  child: CircularPercentIndicator(
-                      radius: 50,
-                      lineWidth: 15,
-                      percent: average / 100,
-                      center: Text('$average%',
-                          style: GoogleFonts.lato(
-                              fontSize: 18, fontWeight: FontWeight.w800)),
-                      linearGradient: LinearGradient(
-                          begin: Alignment.topRight,
-                          end: Alignment.center,
-                          colors: <Color>[
-                            Theme.of(context).colorScheme.secondary,
-                            Theme.of(context).colorScheme.secondary,
-                          ]),
-                      rotateLinearGradient: true,
-                      circularStrokeCap: CircularStrokeCap.round),
-                ),
-                Container(
-                  margin: const EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      width: 2,
-                      color: Theme.of(context).colorScheme.tertiary,
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ...List.generate(
-                      TeachAssistModel.courses.length,
-                      (index) => Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 6),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            border: Border.all(
-                              width: 2,
-                              color: Theme.of(context).colorScheme.tertiary,
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ...List.generate(
+                        TeachAssistModel.courses.length,
+                        (index) => Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              border: Border.all(
+                                width: 2,
+                                color: Theme.of(context).colorScheme.tertiary,
+                              ),
                             ),
-                          ),
-                          child: LinearPercentIndicator(
-                            padding: EdgeInsets.zero,
-                            lineHeight: 15,
-                            percent: double.parse(TeachAssistModel.courses[index]['Course Average']) / 100,
-                            center: Text(
-                                TeachAssistModel.courses[index]['Code'],
-                                style: GoogleFonts.lato(
-                                    fontSize: 10, fontWeight: FontWeight.w800)),
-                            linearGradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.center,
-                              colors: <Color>[
-                                Theme.of(context).colorScheme.secondary,
-                                Theme.of(context).colorScheme.secondary,
-                              ],
+                            child: LinearPercentIndicator(
+                              padding: EdgeInsets.zero,
+                              lineHeight: 20,
+                              percent: double.parse(TeachAssistModel.courses[index]['Course Average']) / 100,
+                              center: Text(
+                                  TeachAssistModel.courses[index]['Code'],
+                                  style: GoogleFonts.lato(
+                                      fontSize: 10, fontWeight: FontWeight.w800)),
+                              linearGradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.center,
+                                colors: <Color>[
+                                  Theme.of(context).colorScheme.secondary,
+                                  Theme.of(context).colorScheme.secondary,
+                                ],
+                              ),
+                              barRadius: const Radius.circular(15),
                             ),
-                            barRadius: const Radius.circular(15),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

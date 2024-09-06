@@ -58,6 +58,16 @@ class MenuDrawer extends Drawer {
           ),
 
           ListTile(
+            leading: const Icon(Icons.class_),
+            title: Text('Courses',
+                style: GoogleFonts.lato(
+                    fontSize: 20, fontWeight: FontWeight.w400)),
+            onTap: () {
+              Navigator.pushNamed(context, '/coursesScreen');
+            },
+          ),
+
+          ListTile(
             leading: const Icon(Icons.settings),
             title: Text('Settings',
                 style: GoogleFonts.lato(
