@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:wolfpackapp/models_services/teachassist_model.dart';
 import 'package:wolfpackapp/screens/contact_teachers_screen.dart';
-import 'package:wolfpackapp/screens/guidance_screen/courses_screen.dart';
+import 'package:wolfpackapp/screens/courses_screen/courses_screen.dart';
 import 'package:wolfpackapp/screens/guidance_screen/guidance_screen.dart';
 import 'package:wolfpackapp/screens/home_screen/home_screen.dart';
 import 'package:wolfpackapp/screens/login_screen.dart';

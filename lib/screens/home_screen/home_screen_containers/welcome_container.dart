@@ -23,7 +23,7 @@ class WelcomeContainer extends Container {
         children: [
           // Displays "Month Day, Year"
           Text(date,
-              style: GoogleFonts.lato(fontSize: 20, fontWeight: FontWeight.w500)),
+              style: GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w500)),
           const SizedBox(height: 3),
 
           //Displays Day of the Week
@@ -32,12 +32,12 @@ class WelcomeContainer extends Container {
             child: FittedBox (
               fit: BoxFit.scaleDown,
               child: Text(day,
-                  style: GoogleFonts.lato(fontSize: 65, fontWeight: FontWeight.w900)),
+                  style: GoogleFonts.roboto(fontSize: 65, fontWeight: FontWeight.w800)),
             ),
           ),
 
           const SizedBox(height: 2),
-          Text(sharedPrefs.username != '' ? sharedPrefs.username : 'Guest', style: GoogleFonts.lato(fontSize: 15)),
+          Text(sharedPrefs.username != '' ? sharedPrefs.username : 'Guest', style: GoogleFonts.roboto(fontSize: 15)),
         ],
       ),
     );

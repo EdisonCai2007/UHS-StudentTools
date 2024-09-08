@@ -41,7 +41,7 @@ class _ScheduleOverviewContainerState extends State<ScheduleOverviewContainer> {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primaryContainer,
         borderRadius: const BorderRadius.all(Radius.elliptical(20, 20)),
-        boxShadow: const [BoxShadow(blurRadius: 10)],
+        boxShadow: const [BoxShadow(blurRadius: 5)],
       ),
       height: 250,
       margin: const EdgeInsets.only(
@@ -75,7 +75,7 @@ class _ScheduleOverviewContainerState extends State<ScheduleOverviewContainer> {
                       child: FittedBox(
                         fit: BoxFit.fitHeight,
                         child: Text(TimeConstants().getPeriod(minuteTime),
-                            style: GoogleFonts.lato(
+                            style: GoogleFonts.roboto(
                                 fontSize: 70, fontWeight: FontWeight.w800)),
                       ),
                     ),
@@ -99,7 +99,7 @@ class _ScheduleOverviewContainerState extends State<ScheduleOverviewContainer> {
                         color: Theme.of(context).colorScheme.tertiary,
                         borderRadius:
                             const BorderRadius.all(Radius.elliptical(10, 10)),
-                        boxShadow: const [BoxShadow(blurRadius: 10)],
+                        boxShadow: const [BoxShadow(blurRadius: 3)],
                       ),
                       alignment: Alignment.center,
                       height: 40,
@@ -109,7 +109,7 @@ class _ScheduleOverviewContainerState extends State<ScheduleOverviewContainer> {
                       child: FittedBox(
                         fit: BoxFit.fitHeight,
                         child: Text(" $twelveHrTime ",
-                            style: GoogleFonts.lato(
+                            style: GoogleFonts.roboto(
                                 fontSize: 20, fontWeight: FontWeight.w800)),
                       ),
                     ),
@@ -135,6 +135,7 @@ class _ScheduleOverviewContainerState extends State<ScheduleOverviewContainer> {
             child: LinearPercentIndicator(
               padding: EdgeInsets.zero,
               lineHeight: 10,
+              backgroundColor: Theme.of(context).colorScheme.tertiary,
               percent: TimeConstants().getPeriodProgress(minuteTime),
               linearGradient: LinearGradient(
                 begin: Alignment.topCenter,
@@ -162,7 +163,7 @@ class _ScheduleOverviewContainerState extends State<ScheduleOverviewContainer> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(TimeConstants().getPeriodClass(minuteTime)[0],
-                      style: GoogleFonts.lato(
+                      style: GoogleFonts.roboto(
                           fontSize: 20, fontWeight: FontWeight.w800)),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
@@ -172,14 +173,14 @@ class _ScheduleOverviewContainerState extends State<ScheduleOverviewContainer> {
                           flex: 1,
                           child: Text(
                               TimeConstants().getPeriodClass(minuteTime)[1],
-                              style: GoogleFonts.lato(
+                              style: GoogleFonts.roboto(
                                   fontSize: 16, fontWeight: FontWeight.w600)),
                         ),
                         Expanded(
                           flex: 2,
                           child: Text(
                               TimeConstants().getPeriodClass(minuteTime)[2],
-                              style: GoogleFonts.lato(
+                              style: GoogleFonts.roboto(
                                   fontSize: 14, fontWeight: FontWeight.w600)),
                         ),
                       ],

@@ -21,6 +21,7 @@ class _ContactTeachersScreenState extends State<ContactTeachersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       /*
       ####################
       #=-=-= AppBar =-=-=#

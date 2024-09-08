@@ -20,13 +20,14 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       /*
       ####################
       #=-=-= AppBar =-=-=#
       ####################
       */
       appBar: AppBar(
-        title: Text('Home', style: GoogleFonts.lato(fontSize: 20)),
+        title: Text('Home', style: GoogleFonts.roboto(fontSize: 20)),
         foregroundColor: Theme.of(context).colorScheme.onSurface,
         centerTitle: true,
       ),

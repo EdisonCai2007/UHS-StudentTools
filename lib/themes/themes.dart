@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 
 
 class Themes {
@@ -14,10 +15,10 @@ class Themes {
   // Dark Theme Colours
   Color darkPrimaryColour = const Color.fromRGBO(255, 255, 255, 1.0);
   Color darkInversePrimaryColour = const Color.fromRGBO(0, 0, 0, 1.0);
-  Color darkBackgroundColour = const Color.fromRGBO(36, 38, 42, 1.0);
+  Color darkBackgroundColour = const Color.fromRGBO(39, 39, 40, 1.0);
   Color darkAppBar = const Color.fromRGBO(23, 23, 23, 1.0);
-  Color darkContainer = const Color.fromRGBO(51, 51, 61, 1.0);
-  Color darkContainerAccent = const Color.fromRGBO(33, 33, 33, 1.0);
+  Color darkContainer = const Color.fromRGBO(60, 61, 66, 1.0);
+  Color darkContainerAccent = const Color.fromRGBO(26, 26, 26, 1.0);
   Color darkAccent = const Color.fromRGBO(176, 18, 18, 1.0);
 
   /*

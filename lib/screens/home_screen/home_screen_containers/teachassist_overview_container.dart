@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:wolfpackapp/models_services/teachassist_model.dart';
-import 'package:wolfpackapp/screens/guidance_screen/courses_screen.dart';
+import 'package:wolfpackapp/screens/courses_screen/courses_screen.dart';
 
 import '../../../page_navigator.dart';
 import '../../no_account_dialog.dart';
@@ -47,7 +47,7 @@ class _TeachAssistOverviewContainerState
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.primaryContainer,
           borderRadius: const BorderRadius.all(Radius.elliptical(20, 20)),
-          boxShadow: const [BoxShadow(blurRadius: 10)],
+          boxShadow: const [BoxShadow(blurRadius: 5)],
         ),
         height: 300,
         margin: const EdgeInsets.all(10),
@@ -70,9 +70,10 @@ class _TeachAssistOverviewContainerState
                     child: CircularPercentIndicator(
                         radius: 50,
                         lineWidth: 10,
+                        backgroundColor: Theme.of(context).colorScheme.tertiary,
                         percent: average / 100,
                         center: Text('$average%',
-                            style: GoogleFonts.lato(
+                            style: GoogleFonts.roboto(
                                 fontSize: 18, fontWeight: FontWeight.w800)),
                         linearGradient: LinearGradient(
                             begin: Alignment.topRight,
@@ -120,10 +121,11 @@ class _TeachAssistOverviewContainerState
                             child: LinearPercentIndicator(
                               padding: EdgeInsets.zero,
                               lineHeight: 20,
+                              backgroundColor: Theme.of(context).colorScheme.tertiary,
                               percent: double.parse(TeachAssistModel.courses[index]['Course Average']) / 100,
                               center: Text(
                                   TeachAssistModel.courses[index]['Code'],
-                                  style: GoogleFonts.lato(
+                                  style: GoogleFonts.roboto(
                                       fontSize: 10, fontWeight: FontWeight.w800)),
                               linearGradient: LinearGradient(
                                 begin: Alignment.topCenter,

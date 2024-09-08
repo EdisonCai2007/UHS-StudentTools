@@ -43,7 +43,7 @@ class _AppointmentPickerContainerState extends State<AppointmentPickerContainer>
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.primaryContainer,
           borderRadius: const BorderRadius.all(Radius.elliptical(20, 20)),
-          boxShadow: const [BoxShadow(blurRadius: 10)],
+          boxShadow: const [BoxShadow(blurRadius: 5)],
         ),
         padding: const EdgeInsets.only(top: 30, left: 30, right: 30),
         child: (TeachAssistModel.courses.isEmpty) ? Column(

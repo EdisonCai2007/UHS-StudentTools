@@ -56,15 +56,20 @@ class _DailyWeatherOverviewContainerState extends State<DailyWeatherOverviewCont
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primaryContainer,
         borderRadius: const BorderRadius.all(Radius.elliptical(20, 20)),
-        boxShadow: const [BoxShadow(blurRadius: 10)],
+        boxShadow: const [BoxShadow(blurRadius: 5)],
       ),
       height: 300,
       margin: const EdgeInsets.all(10),
       padding: const EdgeInsets.only(top:20, left: 20,right: 20),
-      child: weather == null ? const Center(
+      child: (weather == null || minMaxTemperature == null) ? Center(
         child: AspectRatio(
           aspectRatio: 1 / 1,
-          child: CircularProgressIndicator(),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: CircularProgressIndicator(
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+          ),
         ),
       ) :
       Column(
@@ -75,7 +80,7 @@ class _DailyWeatherOverviewContainerState extends State<DailyWeatherOverviewCont
             child: FittedBox(
               fit: BoxFit.none,
               child: Text("${weather?.weatherCondition}",
-                  style: GoogleFonts.lato(
+                  style: GoogleFonts.roboto(
                       fontSize: 30, fontWeight: FontWeight.w800)),
             ),
           ),
@@ -101,13 +106,13 @@ class _DailyWeatherOverviewContainerState extends State<DailyWeatherOverviewCont
             "${minMaxTemperature?.minTemperature.round()}°C" :
             "${weather!.temperature.round()}°C",
                   style:
-                      GoogleFonts.lato(fontSize: 40, fontWeight: FontWeight.w800)),
+                      GoogleFonts.roboto(fontSize: 40, fontWeight: FontWeight.w800)),
           ),
           const SizedBox(height: 15),
           Row(
             children: [
               Text("${minMaxTemperature?.minTemperature.round()}",
-                  style: GoogleFonts.lato(
+                  style: GoogleFonts.roboto(
                       fontSize: 15, fontWeight: FontWeight.w800)),
               const SizedBox(width: 5),
               Expanded(
@@ -148,7 +153,7 @@ class _DailyWeatherOverviewContainerState extends State<DailyWeatherOverviewCont
               ),
               const SizedBox(width: 5),
               Text("${minMaxTemperature?.maxTemperature.round()}",
-                  style: GoogleFonts.lato(
+                  style: GoogleFonts.roboto(
                       fontSize: 15, fontWeight: FontWeight.w800)),
             ],
           ),

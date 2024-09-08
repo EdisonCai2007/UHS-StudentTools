@@ -22,6 +22,7 @@ class _GuidanceScreenState extends State<GuidanceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       /*
       ####################
       #=-=-= AppBar =-=-=#

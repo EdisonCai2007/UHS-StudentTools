@@ -5,7 +5,7 @@ import 'package:wolfpackapp/firebase_options.dart';
 import 'package:wolfpackapp/models_services/teachassist_model.dart';
 import 'package:wolfpackapp/models_services/uhs_teachers_model.dart';
 import 'package:wolfpackapp/screens/contact_teachers_screen.dart';
-import 'package:wolfpackapp/screens/guidance_screen/courses_screen.dart';
+import 'package:wolfpackapp/screens/courses_screen/courses_screen.dart';
 import 'package:wolfpackapp/screens/guidance_screen/guidance_screen.dart';
 import 'package:wolfpackapp/screens/login_screen.dart';
 import 'package:wolfpackapp/shared_prefs.dart';

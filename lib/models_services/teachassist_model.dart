@@ -173,7 +173,7 @@ class TeachAssistModel {
     for (int i = 0; i < ((rawData!.length - 1) / 3).floor(); i++) {
       courses.add(<String, dynamic>{});
       courses[i]['Code'] = rawData![i * 3]
-          .substring(0, rawData![i * 3].indexOf(':'));
+          .substring(0, rawData![i * 3].indexOf(':')-1);
       courses[i]["Name"] = rawData![i * 3]
           .substring(rawData![i * 3].indexOf(':')+1, rawData![i * 3].indexOf('Block:'));
       courses[i]["Period"] = rawData![i * 3]

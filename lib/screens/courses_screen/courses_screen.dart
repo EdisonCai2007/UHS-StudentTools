@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:wolfpackapp/screens/courses_screen/course_overview_container.dart';
 
 import '../../models_services/teachassist_model.dart';
 import '/menu_drawer.dart';
@@ -39,6 +40,7 @@ class _CoursesScreenState extends State<CoursesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       /*
       ####################
       #=-=-= AppBar =-=-=#
@@ -114,6 +116,7 @@ class _CoursesScreenState extends State<CoursesScreen> {
                       child: CircularPercentIndicator(
                           radius: 100,
                           lineWidth: 20,
+                          backgroundColor: Theme.of(context).colorScheme.tertiary,
                           percent: average / 160,
                           center: Text('$average%',
                               style: GoogleFonts.lato(
@@ -132,6 +135,13 @@ class _CoursesScreenState extends State<CoursesScreen> {
                 ),
               ),
             ),
+
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: List.generate(TeachAssistModel.courses.length, (index) =>
+                  CourseOverviewContainer(course: TeachAssistModel.courses[index])
+              ),
+            )
           ],
         ),
       ),
