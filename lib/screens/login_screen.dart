@@ -2,8 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wolfpackapp/models_services/teachassist_model.dart';
+import 'package:wolfpackapp/screens/home_screen/home_screen.dart';
 import 'package:wolfpackapp/shared_prefs.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:wolfpackapp/page_navigator.dart';
 
 /*
 #########################
@@ -69,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 */
 
                 Flexible(
-                  flex: 2,
+                  flex: 3,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 20),//EdgeInsets.all(50),
                     child: Column(
@@ -96,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                             ),
                             onPressed: () async {
-                              Navigator.pushNamed(context, '/homeScreen');
+                              PageNavigator.changePage(context, const HomeScreen());
                             },
                           ),
                         ),
@@ -150,7 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                               await TeachAssistModel().init();
                               if (!context.mounted) return;
-                              Navigator.pushNamed(context, '/homeScreen');
+                              PageNavigator.changePage(context, const HomeScreen());
                             }
                           }
                         },
@@ -280,7 +282,7 @@ class InvalidLoginAlert extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('INVALID LOGIN'),
-      content: const Text('The username and password doesn\'t match. Please try again.'),
+      content: const Text('The username and/or password are invalid. Please try again.'),
       actions: [
         TextButton(
           child: Text('RETRY',
