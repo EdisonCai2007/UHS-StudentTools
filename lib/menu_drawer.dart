@@ -7,6 +7,7 @@ import 'package:wolfpackapp/screens/courses_screen/courses_screen.dart';
 import 'package:wolfpackapp/screens/guidance_screen/guidance_screen.dart';
 import 'package:wolfpackapp/screens/home_screen/home_screen.dart';
 import 'package:wolfpackapp/screens/login_screen.dart';
+import 'package:wolfpackapp/screens/resources_screen.dart';
 import 'package:wolfpackapp/screens/settings_screen.dart';
 import 'package:wolfpackapp/shared_prefs.dart';
 import 'package:wolfpackapp/page_navigator.dart';
@@ -29,7 +30,7 @@ class MenuDrawer extends Drawer {
           // Icon (change later to an actually icon)
           DrawerHeader(
             child: Text('\n\nUHS Student Tools',
-                style: GoogleFonts.lato(
+                style: GoogleFonts.roboto(
                     fontSize: 30, fontWeight: FontWeight.w900)),
           ),
 
@@ -37,8 +38,8 @@ class MenuDrawer extends Drawer {
           ListTile(
             leading: const Icon(Icons.home),
             title: Text('Home',
-                style: GoogleFonts.lato(
-                    fontSize: 20, fontWeight: FontWeight.w400)),
+                style: GoogleFonts.roboto(
+                    fontSize: 18, fontWeight: FontWeight.w400)),
             onTap: () {
               PageNavigator.changePage(context, const HomeScreen());
             },
@@ -47,8 +48,8 @@ class MenuDrawer extends Drawer {
           ListTile(
             leading: const Icon(Icons.contacts),
             title: Text('Teachers',
-                style: GoogleFonts.lato(
-                    fontSize: 20, fontWeight: FontWeight.w400)),
+                style: GoogleFonts.roboto(
+                    fontSize: 18, fontWeight: FontWeight.w400)),
             onTap: () {
               PageNavigator.changePage(context, const ContactTeachersScreen());
             },
@@ -57,8 +58,8 @@ class MenuDrawer extends Drawer {
           ListTile(
             leading: const Icon(Icons.school),
             title: Text('Guidance',
-                style: GoogleFonts.lato(
-                    fontSize: 20, fontWeight: FontWeight.w400)),
+                style: GoogleFonts.roboto(
+                    fontSize: 18, fontWeight: FontWeight.w400)),
             onTap: () {
               PageNavigator.changePage(context, const GuidanceScreen());
             },
@@ -67,18 +68,28 @@ class MenuDrawer extends Drawer {
           ListTile(
             leading: const Icon(Icons.class_),
             title: Text('Courses',
-                style: GoogleFonts.lato(
-                    fontSize: 20, fontWeight: FontWeight.w400)),
+                style: GoogleFonts.roboto(
+                    fontSize: 18, fontWeight: FontWeight.w400)),
             onTap: () {
               PageNavigator.changePage(context, const CoursesScreen());
             },
           ),
 
           ListTile(
+            leading: const Icon(Icons.open_in_new),
+            title: Text('Resources',
+                style: GoogleFonts.roboto(
+                    fontSize: 18, fontWeight: FontWeight.w400)),
+            onTap: () {
+              PageNavigator.changePage(context, const ResourcesScreen());
+            },
+          ),
+
+          ListTile(
             leading: const Icon(Icons.settings),
             title: Text('Settings',
-                style: GoogleFonts.lato(
-                    fontSize: 20, fontWeight: FontWeight.w400)),
+                style: GoogleFonts.roboto(
+                    fontSize: 18, fontWeight: FontWeight.w400)),
             onTap: () {
               PageNavigator.changePage(context, const SettingsScreen());
             },
@@ -87,8 +98,8 @@ class MenuDrawer extends Drawer {
           ListTile(
             leading: Icon(sharedPrefs.username != '' ? Icons.logout : Icons.login),
             title: Text(sharedPrefs.username != '' ? 'Sign Out' : 'Sign In',
-                style: GoogleFonts.lato(
-                    fontSize: 20, fontWeight: FontWeight.w400)),
+                style: GoogleFonts.roboto(
+                    fontSize: 18, fontWeight: FontWeight.w400)),
             onTap: () {
               sharedPrefs.username = '';
               sharedPrefs.password = '';

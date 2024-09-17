@@ -29,7 +29,7 @@ class _TeachAssistOverviewContainerState
     int numCourses = 0;
     for (final course in TeachAssistModel.courses) {
       if (course['Semester'] == 1) {
-        average += double.parse(course['Course Average']);
+        average += double.parse(course['Course Average'] ?? '0');
         numCourses++;
       }
     }
@@ -122,7 +122,7 @@ class _TeachAssistOverviewContainerState
                               padding: EdgeInsets.zero,
                               lineHeight: 20,
                               backgroundColor: Theme.of(context).colorScheme.tertiary,
-                              percent: double.parse(TeachAssistModel.courses[index]['Course Average']) / 100,
+                              percent: double.parse(TeachAssistModel.courses[index]['Course Average'] ?? '0') / 100,
                               center: Text(
                                   TeachAssistModel.courses[index]['Code'],
                                   style: GoogleFonts.roboto(

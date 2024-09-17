@@ -29,7 +29,7 @@ class _CoursesScreenState extends State<CoursesScreen> {
     int numCourses = 0;
     for (final course in TeachAssistModel.courses) {
       if (course['Semester'] == 1) {
-        average += double.parse(course['Course Average']);
+        average += double.parse(course['Course Average'] ?? '0');
         numCourses++;
       }
     }

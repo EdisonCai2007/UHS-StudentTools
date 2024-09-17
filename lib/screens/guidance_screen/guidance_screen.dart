@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wolfpackapp/screens/guidance_screen/appointment_overview_container.dart';
@@ -72,14 +74,13 @@ class _GuidanceScreenState extends State<GuidanceScreen> {
             Positioned(
               top: -250,
               right: -120,
-              child: Container(
+              child: Platform.isAndroid ? Container(
                 height: 600,
                 width: 500,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color:
                       Theme.of(context).colorScheme.secondary.withOpacity(0.2),
-                  //backgroundBlendMode: BlendMode.color,
                   boxShadow: [
                     BoxShadow(
                         color: Theme.of(context).colorScheme.secondary,
@@ -87,8 +88,35 @@ class _GuidanceScreenState extends State<GuidanceScreen> {
                         blurStyle: BlurStyle.outer)
                   ],
                 ),
-              ),
+              ) :
+              Stack(
+                children: [ 
+                  Container(
+                    height: 600,
+                    width: 500,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                            color: Theme.of(context).colorScheme.secondary,
+                            blurRadius: 50,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    height: 600,
+                    width: 500,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Theme.of(context).colorScheme.background.withOpacity(0.8),
+                      backgroundBlendMode: BlendMode.srcATop,
+                    ),
+                  ),
+                ],
+              ) 
             ),
+
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [

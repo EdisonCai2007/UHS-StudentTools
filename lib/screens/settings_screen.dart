@@ -25,7 +25,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ####################
       */
       appBar: AppBar(
-        title: Text('Settings', style: GoogleFonts.lato(fontSize: 20)),
+        title: Text('Settings', style: GoogleFonts.roboto(fontSize: 20)),
         foregroundColor: Theme.of(context).colorScheme.onSurface,
         centerTitle: true,
       ),
@@ -44,7 +44,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             padding: const EdgeInsets.all(20),
             child: SwitchListTile(
               title: Text('Dark Mode',
-                style: GoogleFonts.lato(
+                style: GoogleFonts.roboto(
                 fontSize: 20, fontWeight: FontWeight.w400)),
               secondary: const Icon(Icons.dark_mode),
               value: !sharedPrefs.isLightTheme,

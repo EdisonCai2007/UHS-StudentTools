@@ -93,8 +93,8 @@ class _ContactTeachersScreenState extends State<ContactTeachersScreen> {
 
                               Expanded(
                                 flex: 5,
-                                child: Wrap(
-                                  children: (teachers[index]['Departments'] ?? '').split('/').map((label) {
+                                child: teachers[index]['Departments'] != '' ? Wrap(
+                                  children: teachers[index]['Departments']!.split('/').map((label) {
                                     return Padding(
                                       padding: const EdgeInsets.only(right: 10),
                                       child: Chip(
@@ -102,7 +102,7 @@ class _ContactTeachersScreenState extends State<ContactTeachersScreen> {
                                       ),
                                     );
                                   }).toList(),
-                                ),
+                                ): const SizedBox()
                               ),
 
                               Expanded(

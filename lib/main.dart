@@ -8,6 +8,7 @@ import 'package:wolfpackapp/screens/contact_teachers_screen.dart';
 import 'package:wolfpackapp/screens/courses_screen/courses_screen.dart';
 import 'package:wolfpackapp/screens/guidance_screen/guidance_screen.dart';
 import 'package:wolfpackapp/screens/login_screen.dart';
+import 'package:wolfpackapp/screens/resources_screen.dart';
 import 'package:wolfpackapp/shared_prefs.dart';
 import 'package:wolfpackapp/themes/theme_manager.dart';
 
@@ -76,6 +77,7 @@ class _MyAppState extends State<MyApp> {
         '/contactTeachersScreen': (context) => const ContactTeachersScreen(),
         '/guidanceScreen': (context) => const GuidanceScreen(),
         '/coursesScreen': (context) => const CoursesScreen(),
+        '/resourcesScreen': (context) => const ResourcesScreen(),
         '/settingsScreen': (context) => const SettingsScreen(),
       },
       title: 'UHS Student Tools',

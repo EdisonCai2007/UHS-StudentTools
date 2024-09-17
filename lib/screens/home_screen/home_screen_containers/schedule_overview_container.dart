@@ -28,10 +28,12 @@ class _ScheduleOverviewContainerState extends State<ScheduleOverviewContainer> {
     twelveHrTime = DateFormat.jm().format(DateTime.now());
     minuteTime = (DateTime.now().hour * 60) + DateTime.now().minute;
     timer = Timer.periodic(const Duration(seconds: 5), (timer) {
-      setState(() {
-        twelveHrTime = DateFormat.jm().format(DateTime.now());
-        minuteTime = (DateTime.now().hour * 60) + DateTime.now().minute;
-      });
+      if (mounted) {
+        setState(() {
+          twelveHrTime = DateFormat.jm().format(DateTime.now());
+          minuteTime = (DateTime.now().hour * 60) + DateTime.now().minute;
+        });
+      }
     });
   }
 

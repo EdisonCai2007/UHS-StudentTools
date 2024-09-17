@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/dom.dart' as dom;
 
@@ -175,7 +174,7 @@ class TeachAssistModel {
       courses[i]['Code'] = rawData![i * 3]
           .substring(0, rawData![i * 3].indexOf(':')-1);
       courses[i]["Name"] = rawData![i * 3]
-          .substring(rawData![i * 3].indexOf(':')+1, rawData![i * 3].indexOf('Block:'));
+          .substring(rawData![i * 3].indexOf(':')+2, rawData![i * 3].indexOf('Block:'));
       courses[i]["Period"] = rawData![i * 3]
           .substring(rawData![i * 3].indexOf('Block:') + 7,rawData![i * 3].indexOf('  - '))
           .trim().replaceAll('P', '').split(',');
@@ -183,7 +182,7 @@ class TeachAssistModel {
           .substring(rawData![i * 3].indexOf('  - ')+8);
       courses[i]["Semester"] = rawData![i * 3 + 1].substring(6,7) == '9' ? 1 : 2;
       courses[i]["Course Average"] = (rawData![i * 3 + 2].contains('=')) ? rawData![i * 3 + 2].substring(
-          rawData![i * 3 + 2].indexOf('=')+1,rawData![i * 3 + 2].indexOf('%')-1) : '100';
+          rawData![i * 3 + 2].indexOf('=')+1,rawData![i * 3 + 2].indexOf('%')-1) : null;
 
       // print(courses[i]);
       // print(courses[i]['Code'] );
