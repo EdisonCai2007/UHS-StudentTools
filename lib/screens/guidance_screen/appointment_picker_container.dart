@@ -61,7 +61,7 @@ class _AppointmentPickerContainerState extends State<AppointmentPickerContainer>
             FittedBox(
               fit: BoxFit.scaleDown,
               child: Text('Book an Appointment',
-                  style: GoogleFonts.lato(
+                  style: GoogleFonts.roboto(
                       fontSize: 30, fontWeight: FontWeight.w800)),
             ),
             const SizedBox(
@@ -86,7 +86,7 @@ class _AppointmentPickerContainerState extends State<AppointmentPickerContainer>
                         child: Align(
                           alignment: Alignment.center,
                           child: Text('NOT A SCHOOL DAY',
-                              style: GoogleFonts.lato(
+                              style: GoogleFonts.roboto(
                                   fontSize: 20, fontWeight: FontWeight.w800)),
                         ),
                       )
@@ -158,19 +158,19 @@ class _AppointmentPickerContainerState extends State<AppointmentPickerContainer>
               Text(
                   '${dateSchedule[counselor]['data'][0].substring(4, dateSchedule[counselor]['data'][0].indexOf(':'))}'
                   '${dateSchedule[counselor]['data'][0].substring(dateSchedule[counselor]['data'][0].indexOf('('), dateSchedule[counselor]['data'][0].indexOf('.'))}',
-                  style: GoogleFonts.lato(
+                  style: GoogleFonts.roboto(
                       fontSize: 14, fontWeight: FontWeight.w900)) :
 
               Text(
                   '${dateSchedule[counselor]['data'][0].substring(4, dateSchedule[counselor]['data'][0].indexOf(':')+1)}\n'
                   '${dateSchedule[counselor]['data'][0].substring(dateSchedule[counselor]['data'][0].indexOf(':')+2, dateSchedule[counselor]['data'][0].indexOf('<',4))}',
-                  style: GoogleFonts.lato(
+                  style: GoogleFonts.roboto(
                       fontSize: 14, fontWeight: FontWeight.w900)),
 
               (dateSchedule[counselor]['data'].length <= 1) ? Padding(
                 padding: const EdgeInsets.all(0),
                 child: Text('Fully Booked',
-                    style: GoogleFonts.lato(
+                    style: GoogleFonts.roboto(
                     fontSize: 14, fontWeight: FontWeight.w400)
                 ),
               ) :
@@ -187,7 +187,7 @@ class _AppointmentPickerContainerState extends State<AppointmentPickerContainer>
                   dateSchedule[counselor]['data'][i].substring(
                   dateSchedule[counselor]['data'][i].indexOf('tm=')+3,
                   dateSchedule[counselor]['data'][i].indexOf('&amp',dateSchedule[counselor]['data'][i].indexOf('tm=')+3)-3),
-                  style: GoogleFonts.lato(
+                  style: GoogleFonts.roboto(
                       fontSize: 14, fontWeight: FontWeight.w400)
                 ),
                 onPressed: () async {
@@ -230,20 +230,8 @@ class _AppointmentPickerContainerState extends State<AppointmentPickerContainer>
                           ),
                         ));
                   } else {
-                    bookGuidanceAppointment(sharedPrefs.username, sharedPrefs.password,
-
-                      dateSchedule[counselor]['data'][i].substring(dateSchedule[counselor]['data'][i].indexOf('dt=') + 3,
-                      dateSchedule[counselor]['data'][i].indexOf('&amp',dateSchedule[counselor]['data'][i].indexOf('dt=') + 3)),
-
-                      dateSchedule[counselor]['data'][i].substring(dateSchedule[counselor]['data'][i].indexOf('tm=') + 3,
-                      dateSchedule[counselor]['data'][i].indexOf('&amp', dateSchedule[counselor]['data'][i].indexOf('tm=') + 3)),
-
-                      dateSchedule[counselor]['data'][i].substring(dateSchedule[counselor]['data'][i].indexOf('id=') + 3,
-                      dateSchedule[counselor]['data'][i].indexOf('&amp', dateSchedule[counselor]['data'][i].indexOf('id=') + 3)),
-
-                      dateSchedule[counselor]['data'][i].substring(dateSchedule[counselor]['data'][i].indexOf('school_id=') + 10,
-                      dateSchedule[counselor]['data'][i].indexOf('">', dateSchedule[counselor]['data'][i].indexOf('school_id=') + 10)),
-                      null, null, null
+                    showDialog(context: context, builder: (context) =>
+                      AppointmentConfirmation(data: dateSchedule[counselor], itemNum: i),
                     );
                   }
                 },
@@ -294,7 +282,7 @@ class _AppointmentOptionAlertState extends State<AppointmentOptionAlert> {
                 controlAffinity: ListTileControlAffinity.leading,
                 dense: true,
                 title: Text(widget.checkListItems[index]['label'],
-                  style: GoogleFonts.lato(
+                  style: GoogleFonts.roboto(
                   fontSize: 16, fontWeight: FontWeight.w800,
                   color: Theme.of(context).colorScheme.primary)),
                 checkboxShape: const CircleBorder(),
@@ -319,7 +307,7 @@ class _AppointmentOptionAlertState extends State<AppointmentOptionAlert> {
               controlAffinity: ListTileControlAffinity.leading,
               dense: true,
               title: Text('Check this box if your parent will be a part of the meeting',
-                  style: GoogleFonts.lato(
+                  style: GoogleFonts.roboto(
                       fontSize: 16, fontWeight: FontWeight.w800,
                       color: Theme.of(context).colorScheme.primary)),
               value: withParent,
@@ -334,7 +322,7 @@ class _AppointmentOptionAlertState extends State<AppointmentOptionAlert> {
               controlAffinity: ListTileControlAffinity.leading,
               dense: true,
               title: Text('Request Online Video Meeting',
-                  style: GoogleFonts.lato(
+                  style: GoogleFonts.roboto(
                       fontSize: 16, fontWeight: FontWeight.w800,
                       color: Theme.of(context).colorScheme.primary)),
               value: online,
@@ -349,7 +337,7 @@ class _AppointmentOptionAlertState extends State<AppointmentOptionAlert> {
       actions: [
         TextButton(
           child: Text('CANCEL',
-              style: GoogleFonts.lato(
+              style: GoogleFonts.roboto(
                   fontSize: 16, fontWeight: FontWeight.w900,
                   color: Theme.of(context).colorScheme.secondary)
           ),
@@ -358,7 +346,7 @@ class _AppointmentOptionAlertState extends State<AppointmentOptionAlert> {
 
         TextButton(
           child: Text('CONFIRM',
-              style: GoogleFonts.lato(
+              style: GoogleFonts.roboto(
                   fontSize: 16, fontWeight: FontWeight.w900,
                   color: Theme.of(context).colorScheme.secondary)
           ),
@@ -379,9 +367,94 @@ class _AppointmentOptionAlertState extends State<AppointmentOptionAlert> {
             bookGuidanceAppointment(sharedPrefs.username, sharedPrefs.password,
             widget.dt, widget.tm, widget.id, widget.school_id, reason, withParent ? '10' : '', online ? '100' : ''
             );
+
+            Navigator.pop(context);
           }
         ),
       ],
     );
   }
 }
+
+class AppointmentConfirmation extends StatefulWidget {
+  final dynamic data;
+  final int itemNum;
+
+  const AppointmentConfirmation(
+    {super.key, 
+    required this.data,
+    required this.itemNum,
+  });
+
+  @override
+  State<AppointmentConfirmation> createState() => _AppointmentConfirmationState();
+}
+
+class _AppointmentConfirmationState extends State<AppointmentConfirmation> {
+  bool withParent = false;
+  bool online = false;
+
+
+  @override
+  Widget build(BuildContext context) {
+    int i  = widget.itemNum;
+    return AlertDialog(
+      title: const Text('Are you sure?'),
+
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Appointment: ${widget.data['data'][i].substring(widget.data['data'][i].indexOf('dt=') + 3,
+            widget.data['data'][i].indexOf('&amp', widget.data['data'][i].indexOf('dt=') + 3))}',
+            style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w400)
+            ),
+          Text('Scheduled for: ${widget.data['data'][i].substring(widget.data['data'][i].indexOf('tm=') + 3,
+            widget.data['data'][i].indexOf('&amp', widget.data['data'][i].indexOf('tm=')) - 3)}',
+            style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w400)
+            ),
+        ]
+      ),
+                          
+      actions: [
+        TextButton(
+          child: Text('CANCEL',
+              style: GoogleFonts.roboto(
+                  fontSize: 16, fontWeight: FontWeight.w900,
+                  color: Theme.of(context).colorScheme.secondary)
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+
+        TextButton(
+          child: Text('CONFIRM',
+              style: GoogleFonts.roboto(
+                  fontSize: 16, fontWeight: FontWeight.w900,
+                  color: Theme.of(context).colorScheme.secondary)
+          ),
+          onPressed: () {
+            bookGuidanceAppointment(sharedPrefs.username, sharedPrefs.password,
+              widget.data['data'][i].substring(widget.data['data'][i].indexOf('dt=') + 3,
+              widget.data['data'][i].indexOf('&amp',widget.data['data'][i].indexOf('dt=') + 3)),
+
+              widget.data['data'][i].substring(widget.data['data'][i].indexOf('tm=') + 3,
+              widget.data['data'][i].indexOf('&amp', widget.data['data'][i].indexOf('tm=') + 3)),
+
+              widget.data['data'][i].substring(widget.data['data'][i].indexOf('id=') + 3,
+              widget.data['data'][i].indexOf('&amp', widget.data['data'][i].indexOf('id=') + 3)),
+
+              widget.data['data'][i].substring(widget.data['data'][i].indexOf('school_id=') + 10,
+              widget.data['data'][i].indexOf('">', widget.data['data'][i].indexOf('school_id=') + 10)),
+              null, null, null
+            );
+
+            Navigator.pop(context);
+            Navigator.pop(context);
+            Navigator.pushNamed(context, '/guidanceScreen');
+          }
+        ),
+      ],
+    );
+  }
+}
+

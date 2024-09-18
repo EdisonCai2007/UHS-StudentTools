@@ -25,13 +25,15 @@ class MenuDrawer extends Drawer {
             topRight: Radius.circular(20), bottomRight: Radius.circular(20)),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // Icon (change later to an actually icon)
           DrawerHeader(
-            child: Text('\n\nUHS Student Tools',
-                style: GoogleFonts.roboto(
-                    fontSize: 30, fontWeight: FontWeight.w900)),
+            margin: EdgeInsets.zero,
+            child: Center(
+              child: Text('UHS Wolfpackapp',
+                  style: GoogleFonts.roboto(
+                      fontSize: 30, fontWeight: FontWeight.w900)),
+            ),
           ),
 
           // Home page button
@@ -76,7 +78,7 @@ class MenuDrawer extends Drawer {
           ),
 
           ListTile(
-            leading: const Icon(Icons.open_in_new),
+            leading: const Icon(Icons.description),
             title: Text('Resources',
                 style: GoogleFonts.roboto(
                     fontSize: 18, fontWeight: FontWeight.w400)),

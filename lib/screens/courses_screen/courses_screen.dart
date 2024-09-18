@@ -117,7 +117,7 @@ class _CoursesScreenState extends State<CoursesScreen> {
                           radius: 100,
                           lineWidth: 20,
                           backgroundColor: Theme.of(context).colorScheme.tertiary,
-                          percent: average / 160,
+                          percent: average / 100,
                           center: Text('$average%',
                               style: GoogleFonts.lato(
                                   fontSize: 30, fontWeight: FontWeight.w800)),
