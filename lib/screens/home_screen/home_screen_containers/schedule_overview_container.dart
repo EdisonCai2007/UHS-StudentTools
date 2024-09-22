@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:wolfpackapp/models_services/teachassist_model.dart';
-import 'package:wolfpackapp/models_services/timeConstants.dart';
+import 'package:wolfpackapp/misc/timeConstants.dart';
 
 import '../../no_account_dialog.dart';
 

@@ -1,9 +1,12 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wolfpackapp/models_services/events_model.dart';
-import 'package:wolfpackapp/models_services/month_converter.dart';
-import 'package:wolfpackapp/models_services/time_converter.dart';
+import 'package:wolfpackapp/misc/month_converter.dart';
+import 'package:wolfpackapp/misc/time_converter.dart';
 import 'package:intl/intl.dart';
+import 'package:wolfpackapp/misc/shared_prefs.dart';
+
 
 import '/menu_drawer.dart';
 
@@ -15,7 +18,7 @@ class EventsScreen extends StatefulWidget {
 }
 
 class _EventsScreenState extends State<EventsScreen> {
-  List<EventDetails> events = EventsModel.events;
+  late List<EventDetails> events;
 
   @override
   void initState() {
@@ -25,7 +28,16 @@ class _EventsScreenState extends State<EventsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(events.length);
+    if (sharedPrefs.eventsRequestDate == '' || DateTime.now().subtract(const Duration(days: 1)).isAfter(DateTime.parse(sharedPrefs.eventsRequestDate))) {
+      events = EventsModel.events;
+    } else {
+      events = sharedPrefs.eventsData.map((eventJson) {
+        Map<String, dynamic> eventMap = jsonDecode(eventJson);
+
+        return EventDetails.fromJson(eventMap);
+      }).toList();
+    }
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
 
