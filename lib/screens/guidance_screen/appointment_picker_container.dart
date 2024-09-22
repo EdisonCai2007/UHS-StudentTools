@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:html/dom.dart' as dom;
 
 import '../../models_services/teachassist_model.dart';
-import '../../shared_prefs.dart';
+import '../../misc/shared_prefs.dart';
 import '../no_account_dialog.dart';
 
 class AppointmentPickerContainer extends StatefulWidget {

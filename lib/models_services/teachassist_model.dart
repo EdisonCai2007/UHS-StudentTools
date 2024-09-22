@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:html/dom.dart' as dom;
 
-import '../shared_prefs.dart';
+import '../misc/shared_prefs.dart';
 
 const String LOGINURL = 'https://ta.yrdsb.ca/yrdsb/index.php';
 const String COURSEURL = 'https://ta.yrdsb.ca/live/students/listReports.php';

@@ -4,7 +4,7 @@ class Themes {
   // Light Theme Colours
   Color lightPrimaryColour = const Color.fromRGBO(0, 0, 0, 1.0);
   Color lightInversePrimaryColour = const Color.fromRGBO(255, 255, 255, 1.0);
-  Color lightBackgroundColour = const Color.fromRGBO(255, 255, 255, 1.0);
+  Color lightBackgroundColour = const Color.fromRGBO(232, 232, 232, 1.0);
   Color lightAppBar = const Color.fromRGBO(238, 238, 238, 1.0);
   Color lightContainer = const Color.fromRGBO(255, 255, 255, 1.0);
   Color lightContainerAccent = const Color.fromRGBO(227, 227, 227, 1.0);

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wolfpackapp/shared_prefs.dart';
+import 'package:wolfpackapp/misc/shared_prefs.dart';
 import 'package:wolfpackapp/themes/themes.dart';
 
 class ThemeManager with ChangeNotifier {

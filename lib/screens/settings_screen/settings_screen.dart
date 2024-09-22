@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:wolfpackapp/shared_prefs.dart';
+import 'package:wolfpackapp/misc/shared_prefs.dart';
 
-import '../menu_drawer.dart';
-import '../themes/theme_manager.dart';
+import '../../menu_drawer.dart';
+import '../../themes/theme_manager.dart';
 
 
 class SettingsScreen extends StatefulWidget {

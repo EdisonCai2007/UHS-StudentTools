@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wolfpackapp/models_services/teachassist_model.dart';
 import 'package:wolfpackapp/screens/home_screen/home_screen.dart';
-import 'package:wolfpackapp/shared_prefs.dart';
+import 'package:wolfpackapp/misc/shared_prefs.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:wolfpackapp/page_navigator.dart';
+import 'package:wolfpackapp/misc/page_navigator.dart';
 
 /*
 #########################
