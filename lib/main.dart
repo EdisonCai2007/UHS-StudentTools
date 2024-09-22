@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:wolfpackapp/firebase_options.dart';
 import 'package:wolfpackapp/models_services/teachassist_model.dart';
 import 'package:wolfpackapp/models_services/uhs_teachers_model.dart';
+import 'package:wolfpackapp/screens/resources_screen.dart';
 import 'package:wolfpackapp/shared_prefs.dart';
 import 'package:wolfpackapp/themes/theme_manager.dart';
 
@@ -83,6 +84,7 @@ class _MyAppState extends State<MyApp> {
         '/contactTeachersScreen': (context) => const ContactTeachersScreen(),
         '/guidanceScreen': (context) => const GuidanceScreen(),
         '/coursesScreen': (context) => const CoursesScreen(),
+        '/resourcesScreen': (context) => const ResourcesScreen(),
         '/settingsScreen': (context) => const SettingsScreen(),
         '/eventsScreen': (context) => const EventsScreen(),
       },

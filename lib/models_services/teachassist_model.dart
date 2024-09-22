@@ -181,7 +181,7 @@ class TeachAssistModel {
           .substring(rawData![i * 3].indexOf('  - ')+8);
       courses[i]["Semester"] = rawData![i * 3 + 1].substring(6,7) == '9' ? 1 : 2;
       courses[i]["Course Average"] = (rawData![i * 3 + 2].contains('=')) ? rawData![i * 3 + 2].substring(
-          rawData![i * 3 + 2].indexOf('=')+1,rawData![i * 3 + 2].indexOf('%')-1) : null;
+          rawData![i * 3 + 2].indexOf('=')+1,rawData![i * 3 + 2].indexOf('%')) : null;
 
       // print(courses[i]);
       // print(courses[i]['Code'] );

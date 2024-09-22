@@ -28,9 +28,16 @@ class _TeachAssistOverviewContainerState
 
     int numCourses = 0;
     for (final course in TeachAssistModel.courses) {
+      double prevAverage = average;
+
       if (course['Semester'] == 1) {
-        average += double.parse(course['Course Average'] ?? '0');
-        numCourses++;
+        average += double.parse(course['Course Average'] ?? '-1');
+
+        if (average >= prevAverage) {
+          numCourses++;
+        } else {
+          average++;
+        }
       }
     }
 

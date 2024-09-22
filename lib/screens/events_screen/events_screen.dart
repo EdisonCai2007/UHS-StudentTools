@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:wolfpackapp/models_services/events_model.dart';
 import 'package:wolfpackapp/models_services/month_converter.dart';
 import 'package:wolfpackapp/models_services/time_converter.dart';
+import 'package:intl/intl.dart';
 
 import '/menu_drawer.dart';
 
@@ -67,7 +68,7 @@ class _EventsScreenState extends State<EventsScreen> {
                           maxLines: 3,
                           events[index].title,
                           overflow: TextOverflow.visible,
-                          style: GoogleFonts.roboto(fontSize: 15, fontWeight: FontWeight.w800)
+                          style: GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w800)
                         ),
 
                         const Padding(padding: EdgeInsets.only(top: 15)),
@@ -76,8 +77,8 @@ class _EventsScreenState extends State<EventsScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              '${MonthConverter.getMonthStr(int.parse(events[index].startDate.substring(5, 7)))!} ${events[index].startDate.substring(8)}, ${events[index].startDate.substring(0, 4)}',
-                              style: GoogleFonts.roboto(fontSize: 15, fontWeight: FontWeight.w400),
+                              '${DateFormat('EEEE').format(DateTime.parse(events[index].startDate))}, ${MonthConverter.getMonthStr(int.parse(events[index].startDate.substring(5, 7)))!} ${events[index].startDate.substring(8)}, ${events[index].startDate.substring(0, 4)}',
+                              style: GoogleFonts.roboto(fontSize: 15, fontWeight: FontWeight.w500),
                             ),
                             Text(
                               TimeConverter.get12Format(events[index].startTime),

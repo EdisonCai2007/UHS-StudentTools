@@ -22,7 +22,7 @@ class _ResourcesScreenState extends State<ResourcesScreen> {
       ####################
       */
       appBar: AppBar(
-        title: Text('Settings', style: GoogleFonts.roboto(fontSize: 20)),
+        title: Text('Resources', style: GoogleFonts.roboto(fontSize: 20)),
         foregroundColor: Theme.of(context).colorScheme.onSurface,
         centerTitle: true,
       ),

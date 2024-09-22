@@ -8,6 +8,7 @@ import 'package:wolfpackapp/screens/events_screen/events_screen.dart';
 import 'package:wolfpackapp/screens/guidance_screen/guidance_screen.dart';
 import 'package:wolfpackapp/screens/home_screen/home_screen.dart';
 import 'package:wolfpackapp/screens/login_screen.dart';
+import 'package:wolfpackapp/screens/resources_screen.dart';
 import 'package:wolfpackapp/screens/settings_screen.dart';
 import 'package:wolfpackapp/shared_prefs.dart';
 import 'package:wolfpackapp/page_navigator.dart';
@@ -46,6 +47,16 @@ class MenuDrawer extends Drawer {
           ),
 
           ListTile(
+            leading: const Icon(Icons.class_),
+            title: Text('Courses',
+                style: GoogleFonts.lato(
+                    fontSize: 20, fontWeight: FontWeight.w400)),
+            onTap: () {
+              PageNavigator.changePage(context, const CoursesScreen());
+            },
+          ),
+
+          ListTile(
             leading: const Icon(Icons.contacts),
             title: Text('Teachers',
                 style: GoogleFonts.lato(
@@ -66,16 +77,6 @@ class MenuDrawer extends Drawer {
           ),
 
           ListTile(
-            leading: const Icon(Icons.class_),
-            title: Text('Courses',
-                style: GoogleFonts.lato(
-                    fontSize: 20, fontWeight: FontWeight.w400)),
-            onTap: () {
-              PageNavigator.changePage(context, const CoursesScreen());
-            },
-          ),
-
-          ListTile(
             leading: const Icon(Icons.event),
             title: Text('Events',
                 style: GoogleFonts.lato(
@@ -84,6 +85,17 @@ class MenuDrawer extends Drawer {
               PageNavigator.changePage(context, const EventsScreen());
             },
           ),
+
+          ListTile(
+            leading: const Icon(Icons.open_in_new),
+            title: Text('Resources',
+                style: GoogleFonts.roboto(
+                    fontSize: 18, fontWeight: FontWeight.w400)),
+            onTap: () {
+              PageNavigator.changePage(context, const ResourcesScreen());
+            },
+          ),
+
 
           ListTile(
             leading: const Icon(Icons.settings),
