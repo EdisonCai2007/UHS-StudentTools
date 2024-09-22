@@ -18,7 +18,10 @@ class EventsScreen extends StatefulWidget {
 }
 
 class _EventsScreenState extends State<EventsScreen> {
-  late List<EventDetails> events;
+  late List<EventDetails> events = sharedPrefs.eventsData.map((eventJson) {
+    Map<String, dynamic> eventMap = jsonDecode(eventJson);
+    return EventDetails.fromJson(eventMap);
+  }).toList();
 
   @override
   void initState() {
@@ -28,16 +31,6 @@ class _EventsScreenState extends State<EventsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (sharedPrefs.eventsRequestDate == '' || DateTime.now().subtract(const Duration(days: 1)).isAfter(DateTime.parse(sharedPrefs.eventsRequestDate))) {
-      events = EventsModel.events;
-    } else {
-      events = sharedPrefs.eventsData.map((eventJson) {
-        Map<String, dynamic> eventMap = jsonDecode(eventJson);
-
-        return EventDetails.fromJson(eventMap);
-      }).toList();
-    }
-
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
 

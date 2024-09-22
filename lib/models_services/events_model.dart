@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+import '../misc/shared_prefs.dart';
+
 const String CALENDAR_ID = 'unionville.hs@gapps.yrdsb.ca';
 
 /*
@@ -33,7 +35,9 @@ class EventsModel {
   static List<EventDetails> events = [];
 
   Future init() async {
-    loadEvents();
+    if (sharedPrefs.eventsData == [] || sharedPrefs.eventsRequestDate == '' || DateTime.now().subtract(const Duration(days: 1)).isAfter(DateTime.parse(sharedPrefs.eventsRequestDate))) {
+      loadEvents();
+    }
   }
 
   static Future loadEvents() async {
@@ -48,6 +52,9 @@ class EventsModel {
         events.add(EventDetails(event['summary'], event['start']['dateTime'].substring(0, 10), event['end']['dateTime'].substring(0, 10), event['start']['dateTime'].substring(11, 19), event['end']['dateTime'].substring(11, 19)));
       }
     }
+
+    sharedPrefs.eventsRequestDate = DateTime.now() as String;
+    sharedPrefs.eventsData = EventsModel.events.map((event) => jsonEncode(event.toJson())).toList();
   }
 }
 
