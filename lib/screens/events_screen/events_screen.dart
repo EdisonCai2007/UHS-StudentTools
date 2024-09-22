@@ -31,6 +31,7 @@ class _EventsScreenState extends State<EventsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //print(sharedPrefs.eventsData);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
 

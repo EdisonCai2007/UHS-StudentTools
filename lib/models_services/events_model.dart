@@ -35,7 +35,7 @@ class EventsModel {
   static List<EventDetails> events = [];
 
   Future init() async {
-    if (sharedPrefs.eventsData == [] || sharedPrefs.eventsRequestDate == '' || DateTime.now().subtract(const Duration(days: 1)).isAfter(DateTime.parse(sharedPrefs.eventsRequestDate))) {
+    if (sharedPrefs.eventsData.isEmpty || sharedPrefs.eventsRequestDate == '' || DateTime.now().subtract(const Duration(days: 1)).isAfter(DateTime.parse(sharedPrefs.eventsRequestDate))) {
       loadEvents();
     }
   }
@@ -53,7 +53,7 @@ class EventsModel {
       }
     }
 
-    sharedPrefs.eventsRequestDate = DateTime.now() as String;
+    sharedPrefs.eventsRequestDate = DateTime.now().toString();
     sharedPrefs.eventsData = EventsModel.events.map((event) => jsonEncode(event.toJson())).toList();
   }
 }

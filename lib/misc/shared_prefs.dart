@@ -15,7 +15,7 @@ class SharedPrefs {
   }
   List<String> get eventsData => _sharedPrefs.getStringList('eventsData') ?? [];
   set eventsData(List<String> value) {
-    _sharedPrefs.setStringList('eventsRequestDate', value);
+    _sharedPrefs.setStringList('eventsData', value);
   }
 
 
