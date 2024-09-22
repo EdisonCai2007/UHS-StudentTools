@@ -82,13 +82,13 @@ class _CoursesScreenState extends State<CoursesScreen> {
       #######################
       */
       body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
+        physics: const ClampingScrollPhysics(),
         controller: ScrollController(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.only(top:40),
+              padding: const EdgeInsets.only(top: 30, bottom: 10),
               child: Center(
                 child: Stack(
                   alignment: Alignment.center,
@@ -141,7 +141,9 @@ class _CoursesScreenState extends State<CoursesScreen> {
               children: List.generate(TeachAssistModel.courses.length, (index) =>
                   CourseOverviewContainer(course: TeachAssistModel.courses[index])
               ),
-            )
+            ),
+            
+            const Padding(padding: EdgeInsets.only(bottom: 30)),
           ],
         ),
       ),

@@ -4,10 +4,10 @@ import 'package:provider/provider.dart';
 import 'package:wolfpackapp/models_services/teachassist_model.dart';
 import 'package:wolfpackapp/screens/contact_teachers_screen.dart';
 import 'package:wolfpackapp/screens/courses_screen/courses_screen.dart';
+import 'package:wolfpackapp/screens/events_screen/events_screen.dart';
 import 'package:wolfpackapp/screens/guidance_screen/guidance_screen.dart';
 import 'package:wolfpackapp/screens/home_screen/home_screen.dart';
 import 'package:wolfpackapp/screens/login_screen.dart';
-import 'package:wolfpackapp/screens/resources_screen.dart';
 import 'package:wolfpackapp/screens/settings_screen.dart';
 import 'package:wolfpackapp/shared_prefs.dart';
 import 'package:wolfpackapp/page_navigator.dart';
@@ -25,23 +25,21 @@ class MenuDrawer extends Drawer {
             topRight: Radius.circular(20), bottomRight: Radius.circular(20)),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // Icon (change later to an actually icon)
           DrawerHeader(
-            margin: EdgeInsets.zero,
-            child: Center(
-              child: Text('UHS Wolfpackapp',
-                  style: GoogleFonts.roboto(
-                      fontSize: 30, fontWeight: FontWeight.w900)),
-            ),
+            child: Text('\n\nUHS Student Tools',
+                style: GoogleFonts.lato(
+                    fontSize: 30, fontWeight: FontWeight.w900)),
           ),
 
           // Home page button
           ListTile(
             leading: const Icon(Icons.home),
             title: Text('Home',
-                style: GoogleFonts.roboto(
-                    fontSize: 18, fontWeight: FontWeight.w400)),
+                style: GoogleFonts.lato(
+                    fontSize: 20, fontWeight: FontWeight.w400)),
             onTap: () {
               PageNavigator.changePage(context, const HomeScreen());
             },
@@ -50,8 +48,8 @@ class MenuDrawer extends Drawer {
           ListTile(
             leading: const Icon(Icons.contacts),
             title: Text('Teachers',
-                style: GoogleFonts.roboto(
-                    fontSize: 18, fontWeight: FontWeight.w400)),
+                style: GoogleFonts.lato(
+                    fontSize: 20, fontWeight: FontWeight.w400)),
             onTap: () {
               PageNavigator.changePage(context, const ContactTeachersScreen());
             },
@@ -60,8 +58,8 @@ class MenuDrawer extends Drawer {
           ListTile(
             leading: const Icon(Icons.school),
             title: Text('Guidance',
-                style: GoogleFonts.roboto(
-                    fontSize: 18, fontWeight: FontWeight.w400)),
+                style: GoogleFonts.lato(
+                    fontSize: 20, fontWeight: FontWeight.w400)),
             onTap: () {
               PageNavigator.changePage(context, const GuidanceScreen());
             },
@@ -70,28 +68,28 @@ class MenuDrawer extends Drawer {
           ListTile(
             leading: const Icon(Icons.class_),
             title: Text('Courses',
-                style: GoogleFonts.roboto(
-                    fontSize: 18, fontWeight: FontWeight.w400)),
+                style: GoogleFonts.lato(
+                    fontSize: 20, fontWeight: FontWeight.w400)),
             onTap: () {
               PageNavigator.changePage(context, const CoursesScreen());
             },
           ),
 
           ListTile(
-            leading: const Icon(Icons.description),
-            title: Text('Resources',
-                style: GoogleFonts.roboto(
-                    fontSize: 18, fontWeight: FontWeight.w400)),
+            leading: const Icon(Icons.event),
+            title: Text('Events',
+                style: GoogleFonts.lato(
+                    fontSize: 20, fontWeight: FontWeight.w400)),
             onTap: () {
-              PageNavigator.changePage(context, const ResourcesScreen());
+              PageNavigator.changePage(context, const EventsScreen());
             },
           ),
 
           ListTile(
             leading: const Icon(Icons.settings),
             title: Text('Settings',
-                style: GoogleFonts.roboto(
-                    fontSize: 18, fontWeight: FontWeight.w400)),
+                style: GoogleFonts.lato(
+                    fontSize: 20, fontWeight: FontWeight.w400)),
             onTap: () {
               PageNavigator.changePage(context, const SettingsScreen());
             },
@@ -100,8 +98,8 @@ class MenuDrawer extends Drawer {
           ListTile(
             leading: Icon(sharedPrefs.username != '' ? Icons.logout : Icons.login),
             title: Text(sharedPrefs.username != '' ? 'Sign Out' : 'Sign In',
-                style: GoogleFonts.roboto(
-                    fontSize: 18, fontWeight: FontWeight.w400)),
+                style: GoogleFonts.lato(
+                    fontSize: 20, fontWeight: FontWeight.w400)),
             onTap: () {
               sharedPrefs.username = '';
               sharedPrefs.password = '';

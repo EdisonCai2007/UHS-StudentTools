@@ -61,12 +61,14 @@ class _ContactTeachersScreenState extends State<ContactTeachersScreen> {
           Expanded(
             flex: 1,
             child: ListView.builder(
-              physics: const BouncingScrollPhysics(),
+              physics: const ClampingScrollPhysics(),
               itemCount: teachers.length,
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30),
                   child: Container(
+                    margin: const EdgeInsets.only(
+                    ),
                     height: 160,
                     decoration: BoxDecoration(
                       border: Border.symmetric(

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 import 'package:html/dom.dart' as dom;
@@ -156,7 +155,7 @@ Future<dom.Document> bookGuidanceAppointment (username, password, dt, tm, id, sc
 }
 
 class TeachAssistModel {
-  static List<Map<String,dynamic>> courses = [];
+  static List<Map<String, dynamic>> courses = [];
   static List<String>? rawData;
 
   Future init() async {
