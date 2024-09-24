@@ -28,10 +28,8 @@ class _EventsScreenState extends State<EventsScreen> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
-    //print(sharedPrefs.eventsData);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
 
