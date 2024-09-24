@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../misc/shared_prefs.dart';
 
@@ -35,7 +36,7 @@ class EventsModel {
   static List<EventDetails> events = [];
 
   Future init() async {
-    if (sharedPrefs.eventsData.isEmpty || sharedPrefs.eventsRequestDate == '' || DateTime.now().subtract(const Duration(days: 1)).isAfter(DateTime.parse(sharedPrefs.eventsRequestDate))) {
+    if (sharedPrefs.eventsData.isEmpty || sharedPrefs.eventsRequestDate.isEmpty || DateTime.now().subtract(const Duration(days: 1)).isAfter(DateTime.parse(sharedPrefs.eventsRequestDate))) {
       loadEvents();
     }
   }

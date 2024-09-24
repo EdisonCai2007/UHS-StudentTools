@@ -4,7 +4,6 @@ class TimeConverter {
       return '';
     }
 
-    print(timeIn24Format);
     late String meridiem;
 
     int firstColonIndex = timeIn24Format.indexOf(':');
