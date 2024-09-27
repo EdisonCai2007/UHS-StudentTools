@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 import 'package:html/dom.dart' as dom;
@@ -6,7 +7,8 @@ import 'package:html/dom.dart' as dom;
 import '../misc/shared_prefs.dart';
 
 const String LOGINURL = 'https://ta.yrdsb.ca/yrdsb/index.php';
-const String COURSEURL = 'https://ta.yrdsb.ca/live/students/listReports.php';
+const String DASHBOARDURL = 'https://ta.yrdsb.ca/live/students/listReports.php';
+const String COURSEURL = 'https://ta.yrdsb.ca/live/students/viewReport.php';
 const String GUIDANCEDATEURL = 'https://ta.yrdsb.ca/live/students/bookAppointment.php';
 
 Future<List<String?>> authorizeUser(String username, String password) async {
@@ -47,7 +49,30 @@ Future<dom.Document> fetchMarks(username, password) async {
 
   try {
     http.Response response = await http.get(
-      Uri.parse('$COURSEURL?student_id=${cookies[1]}'),
+      Uri.parse('$DASHBOARDURL?student_id=${cookies[1]}'),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Cookie': 'session_token=${cookies[0]}; student_id=${cookies[1]}',
+      },
+    );
+
+    // log('body==${response.body}');
+    if (response.statusCode == 200) {
+      return dom.Document.html(response.body);
+    } else {
+      throw Exception('Failed to load TeachAssist Marks');
+    }
+  } catch (e) {
+    throw Exception('Failed to load TeachAssist Marks');
+  }
+}
+
+Future<dom.Document> fetchCourse(username,password, subjectId) async {
+  var cookies = await authorizeUser(username, password);
+
+  try {
+    http.Response response = await http.get(
+      Uri.parse('$COURSEURL?subject_id=$subjectId&student_id=${cookies[1]}'),
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Cookie': 'session_token=${cookies[0]}; student_id=${cookies[1]}',
@@ -157,12 +182,18 @@ Future<dom.Document> bookGuidanceAppointment (username, password, dt, tm, id, sc
 class TeachAssistModel {
   static List<Map<String, dynamic>> courses = [];
   static List<String>? rawData;
+  static List<String?> subjectIds = [];
 
   Future init() async {
     final fetchedData = await fetchMarks(sharedPrefs.username, sharedPrefs.password);
     rawData = fetchedData.querySelectorAll('body > div > div > div > table > tbody > tr > td')
         .map((element) => element.text.trim().replaceAll(RegExp('[\t\n]'), ''))
         .toList();
+
+    subjectIds = fetchedData.querySelectorAll('body > div > div > div > table > tbody > tr > td')
+        .map((element) => element.children.isNotEmpty ? element.children[0].attributes['href'] : null)
+        .toList();
+
     loadCourses();
   }
 
@@ -182,9 +213,8 @@ class TeachAssistModel {
       courses[i]["Semester"] = rawData![i * 3 + 1].substring(6,7) == '9' ? 1 : 2;
       courses[i]["Course Average"] = (rawData![i * 3 + 2].contains('=')) ? rawData![i * 3 + 2].substring(
           rawData![i * 3 + 2].indexOf('=')+1,rawData![i * 3 + 2].indexOf('%')) : null;
-
-      // print(courses[i]);
-      // print(courses[i]['Code'] );
+      courses[i]["Subject ID"] = ((subjectIds[i * 3 + 2] ?? '').contains('=')) ? subjectIds[i * 3 + 2]!.substring(subjectIds[i * 3 + 2]!.indexOf('=')+1, subjectIds[i * 3 + 2]!.indexOf('&')): null;
+      print(courses[i]['Subject ID']);
     }
   }
 

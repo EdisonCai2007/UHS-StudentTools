@@ -18,9 +18,7 @@ import 'package:wolfpackapp/screens/login_screen/login_screen.dart';
 import 'package:wolfpackapp/screens/events_screen/events_screen.dart';
 import 'package:wolfpackapp/models_services/events_model.dart';
 
-
 import 'dart:io';
-
 
 // - 🏁 START HERE 🏁 -
 Future main() async {
@@ -38,24 +36,20 @@ Future main() async {
   UHSTeachersModel().init();
   await EventsModel().init();
 
-  runApp(
-    ChangeNotifierProvider(
-        create: (context) => ThemeManager(),
-      child: const MyApp(),
-    )
-  );
+  runApp(ChangeNotifierProvider(
+    create: (context) => ThemeManager(),
+    child: const MyApp(),
+  ));
 }
-
 
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host,
-          int port) => true;
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }
-
 
 // MyApp Widget; Holds Themes and Pages
 class MyApp extends StatefulWidget {
@@ -66,7 +60,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   void initState() {
     super.initState();
@@ -76,8 +69,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-
-      home: (sharedPrefs.username == '' && sharedPrefs.password == '') ? const LoginScreen() : const HomeScreen(),
+      home: (sharedPrefs.username == '' && sharedPrefs.password == '')
+          ? const LoginScreen()
+          : const HomeScreen(),
       routes: {
         '/loginScreen': (context) => const LoginScreen(),
         '/homeScreen': (context) => const HomeScreen(),
@@ -89,7 +83,6 @@ class _MyAppState extends State<MyApp> {
         '/eventsScreen': (context) => const EventsScreen(),
       },
       title: 'UHS Student Tools',
-
       theme: Provider.of<ThemeManager>(context).themeData,
     );
   }

@@ -26,7 +26,7 @@ class _TeachAssistOverviewContainerState
   void initState() {
     super.initState();
 
-    int numCourses = 0;
+    double numCourses = 0.0;
     for (final course in TeachAssistModel.courses) {
       double prevAverage = average;
 
@@ -78,7 +78,7 @@ class _TeachAssistOverviewContainerState
                         radius: 50,
                         lineWidth: 10,
                         backgroundColor: Theme.of(context).colorScheme.tertiary,
-                        percent: average / 100,
+                        percent: (!average.isNaN ? average : 0) / 100,
                         center: Text('$average%',
                             style: GoogleFonts.roboto(
                                 fontSize: 18, fontWeight: FontWeight.w800)),
@@ -89,6 +89,8 @@ class _TeachAssistOverviewContainerState
                               Theme.of(context).colorScheme.secondary,
                               Theme.of(context).colorScheme.secondary,
                             ]),
+                        animation: true,
+                        curve: Curves.easeInOut,
                         rotateLinearGradient: true,
                         circularStrokeCap: CircularStrokeCap.round),
                   ),
@@ -142,6 +144,8 @@ class _TeachAssistOverviewContainerState
                                   Theme.of(context).colorScheme.secondary,
                                 ],
                               ),
+                              animation: true,
+                              curve: Curves.easeInOut,
                               barRadius: const Radius.circular(15),
                             ),
                           ),

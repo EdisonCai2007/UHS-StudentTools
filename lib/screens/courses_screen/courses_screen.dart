@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:wolfpackapp/screens/courses_screen/course_overview_container.dart';
+import 'package:wolfpackapp/screens/no_account_dialog.dart';
 
 import '../../models_services/teachassist_model.dart';
 import '/menu_drawer.dart';
@@ -90,7 +91,12 @@ class _CoursesScreenState extends State<CoursesScreen> {
       body: SingleChildScrollView(
         physics: const ClampingScrollPhysics(),
         controller: ScrollController(),
-        child: Column(
+        child: (TeachAssistModel.courses.isEmpty) ? Padding(
+          padding: const EdgeInsets.all(30),
+          child: Center(
+            child: NoAccountDialog()
+          ),
+        ) : Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
@@ -107,8 +113,8 @@ class _CoursesScreenState extends State<CoursesScreen> {
                           color: Theme.of(context).colorScheme.tertiary,
                         ),
                       ),
-                      height: 160,
-                      width: 160,
+                      height: 170,
+                      width: 170,
                     ),
 
                     Container(
@@ -121,9 +127,9 @@ class _CoursesScreenState extends State<CoursesScreen> {
                       ),
                       child: CircularPercentIndicator(
                           radius: 100,
-                          lineWidth: 20,
-                          backgroundColor: Theme.of(context).colorScheme.tertiary,
-                          percent: average / 100,
+                          lineWidth: 15,
+                           backgroundColor: Theme.of(context).colorScheme.tertiary,
+                          percent: 0.9, //(!average.isNaN ? average : 0) / 100,
                           center: Text('$average%',
                               style: GoogleFonts.lato(
                                   fontSize: 30, fontWeight: FontWeight.w800)),
@@ -135,6 +141,8 @@ class _CoursesScreenState extends State<CoursesScreen> {
                                 Theme.of(context).colorScheme.secondary,
                               ]),
                           rotateLinearGradient: true,
+                          animation: true,
+                          curve: Curves.easeInOut,
                           circularStrokeCap: CircularStrokeCap.round),
                     ),
                   ],

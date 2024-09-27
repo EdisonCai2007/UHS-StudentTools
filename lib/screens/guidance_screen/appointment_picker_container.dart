@@ -152,20 +152,22 @@ class _AppointmentPickerContainerState extends State<AppointmentPickerContainer>
               ),
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               dateSchedule[counselor]['type'] == 'guidance' ?
               Text(
                   '${dateSchedule[counselor]['data'][0].substring(4, dateSchedule[counselor]['data'][0].indexOf(':'))}'
                   '${dateSchedule[counselor]['data'][0].substring(dateSchedule[counselor]['data'][0].indexOf('('), dateSchedule[counselor]['data'][0].indexOf('.'))}',
-                  style: GoogleFonts.roboto(
-                      fontSize: 14, fontWeight: FontWeight.w900)) :
+                  style: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.w900),
+                  textAlign: TextAlign.center,
+                  ) :
 
               Text(
                   '${dateSchedule[counselor]['data'][0].substring(4, dateSchedule[counselor]['data'][0].indexOf(':')+1)}\n'
                   '${dateSchedule[counselor]['data'][0].substring(dateSchedule[counselor]['data'][0].indexOf(':')+2, dateSchedule[counselor]['data'][0].indexOf('<',4))}',
-                  style: GoogleFonts.roboto(
-                      fontSize: 14, fontWeight: FontWeight.w900)),
+                  style: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.w900),
+                  textAlign: TextAlign.center,
+                  ),
 
               (dateSchedule[counselor]['data'].length <= 1) ? Padding(
                 padding: const EdgeInsets.all(0),
@@ -182,6 +184,7 @@ class _AppointmentPickerContainerState extends State<AppointmentPickerContainer>
                 style: TextButton.styleFrom(
                   padding: EdgeInsets.zero,
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  backgroundColor: Theme.of(context).colorScheme.background,
                 ),
                 child: Text(
                   dateSchedule[counselor]['data'][i].substring(
