@@ -55,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: SizedBox.fromSize(
                           size: const Size.fromRadius(500), // Image radius
                           child: const Image(
-                            image: AssetImage('assets/TemporaryLogo.jpg'),
+                            image: AssetImage('assets/test logo.png'),
                             fit: BoxFit.cover,
                           ),
                         ),
