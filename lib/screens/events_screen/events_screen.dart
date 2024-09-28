@@ -68,6 +68,7 @@ class _EventsScreenState extends State<EventsScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // -=-  Event Name  -=-
                         Text(
                           maxLines: 3,
                           events[index].title,
@@ -77,18 +78,59 @@ class _EventsScreenState extends State<EventsScreen> {
 
                         const Padding(padding: EdgeInsets.only(top: 15)),
 
+                        // -=-  Event Start Date/Time  -=-
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              '${DateFormat('EEEE').format(DateTime.parse(events[index].startDate))}, ${MonthConverter.getMonthStr(int.parse(events[index].startDate.substring(5, 7)))!} ${events[index].startDate.substring(8)}, ${events[index].startDate.substring(0, 4)}',
-                              style: GoogleFonts.roboto(fontSize: 15, fontWeight: FontWeight.w500),
+                              '${DateFormat('E').format(DateTime.parse(events[index].startDate))}, '
+                                  '${MonthConverter.getMonthStr(int.parse(events[index].startDate.substring(5, 7)))!} ${events[index].startDate.substring(8)}, '
+                                  '${events[index].startDate.substring(0, 4)}',
+                              style: GoogleFonts.roboto(fontSize: 15, fontWeight: FontWeight.w400),
                             ),
+
                             Text(
                               TimeConverter.get12Format(events[index].startTime),
                               style: GoogleFonts.roboto(fontSize: 15, fontWeight: FontWeight.w400),
                             ),
                           ],
+                        ),
+
+                        // -=-  Event Start Date/Time  -=-
+                        if (events[index].endTime != '' || events[index].endDate != events[index].startDate && !(events[index].title.toLowerCase().contains('day') && DateTime.parse(events[index].endDate).difference(DateTime.parse(events[index].startDate)).inDays <= 1)) const Padding(padding: EdgeInsets.only(top: 5)),
+
+                        if (events[index].endTime != '' || events[index].endDate != events[index].startDate && !(events[index].title.toLowerCase().contains('day') && DateTime.parse(events[index].endDate).difference(DateTime.parse(events[index].startDate)).inDays <= 1)) Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            events[index].endDate != events[index].startDate ? Text(
+                              '${DateFormat('E').format(DateTime.parse(events[index].endDate))}, ${MonthConverter.getMonthStr(int.parse(events[index].endDate.substring(5, 7)))!} ${events[index].endDate.substring(8)}, ${events[index].endDate.substring(0, 4)}',
+                              style: GoogleFonts.roboto(fontSize: 15, fontWeight: FontWeight.w400),
+                            ) : const Text(''),
+
+                            Text(
+                              TimeConverter.get12Format(events[index].endTime),
+                              style: GoogleFonts.roboto(fontSize: 15, fontWeight: FontWeight.w400),
+                            ),
+                          ],
+                        ),
+
+                        if (events[index].endTime != '' || events[index].endDate != events[index].startDate && !(events[index].title.toLowerCase().contains('day') && DateTime.parse(events[index].endDate).difference(DateTime.parse(events[index].startDate)).inDays <= 1)) const Padding(padding: EdgeInsets.only(bottom: 10)),
+
+                        // -=-  Time Remaining  -=-
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Container(
+                            padding: const EdgeInsets.only(top: 3, bottom: 3, left: 5, right: 5),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.background.withOpacity(0.6),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: (DateTime.parse(events[index].startDate).difference(DateTime.now()).inHours / 24).ceil() > 1
+                                ? Text('${(DateTime.parse(events[index].startDate).difference(DateTime.now()).inHours / 24).ceil()} Days Remaining', style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w500, color: Colors.redAccent))
+                                : (DateTime.parse(events[index].startDate).difference(DateTime.now()).inHours / 24).ceil() == 1
+                                ? Text('Tomorrow', style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w500, color: Colors.redAccent))
+                                : Text('Today', style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w500, color: Colors.redAccent)),
+                          ),
                         ),
                       ],
                     ),
