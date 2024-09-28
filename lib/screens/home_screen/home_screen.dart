@@ -121,14 +121,6 @@ class HomeScreen extends StatelessWidget {
                 // Welcome Container
                 WelcomeContainer(),
 
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Container(
-                    height: 10,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-                ),
-
                 // Schedule & Time Overview Container
                 const Row(
                   children: [

@@ -47,7 +47,7 @@ class _ScheduleOverviewContainerState extends State<ScheduleOverviewContainer> {
       ),
       height: 250,
       margin: const EdgeInsets.only(
-        top: 30,
+        top: 20,
         left: 30,
         right: 30,
       ),
@@ -101,7 +101,6 @@ class _ScheduleOverviewContainerState extends State<ScheduleOverviewContainer> {
                         color: Theme.of(context).colorScheme.tertiary,
                         borderRadius:
                             const BorderRadius.all(Radius.elliptical(10, 10)),
-                        boxShadow: const [BoxShadow(blurRadius: 3)],
                       ),
                       alignment: Alignment.center,
                       height: 40,

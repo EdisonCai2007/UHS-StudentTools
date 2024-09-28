@@ -9,6 +9,8 @@ class WelcomeContainer extends Container {
   final String date = DateFormat("MMMM d, yyyy").format(DateTime.now());
   final String day = DateFormat("EEEE").format(DateTime.now());
 
+  WelcomeContainer({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
