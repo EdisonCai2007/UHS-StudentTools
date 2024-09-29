@@ -76,7 +76,6 @@ class _EventsScreenState extends State<EventsScreen> {
 
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           shape: const CircleBorder(),
                           backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
                           shadowColor: const Color.fromRGBO(0, 0, 0, 0),
@@ -161,7 +160,7 @@ class _EventsScreenState extends State<EventsScreen> {
           const Padding(padding: EdgeInsets.only(bottom: 30)),
 
           // -=-  Events List  -=-
-          Expanded(
+          _events.isNotEmpty ? Expanded(
             flex: 1,
             child: ListView.builder(
               physics: const ClampingScrollPhysics(),
@@ -256,6 +255,18 @@ class _EventsScreenState extends State<EventsScreen> {
                   ),
                 );
               },
+            ),
+          )
+          : Align(
+            alignment: Alignment.center,
+            child: Text(
+              'Filters Result in No Events...',
+              style: GoogleFonts.roboto(
+                fontSize: 20,
+                fontWeight: FontWeight.w300,
+                fontStyle: FontStyle.italic,
+              ),
+              overflow: TextOverflow.visible,
             ),
           ),
         ],
