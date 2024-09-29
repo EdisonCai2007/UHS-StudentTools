@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'package:wolfpackapp/models_services/teachassist_model.dart';
 import 'package:wolfpackapp/screens/teacher_contacts/teacher_contacts_screen.dart';
 import 'package:wolfpackapp/screens/courses_screen/courses_screen.dart';
@@ -12,8 +11,6 @@ import 'package:wolfpackapp/screens/resources_screen/resources_screen.dart';
 import 'package:wolfpackapp/screens/settings_screen/settings_screen.dart';
 import 'package:wolfpackapp/misc/shared_prefs.dart';
 import 'package:wolfpackapp/misc/page_navigator.dart';
-
-import 'themes/theme_manager.dart';
 
 class MenuDrawer extends Drawer {
   const MenuDrawer({super.key});
@@ -109,11 +106,12 @@ class MenuDrawer extends Drawer {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   ElevatedButton(
-                    style: ButtonStyle(
-                      shape: const MaterialStatePropertyAll(CircleBorder()),
-                      backgroundColor: const MaterialStatePropertyAll(Color.fromRGBO(0, 0, 0, 0)),
-                      shadowColor: const MaterialStatePropertyAll(Color.fromRGBO(0, 0, 0, 0)),
-                      iconColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.onSurface),
+                    style: ElevatedButton.styleFrom(
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      shape: const CircleBorder(),
+                      backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
+                      shadowColor: const Color.fromRGBO(0, 0, 0, 0),
+                      foregroundColor: Theme.of(context).colorScheme.onSurface,
                     ),
                     onPressed: () {
                       sharedPrefs.username = '';
@@ -124,11 +122,12 @@ class MenuDrawer extends Drawer {
                     child: Icon(sharedPrefs.username != '' ? Icons.logout : Icons.login),
                   ),
                   ElevatedButton(
-                    style: ButtonStyle(
-                      shape: const MaterialStatePropertyAll(CircleBorder()),
-                      backgroundColor: const MaterialStatePropertyAll(Color.fromRGBO(0, 0, 0, 0)),
-                      shadowColor: const MaterialStatePropertyAll(Color.fromRGBO(0, 0, 0, 0)),
-                      iconColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.onSurface),
+                    style: ElevatedButton.styleFrom(
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      shape: const CircleBorder(),
+                      backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
+                      shadowColor: const Color.fromRGBO(0, 0, 0, 0),
+                      foregroundColor: Theme.of(context).colorScheme.onSurface,
                     ),
                     onPressed: () {
                       PageNavigator.changePage(context, const SettingsScreen());

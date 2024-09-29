@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:html/dom.dart' as dom;
@@ -12,8 +10,7 @@ class AppointmentPickerContainer extends StatefulWidget {
   const AppointmentPickerContainer({super.key});
 
   @override
-  State<AppointmentPickerContainer> createState() =>
-      _AppointmentPickerContainerState();
+  State<AppointmentPickerContainer> createState() => _AppointmentPickerContainerState();
 }
 
 class _AppointmentPickerContainerState extends State<AppointmentPickerContainer> {

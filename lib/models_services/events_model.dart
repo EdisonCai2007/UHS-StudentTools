@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../misc/shared_prefs.dart';
 
@@ -37,11 +36,15 @@ class EventsModel {
 
   Future init() async {
     if (sharedPrefs.eventsData.isEmpty || sharedPrefs.eventsRequestDate.isEmpty || DateTime.now().subtract(const Duration(days: 1)).isAfter(DateTime.parse(sharedPrefs.eventsRequestDate))) {
-      loadEvents();
+      loadNewEvents();
+      print('NEW events loaded...');
+    } else {
+      loadSavedEvents();
+      print('SAVED events loaded...');
     }
   }
 
-  static Future loadEvents() async {
+  static Future loadNewEvents() async {
     events = [];
 
     final fetchedEvents = await fetchEvents();
@@ -57,6 +60,17 @@ class EventsModel {
     sharedPrefs.eventsRequestDate = DateTime.now().toString();
     sharedPrefs.eventsData = EventsModel.events.map((event) => jsonEncode(event.toJson())).toList();
   }
+
+  static Future loadSavedEvents() async {
+    events = [];
+
+    events = sharedPrefs.eventsData.map((eventJson) {
+      Map<String, dynamic> eventMap = jsonDecode(eventJson);
+      return EventDetails.fromJson(eventMap);
+    }).toList();
+
+    events.removeWhere((event) => DateTime.parse(event.startDate).isBefore(DateTime.now()));
+  }
 }
 
 class EventDetails {
@@ -70,7 +84,7 @@ class EventDetails {
 
   @override
   String toString() {
-    return 'Title: $title   |   Start Date: $startDate   |   Start Time: $startTime   |   End Date: $endDate   |   End Time: $endTime';
+    return '{Title: "$title"  |  Start Date: "$startDate"  |  Start Time: "$startTime"  |  End Date: "$endDate"  |  End Time: "$endTime"}';
   }
 
   Map<String, dynamic> toJson() {
