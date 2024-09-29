@@ -101,27 +101,34 @@ class _EventsScreenState extends State<EventsScreen> {
                     children: [
                       Row(
                         children: [
+                          const Padding(padding: EdgeInsets.only(right: 8)),
+
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              shape: const CircleBorder(),
+                              tapTargetSize: MaterialTapTargetSize.padded,
                               backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
                               shadowColor: const Color.fromRGBO(0, 0, 0, 0),
                               foregroundColor: Theme.of(context).colorScheme.onSurface,
                             ),
                             onPressed: _datePicker,
-                            child: const Icon(Icons.edit_calendar),
-                          ),
+                            child: Row(
+                              children: [
+                                const Icon(Icons.edit_calendar),
 
-                          clearCheck ? Text(
-                            'No Date Selected',
-                            style: GoogleFonts.roboto(fontSize: 15, fontWeight: FontWeight.w400),
-                          )
-                              : Text(
-                              '${DateFormat('E').format(_selectedDate)}, '
-                                  '${MonthConverter.getMonthStr(int.parse(_selectedDate.toString().substring(5, 7)))!} ${_selectedDate.toString().substring(8, 10)}, '
-                                  '${_selectedDate.toString().substring(0, 4)}',
-                              style: GoogleFonts.roboto(fontSize: 15, fontWeight: FontWeight.w400)
+                                const Padding(padding: EdgeInsets.only(right: 15)),
+
+                                clearCheck ? Text(
+                                  'No Date Selected',
+                                  style: GoogleFonts.roboto(fontSize: 15, fontWeight: FontWeight.w400),
+                                )
+                                    : Text(
+                                    '${DateFormat('E').format(_selectedDate)}, '
+                                        '${MonthConverter.getMonthStr(int.parse(_selectedDate.toString().substring(5, 7)))!} ${_selectedDate.toString().substring(8, 10)}, '
+                                        '${_selectedDate.toString().substring(0, 4)}',
+                                    style: GoogleFonts.roboto(fontSize: 15, fontWeight: FontWeight.w400)
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
