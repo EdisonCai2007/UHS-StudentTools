@@ -35,12 +35,13 @@ class EventsModel {
   static List<EventDetails> events = [];
 
   Future init() async {
+    //SharedPreferences prefs = await SharedPreferences.getInstance();
+    //prefs.remove('eventsData');
+
     if (sharedPrefs.eventsData.isEmpty || sharedPrefs.eventsRequestDate.isEmpty || DateTime.now().subtract(const Duration(days: 1)).isAfter(DateTime.parse(sharedPrefs.eventsRequestDate))) {
-      loadNewEvents();
-      print('NEW events loaded...');
+      await loadNewEvents();
     } else {
-      loadSavedEvents();
-      print('SAVED events loaded...');
+      await loadSavedEvents();
     }
   }
 
@@ -57,6 +58,21 @@ class EventsModel {
       }
     }
 
+    events.where((event) => event.endTime.isEmpty
+        && event.title.toLowerCase().contains('day')
+        && DateTime.parse(event.endDate).difference(DateTime.parse(event.startDate)).inDays <= 1
+    ).forEach((event) {
+      event.endDate = event.startDate;
+    });
+
+    events.removeWhere((event) {
+      try {
+        return DateTime.parse('${event.endDate} ${event.endTime}').isBefore(DateTime.now());
+      } catch (e) {
+        return DateTime.parse('${event.endDate} 24:00:00').isBefore(DateTime.now());
+      }
+    });
+
     sharedPrefs.eventsRequestDate = DateTime.now().toString();
     sharedPrefs.eventsData = EventsModel.events.map((event) => jsonEncode(event.toJson())).toList();
   }
@@ -69,7 +85,13 @@ class EventsModel {
       return EventDetails.fromJson(eventMap);
     }).toList();
 
-    events.removeWhere((event) => DateTime.parse(event.startDate).isBefore(DateTime.now()));
+    events.removeWhere((event) {
+      try {
+        return DateTime.parse('${event.endDate} ${event.endTime}').isBefore(DateTime.now());
+      } catch (e) {
+        return DateTime.parse('${event.endDate} 24:00:00').isBefore(DateTime.now());
+      }
+    });
   }
 }
 

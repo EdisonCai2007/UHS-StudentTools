@@ -16,7 +16,6 @@ import 'package:wolfpackapp/screens/courses_screen/courses_screen.dart';
 import 'package:wolfpackapp/screens/guidance_screen/guidance_screen.dart';
 import 'package:wolfpackapp/screens/login_screen/login_screen.dart';
 import 'package:wolfpackapp/screens/events_screen/events_screen.dart';
-import 'package:wolfpackapp/models_services/events_model.dart';
 
 import 'dart:io';
 
@@ -34,10 +33,7 @@ Future main() async {
   await sharedPrefs.init();
   if (sharedPrefs.username != '' && sharedPrefs.password != '') await TeachAssistModel().init();
   await UHSTeachersModel().init();
-  await EventsModel().init();
-
-  //SharedPreferences prefs = await SharedPreferences.getInstance();
-  //prefs.remove('eventsData');
+  //await EventsModel().init();
 
   runApp(ChangeNotifierProvider(
     create: (context) => ThemeManager(),
