@@ -61,14 +61,12 @@ class _DailyWeatherOverviewContainerState extends State<DailyWeatherOverviewCont
       height: 300,
       margin: const EdgeInsets.all(10),
       padding: const EdgeInsets.only(top:20, left: 20,right: 20),
-      child: (weather == null || minMaxTemperature == null) ? Center(
+      child: (weather == null || minMaxTemperature == null) ? const Center(
         child: AspectRatio(
           aspectRatio: 1 / 1,
           child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: CircularProgressIndicator(
-              color: Theme.of(context).colorScheme.secondary,
-            ),
+            padding: EdgeInsets.all(20),
+            child: CircularProgressIndicator(),
           ),
         ),
       ) :

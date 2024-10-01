@@ -47,7 +47,7 @@ class Themes {
       padding: const EdgeInsets.all(20),
     ),
     progressIndicatorTheme: ProgressIndicatorThemeData(
-      refreshBackgroundColor: _themes.lightContainerAccent,
+      color: _themes.lightAccent
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -82,7 +82,7 @@ class Themes {
       padding: const EdgeInsets.all(20),
     ),
     progressIndicatorTheme: ProgressIndicatorThemeData(
-      refreshBackgroundColor: _themes.darkContainerAccent,
+      color: _themes.darkAccent
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(

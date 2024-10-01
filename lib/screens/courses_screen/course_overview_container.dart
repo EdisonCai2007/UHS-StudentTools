@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:wolfpackapp/misc/page_navigator.dart';
+import 'package:wolfpackapp/misc/shared_prefs.dart';
+import 'package:wolfpackapp/models_services/teachassist_model.dart';
 import 'package:wolfpackapp/screens/courses_screen/single_course_screen.dart';
 
 
@@ -25,12 +27,14 @@ class _CourseOverviewContainerState extends State<CourseOverviewContainer> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         final id = widget.course['Subject ID'];
 
         if (id != null) {
-          PageNavigator.changePage(context, SingleCourseScreen(
-          subjectId: widget.course['Subject ID'], courseCode: widget.course['Code'],));
+          final fetchedData = await fetchCourse(sharedPrefs.username, sharedPrefs.password, id);
+
+          // ignore: use_build_context_synchronously
+          PageNavigator.changePage(context, SingleCourseScreen(courseCode: widget.course['Code'], fetchedData: fetchedData,));
         }
       },
       child: Container(

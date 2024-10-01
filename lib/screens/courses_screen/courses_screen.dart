@@ -129,7 +129,7 @@ class _CoursesScreenState extends State<CoursesScreen> {
                           radius: 100,
                           lineWidth: 15,
                            backgroundColor: Theme.of(context).colorScheme.tertiary,
-                          percent: 0.9, //(!average.isNaN ? average : 0) / 100,
+                          percent: (!average.isNaN ? average : 0) / 100,
                           center: Text('$average%',
                               style: GoogleFonts.lato(
                                   fontSize: 30, fontWeight: FontWeight.w800)),

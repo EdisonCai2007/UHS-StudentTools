@@ -93,7 +93,11 @@ class _AppointmentPickerContainerState extends State<AppointmentPickerContainer>
                           physics: const BouncingScrollPhysics(),
                             scrollDirection: Axis.horizontal,
                             child:
-                                Row(children: buildDateSchedule(dateSchedule))),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: buildDateSchedule(dateSchedule)
+                                )
+                              ),
                       )
                 : const SizedBox(
                     height: 30,
@@ -129,6 +133,8 @@ class _AppointmentPickerContainerState extends State<AppointmentPickerContainer>
         }
         searchController.text = selectedDate.toString().split(" ")[0];
       });
+
+      print(dateSchedule);
     }
   }
 
@@ -140,21 +146,13 @@ class _AppointmentPickerContainerState extends State<AppointmentPickerContainer>
       columns.add(
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 30),
-          decoration: BoxDecoration(
-              border: Border(
-                right: BorderSide(
-                  color: Theme.of(context).colorScheme.secondary,
-                  width: 1.5,
-                ),
-              ),
-          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               dateSchedule[counselor]['type'] == 'guidance' ?
               Text(
                   '${dateSchedule[counselor]['data'][0].substring(4, dateSchedule[counselor]['data'][0].indexOf(':'))}'
-                  '${dateSchedule[counselor]['data'][0].substring(dateSchedule[counselor]['data'][0].indexOf('('), dateSchedule[counselor]['data'][0].indexOf('.'))}',
+                  '${dateSchedule[counselor]['data'][0].substring(dateSchedule[counselor]['data'][0].indexOf('('), dateSchedule[counselor]['data'][0].indexOf(')')+1)}',
                   style: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.w900),
                   textAlign: TextAlign.center,
                   ) :
@@ -177,7 +175,9 @@ class _AppointmentPickerContainerState extends State<AppointmentPickerContainer>
                 height: 10,
               ),
 
-              for (int i = 1; i < dateSchedule[counselor]['data'].length; i++) TextButton(
+              for (int i = 1; i < dateSchedule[counselor]['data'].length; i++) 
+              dateSchedule[counselor]['data'][i].indexOf('tm=') != -1 ? 
+              TextButton(
                 style: TextButton.styleFrom(
                   padding: EdgeInsets.zero,
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -185,8 +185,9 @@ class _AppointmentPickerContainerState extends State<AppointmentPickerContainer>
                 ),
                 child: Text(
                   dateSchedule[counselor]['data'][i].substring(
-                  dateSchedule[counselor]['data'][i].indexOf('tm=')+3,
-                  dateSchedule[counselor]['data'][i].indexOf('&amp',dateSchedule[counselor]['data'][i].indexOf('tm=')+3)-3),
+                    dateSchedule[counselor]['data'][i].indexOf('tm=')+3,
+                    dateSchedule[counselor]['data'][i].indexOf('&amp',dateSchedule[counselor]['data'][i].indexOf('tm=')+3)-3
+                  ),
                   style: GoogleFonts.roboto(
                       fontSize: 14, fontWeight: FontWeight.w400)
                 ),
@@ -235,7 +236,7 @@ class _AppointmentPickerContainerState extends State<AppointmentPickerContainer>
                     );
                   }
                 },
-              )
+              ) : const SizedBox.shrink(),
             ],
           ),
         ),
