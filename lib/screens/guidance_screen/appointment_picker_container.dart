@@ -91,13 +91,15 @@ class _AppointmentPickerContainerState extends State<AppointmentPickerContainer>
                         padding: const EdgeInsets.symmetric(vertical: 30),
                         child: SingleChildScrollView(
                           physics: const BouncingScrollPhysics(),
-                            scrollDirection: Axis.horizontal,
-                            child:
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: buildDateSchedule(dateSchedule)
-                                )
+                          scrollDirection: Axis.horizontal,
+                          child:
+                            IntrinsicHeight(
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: buildDateSchedule(dateSchedule)
                               ),
+                            ),
+                          ),
                       )
                 : const SizedBox(
                     height: 30,
@@ -133,8 +135,6 @@ class _AppointmentPickerContainerState extends State<AppointmentPickerContainer>
         }
         searchController.text = selectedDate.toString().split(" ")[0];
       });
-
-      print(dateSchedule);
     }
   }
 
@@ -143,101 +143,126 @@ class _AppointmentPickerContainerState extends State<AppointmentPickerContainer>
     List checkListItems = [];
 
     for (int counselor = 0; counselor < dateSchedule.length; counselor++) {
+      bool fullyBooked = true;
+
+      for (int i = 1; i < dateSchedule[counselor]['data'].length; i++) {
+        if (dateSchedule[counselor]['data'][i].indexOf('tm=') != -1) {
+          fullyBooked = false;
+        }
+      }
+
       columns.add(
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              dateSchedule[counselor]['type'] == 'guidance' ?
-              Text(
-                  '${dateSchedule[counselor]['data'][0].substring(4, dateSchedule[counselor]['data'][0].indexOf(':'))}'
-                  '${dateSchedule[counselor]['data'][0].substring(dateSchedule[counselor]['data'][0].indexOf('('), dateSchedule[counselor]['data'][0].indexOf(')')+1)}',
-                  style: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.w900),
-                  textAlign: TextAlign.center,
-                  ) :
-
-              Text(
-                  '${dateSchedule[counselor]['data'][0].substring(4, dateSchedule[counselor]['data'][0].indexOf(':')+1)}\n'
-                  '${dateSchedule[counselor]['data'][0].substring(dateSchedule[counselor]['data'][0].indexOf(':')+2, dateSchedule[counselor]['data'][0].indexOf('<',4))}',
-                  style: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.w900),
-                  textAlign: TextAlign.center,
-                  ),
-
-              (dateSchedule[counselor]['data'].length <= 1) ? Padding(
-                padding: const EdgeInsets.all(0),
-                child: Text('Fully Booked',
-                    style: GoogleFonts.roboto(
-                    fontSize: 14, fontWeight: FontWeight.w400)
-                ),
-              ) :
-              const SizedBox(
-                height: 10,
+          decoration: BoxDecoration(
+            border: Border.symmetric(
+              vertical: BorderSide(
+                color: Theme.of(context).colorScheme.secondary,
+                width: 0.5
               ),
-
-              for (int i = 1; i < dateSchedule[counselor]['data'].length; i++) 
-              dateSchedule[counselor]['data'][i].indexOf('tm=') != -1 ? 
-              TextButton(
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  backgroundColor: Theme.of(context).colorScheme.background,
-                ),
-                child: Text(
-                  dateSchedule[counselor]['data'][i].substring(
-                    dateSchedule[counselor]['data'][i].indexOf('tm=')+3,
-                    dateSchedule[counselor]['data'][i].indexOf('&amp',dateSchedule[counselor]['data'][i].indexOf('tm=')+3)-3
-                  ),
-                  style: GoogleFonts.roboto(
-                      fontSize: 14, fontWeight: FontWeight.w400)
-                ),
-                onPressed: () async {
-                  if (dateSchedule[counselor]['type'] == 'guidance') {
-                    await _fetchGuidanceTime(counselor, i);
-
-                    final labels = guidanceTimeHtmlData
-                        .querySelectorAll('body > div > form > label')
-                        .map((element) => element.innerHtml.trim())
-                        .toList();
-                    final values = guidanceTimeHtmlData
-                        .querySelectorAll('body > div > form > input')
-                        .map((element) => element.attributes['value']!)
-                        .toList();
-
-                    checkListItems = [];
-                    for (int j = 0; j < labels.length; j++) {
-                      checkListItems.add({
-                        'label': labels[j],
-                        'value': values[j + 6],
-                        'selected': false,
-                      });
-                    }
-
-                    if (!context.mounted) return;
-                    showDialog(context: context, builder: (context) =>
-                        AppointmentOptionAlert(
-                          checkListItems: checkListItems,
-                          dt: dateSchedule[counselor]['data'][i].substring(dateSchedule[counselor]['data'][i].indexOf('dt=') + 3,
-                            dateSchedule[counselor]['data'][i].indexOf('&amp', dateSchedule[counselor]['data'][i].indexOf('dt=') + 3),
-                          ),
-                          tm: dateSchedule[counselor]['data'][i].substring(dateSchedule[counselor]['data'][i].indexOf('tm=') + 3,
-                            dateSchedule[counselor]['data'][i].indexOf('&amp', dateSchedule[counselor]['data'][i].indexOf('tm=') + 3),
-                          ),
-                          id: dateSchedule[counselor]['data'][i].substring(dateSchedule[counselor]['data'][i].indexOf('id=') + 3,
-                            dateSchedule[counselor]['data'][i].indexOf('&amp', dateSchedule[counselor]['data'][i].indexOf('id=') + 3),
-                          ),
-                          school_id: dateSchedule[counselor]['data'][i].substring(dateSchedule[counselor]['data'][i].indexOf('school_id=') + 10,
-                              dateSchedule[counselor]['data'][i].indexOf('">', dateSchedule[counselor]['data'][i].indexOf('school_id=') + 10)
-                          ),
-                        ));
-                  } else {
-                    showDialog(context: context, builder: (context) =>
-                      AppointmentConfirmation(data: dateSchedule[counselor], itemNum: i),
-                    );
-                  }
-                },
-              ) : const SizedBox.shrink(),
-            ],
+            ),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Center(
+            child: IntrinsicWidth(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  dateSchedule[counselor]['type'] == 'guidance' ?
+                  Text(
+                      '${dateSchedule[counselor]['data'][0].substring(4, dateSchedule[counselor]['data'][0].indexOf(':'))}'
+                      '${dateSchedule[counselor]['data'][0].substring(dateSchedule[counselor]['data'][0].indexOf('('), dateSchedule[counselor]['data'][0].indexOf(')')+1)}',
+                      style: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.w900),
+                      textAlign: TextAlign.center,
+                      ) :
+                          
+                  Text(
+                      '${dateSchedule[counselor]['data'][0].substring(4, dateSchedule[counselor]['data'][0].indexOf(':')+1)}\n'
+                      '${dateSchedule[counselor]['data'][0].substring(dateSchedule[counselor]['data'][0].indexOf(':')+2, dateSchedule[counselor]['data'][0].indexOf('<',4))}',
+                      style: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.w900),
+                      textAlign: TextAlign.center,
+                      ),
+                          
+                  (dateSchedule[counselor]['data'].length <= 1 || fullyBooked) ? Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text('Fully Booked',
+                        style: GoogleFonts.roboto(
+                        fontSize: 14, fontWeight: FontWeight.w400)
+                    ),
+                  ) :
+                  const SizedBox(height: 10),
+                          
+                  for (int i = 1; i < dateSchedule[counselor]['data'].length; i++) 
+                  dateSchedule[counselor]['data'][i].indexOf('tm=') != -1 ? 
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 1),
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        backgroundColor: Theme.of(context).colorScheme.background,
+                      ),
+                      child: Text(
+                        dateSchedule[counselor]['data'][i].substring(
+                          dateSchedule[counselor]['data'][i].indexOf('tm=')+3,
+                          dateSchedule[counselor]['data'][i].indexOf('&amp',dateSchedule[counselor]['data'][i].indexOf('tm=')+3)-3
+                        ),
+                        style: GoogleFonts.roboto(
+                            fontSize: 14, fontWeight: FontWeight.w400)
+                      ),
+                      onPressed: () async {
+                        if (dateSchedule[counselor]['type'] == 'guidance') {
+                          showDialog(context: context, builder: (context) =>
+                            AppointmentConfirmation(data: dateSchedule[counselor], itemNum: i),
+                          );
+                          /*
+                          await _fetchGuidanceTime(counselor, i);
+                    
+                          final labels = guidanceTimeHtmlData
+                              .querySelectorAll('body > div > form > label')
+                              .map((element) => element.innerHtml.trim())
+                              .toList();
+                          final values = guidanceTimeHtmlData
+                              .querySelectorAll('body > div > form > input')
+                              .map((element) => element.attributes['value']!)
+                              .toList();
+                    
+                          checkListItems = [];
+                          for (int j = 0; j < labels.length; j++) {
+                            checkListItems.add({
+                              'label': labels[j],
+                              'value': values[j + 6],
+                              'selected': false,
+                            });
+                          }
+                    
+                          if (!context.mounted) return;
+                          showDialog(context: context, builder: (context) =>
+                              AppointmentOptionAlert(
+                                checkListItems: checkListItems,
+                                dt: dateSchedule[counselor]['data'][i].substring(dateSchedule[counselor]['data'][i].indexOf('dt=') + 3,
+                                  dateSchedule[counselor]['data'][i].indexOf('&amp', dateSchedule[counselor]['data'][i].indexOf('dt=') + 3),
+                                ),
+                                tm: dateSchedule[counselor]['data'][i].substring(dateSchedule[counselor]['data'][i].indexOf('tm=') + 3,
+                                  dateSchedule[counselor]['data'][i].indexOf('&amp', dateSchedule[counselor]['data'][i].indexOf('tm=') + 3),
+                                ),
+                                id: dateSchedule[counselor]['data'][i].substring(dateSchedule[counselor]['data'][i].indexOf('id=') + 3,
+                                  dateSchedule[counselor]['data'][i].indexOf('&amp', dateSchedule[counselor]['data'][i].indexOf('id=') + 3),
+                                ),
+                                school_id: dateSchedule[counselor]['data'][i].substring(dateSchedule[counselor]['data'][i].indexOf('school_id=') + 10,
+                                    dateSchedule[counselor]['data'][i].indexOf('">', dateSchedule[counselor]['data'][i].indexOf('school_id=') + 10)
+                                ),
+                              ))
+                              */
+                        } else {
+                          showDialog(context: context, builder: (context) =>
+                            AppointmentConfirmation(data: dateSchedule[counselor], itemNum: i),
+                          );
+                        }
+                      },
+                    ),
+                  ) : const SizedBox.shrink(),
+                ],
+              ),
+            ),
           ),
         ),
       );

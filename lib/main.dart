@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:wolfpackapp/firebase_options.dart';
+import 'package:wolfpackapp/models_services/account_model.dart';
 import 'package:wolfpackapp/models_services/teachassist_model.dart';
 import 'package:wolfpackapp/models_services/uhs_teachers_model.dart';
 import 'package:wolfpackapp/screens/resources_screen/resources_screen.dart';
@@ -33,6 +34,7 @@ Future main() async {
   await sharedPrefs.init();
   if (sharedPrefs.username != '' && sharedPrefs.password != '') await TeachAssistModel().init();
   await UHSTeachersModel().init();
+  await AccountModel().init();
   //await EventsModel().init();
 
   runApp(ChangeNotifierProvider(

@@ -45,7 +45,6 @@ class _ScheduleOverviewContainerState extends State<ScheduleOverviewContainer> {
         borderRadius: const BorderRadius.all(Radius.elliptical(20, 20)),
         boxShadow: const [BoxShadow(blurRadius: 5)],
       ),
-      height: 250,
       margin: const EdgeInsets.only(
         top: 20,
         left: 30,
@@ -156,6 +155,7 @@ class _ScheduleOverviewContainerState extends State<ScheduleOverviewContainer> {
           #########################
           */
           (TeachAssistModel.courses.isEmpty) ? NoAccountDialog() :
+          (TimeConstants().getPeriodClass(minuteTime)[0] == '') ? const SizedBox(height: 60) :
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 20),
             child: Align(

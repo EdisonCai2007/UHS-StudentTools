@@ -138,7 +138,7 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
                       lineWidth: 10,
                         backgroundColor: Theme.of(context).colorScheme.tertiary,
                       percent: courseAverage / 100,
-                      center: Text('$courseAverage%',
+                      center: Text('${courseAverage.toStringAsFixed(1)}%',
                           style: GoogleFonts.lato(
                               fontSize: 25, fontWeight: FontWeight.w800)),
                       linearGradient: LinearGradient(
@@ -250,6 +250,7 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
             GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 10, mainAxisSpacing: 10),
               padding: const EdgeInsets.all(10),
+              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount: categories.length,
               itemBuilder: (context, index) {

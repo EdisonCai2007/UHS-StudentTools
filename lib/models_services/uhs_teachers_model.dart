@@ -1,3 +1,4 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gsheets/gsheets.dart';
 
 class UHSTeachersModel {
@@ -19,12 +20,11 @@ class UHSTeachersModel {
   static int numTeachers = 0;
   static List<Map<String,String>> teachers = [];
 
-  static const _spreadsheetId = '1h8FykeO8w03h7JLZqGPNo12bC7y_SSDUFNg2h7Ulx8A';
   static final _gsheets = GSheets(_credentials);
   static Worksheet? _worksheet;
   
   Future init() async {
-    final ss = await _gsheets.spreadsheet(_spreadsheetId);
+    final ss = await _gsheets.spreadsheet(dotenv.env['UHS_TEACHERS_SPREADSHEET_ID']!);
     _worksheet = ss.worksheetByTitle('Teachers');
     loadTeachers();
   }

@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:wolfpackapp/models_services/account_model.dart';
 import 'package:wolfpackapp/models_services/teachassist_model.dart';
 import 'package:wolfpackapp/screens/home_screen/home_screen.dart';
 import 'package:wolfpackapp/misc/shared_prefs.dart';
@@ -151,6 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               sharedPrefs.password = password;
 
                               await TeachAssistModel().init();
+                              AccountModel.parseAccount();
                               if (!context.mounted) return;
                               PageNavigator.changePage(context, const HomeScreen());
                             }
