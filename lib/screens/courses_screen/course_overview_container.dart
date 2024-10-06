@@ -122,8 +122,8 @@ class _CourseOverviewContainerState extends State<CourseOverviewContainer> {
                       ),
                     ),
                     child: CircularPercentIndicator(
-                        radius: 60,
-                        lineWidth: 12,
+                        radius: 55,
+                        lineWidth: 7,
                         backgroundColor: Theme.of(context).colorScheme.tertiary,
                         percent: double.parse(widget.course['Course Average']) / 100,
                         center: Text('${double.parse(widget.course['Course Average']).toStringAsFixed(1)}%',

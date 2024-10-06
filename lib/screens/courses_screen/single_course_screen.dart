@@ -161,53 +161,60 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
             Padding(
               padding: const EdgeInsets.all(10),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Expanded(
                     flex: 1,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: ElevatedButton(
-                        style: Theme.of(context).elevatedButtonTheme.style,
-                        onPressed: (showAssignments == true) ? null : () {
-                          setState(() {
-                            showAssignments = true;
-                            showTrends = false;
-                          });
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: FittedBox(
-                            fit: BoxFit.fitHeight,
-                            child: Text('Assignments',
-                                style: GoogleFonts.lato(
-                                    color: Theme.of(context).colorScheme.primary,
-                                    fontSize: 20, fontWeight: FontWeight.w600)),
-                          ),
-                        )
+                    child: SizedBox(
+                      height: 40,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: ElevatedButton(
+                            style: Theme.of(context).elevatedButtonTheme.style,
+                            onPressed: (showAssignments == true) ? null : () {
+                              setState(() {
+                                showAssignments = true;
+                                showTrends = false;
+                              });
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: FittedBox(
+                                fit: BoxFit.fitHeight,
+                                child: Text('Assignments',
+                                    style: GoogleFonts.lato(
+                                        color: Theme.of(context).colorScheme.primary,
+                                        fontSize: 20, fontWeight: FontWeight.w600)),
+                              ),
+                            )
+                        ),
                       ),
                     ),
                   ),
               
                   Expanded(
                     flex: 1,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: ElevatedButton(
-                        style: Theme.of(context).elevatedButtonTheme.style,
-                        onPressed: (showTrends == true) ? null : () {
-                          setState(() {
-                            showTrends = true;
-                            showAssignments = false;
-                          });
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: FittedBox(
-                            fit: BoxFit.fitHeight,
-                            child: Text('Trends',
-                                style: GoogleFonts.lato(
-                                    color: Theme.of(context).colorScheme.primary,
-                                    fontSize: 20, fontWeight: FontWeight.w600)),
+                    child: SizedBox(
+                      height: 40,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: ElevatedButton(
+                          style: Theme.of(context).elevatedButtonTheme.style,
+                          onPressed: (showTrends == true) ? null : () {
+                            setState(() {
+                              showTrends = true;
+                              showAssignments = false;
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: FittedBox(
+                              fit: BoxFit.fitHeight,
+                              child: Text('Trends',
+                                  style: GoogleFonts.lato(
+                                      color: Theme.of(context).colorScheme.primary,
+                                      fontSize: 20, fontWeight: FontWeight.w600)),
+                            ),
                           ),
                         ),
                       ),
@@ -351,57 +358,59 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
                       ),
                     ),
                 
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: AspectRatio(
-                        aspectRatio: 1.2,
-                        child: LineChart(
-                          LineChartData(
-                            gridData: const FlGridData(
-                              drawVerticalLine: false
-                            ),
-                            titlesData: FlTitlesData(
-                              topTitles: const AxisTitles(
-                                sideTitles: SideTitles(showTitles: false)
-                              ),
-                              bottomTitles: const AxisTitles(
-                                sideTitles: SideTitles(showTitles: false)
-                              ),
-                              rightTitles: const AxisTitles(
-                                sideTitles: SideTitles(showTitles: false)
-                              ),
-                              leftTitles: AxisTitles(
-                                sideTitles: SideTitles(
-                                  showTitles: true,
-                                  maxIncluded: false,
-                                  minIncluded: false,
-                                  interval: ((trendMax - trendMin) / 5).ceilToDouble() + 1,
-                                  reservedSize: 25,
-                                  getTitlesWidget: (value, meta) => Text('${value.ceil()}%',
-                                                  style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w600),
-                                                ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: AspectRatio(
+                          aspectRatio: 1.2,
+                          child: LineChart(
+                              LineChartData(
+                                gridData: const FlGridData(
+                                    drawVerticalLine: false
                                 ),
-                              ),
-                            ),
-                            lineBarsData: [
-                              LineChartBarData(
-                                isCurved: true,
-                                preventCurveOverShooting: true,
-                                spots: trends,
-                                color: Theme.of(context).colorScheme.secondary,
+                                titlesData: FlTitlesData(
+                                  topTitles: const AxisTitles(
+                                      sideTitles: SideTitles(showTitles: false)
+                                  ),
+                                  bottomTitles: const AxisTitles(
+                                      sideTitles: SideTitles(showTitles: false)
+                                  ),
+                                  rightTitles: const AxisTitles(
+                                      sideTitles: SideTitles(showTitles: false)
+                                  ),
+                                  leftTitles: AxisTitles(
+                                    sideTitles: SideTitles(
+                                      showTitles: true,
+                                      maxIncluded: false,
+                                      minIncluded: false,
+                                      interval: ((trendMax - trendMin) / 5).ceilToDouble() + 1,
+                                      reservedSize: 25,
+                                      getTitlesWidget: (value, meta) => Text('${value.ceil()}%',
+                                        style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w600),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                lineBarsData: [
+                                  LineChartBarData(
+                                    isCurved: true,
+                                    preventCurveOverShooting: true,
+                                    spots: trends,
+                                    color: Theme.of(context).colorScheme.secondary,
+                                  )
+                                ],
+                                lineTouchData: const LineTouchData(
+                                    touchTooltipData: LineTouchTooltipData(
+                                      tooltipRoundedRadius: 20,
+                                    )
+                                ),
+                                maxY: min(100.5, trendMax+3),
+                                minY: max(-0.5, trendMin-3),
+                                maxX: (trends.length > 1) ? trends.length-1 : trends.length-0,
+                                minX: (trends.length > 1) ? 0 : -1,
+
                               )
-                            ],
-                            lineTouchData: const LineTouchData(
-                              touchTooltipData: LineTouchTooltipData(
-                                tooltipRoundedRadius: 20,
-                              )
-                            ),
-                            maxY: min(100.5, trendMax+3),
-                            minY: max(-0.5, trendMin-3),
-                            maxX: (trends.length > 1) ? trends.length-1 : trends.length-0,
-                            minX: (trends.length > 1) ? 0 : -1,
-                            
-                          )
+                          ),
                         ),
                       ),
                     ),
