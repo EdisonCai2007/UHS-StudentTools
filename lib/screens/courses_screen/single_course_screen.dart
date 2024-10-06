@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:wolfpackapp/misc/shared_prefs.dart';
 import 'package:wolfpackapp/screens/courses_screen/assignment.dart';
 
 import '/menu_drawer.dart';
@@ -35,6 +36,9 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
   List<Assignment> courseData = [];
   double courseAverage = 0;
   List<String> categories = [];
+
+  bool showAssignments = true;
+  bool showTrends = false;
 
   @override
   void initState() {
@@ -70,9 +74,6 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
         );
       }
     }
-
-    setState(() {
-    });
   }
 
   @override
@@ -156,8 +157,67 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
                 ],
               ),
             ),
+
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: ElevatedButton(
+                        style: Theme.of(context).elevatedButtonTheme.style,
+                        onPressed: (showAssignments == true) ? null : () {
+                          setState(() {
+                            showAssignments = true;
+                            showTrends = false;
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: FittedBox(
+                            fit: BoxFit.fitHeight,
+                            child: Text('Assignments',
+                                style: GoogleFonts.lato(
+                                    color: Theme.of(context).colorScheme.primary,
+                                    fontSize: 20, fontWeight: FontWeight.w600)),
+                          ),
+                        )
+                      ),
+                    ),
+                  ),
+              
+                  Expanded(
+                    flex: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: ElevatedButton(
+                        style: Theme.of(context).elevatedButtonTheme.style,
+                        onPressed: (showTrends == true) ? null : () {
+                          setState(() {
+                            showTrends = true;
+                            showAssignments = false;
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: FittedBox(
+                            fit: BoxFit.fitHeight,
+                            child: Text('Trends',
+                                style: GoogleFonts.lato(
+                                    color: Theme.of(context).colorScheme.primary,
+                                    fontSize: 20, fontWeight: FontWeight.w600)),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           
-            Column(
+            (showAssignments) ? Column(
               children: <Widget>[
                 for (final assignment in courseData)
                   Padding(
@@ -245,105 +305,111 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
                     ),
                   ),
               ],
-            ),
+            ) : const SizedBox.shrink(),
             
-            GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 10, mainAxisSpacing: 10),
-              padding: const EdgeInsets.all(10),
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: categories.length,
-              itemBuilder: (context, index) {
-              List<FlSpot> trends = [];
-              double trendMax = 0;
-              double trendMin = 100;
-
-              final category = categories[index];
-
-              for (final assignment in courseData) {
-                if(assignment.categories[category]![0].isNotEmpty) {
-                  final mark = double.parse(assignment.categories[category]![0]
-                  .substring(
-                    assignment.categories[category]![0].indexOf('=')+ 2,
-                    assignment.categories[category]![0].indexOf('%')
-                  ));
-
-                  trends.add(FlSpot(trends.length.floorToDouble(), mark));
-
-                  if (mark > trendMax) trendMax = mark;
-                  if (mark < trendMin) trendMin = mark;
+            (showTrends) ? Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 10, mainAxisSpacing: 20),
+                padding: const EdgeInsets.all(10),
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: categories.length,
+                itemBuilder: (context, index) {
+                List<FlSpot> trends = [];
+                double trendMax = 0;
+                double trendMin = 100;
+              
+                final category = categories[index];
+              
+                for (final assignment in courseData) {
+                  if(assignment.categories[category]![0].isNotEmpty) {
+                    final mark = double.parse(assignment.categories[category]![0]
+                    .substring(
+                      assignment.categories[category]![0].indexOf('=')+ 2,
+                      assignment.categories[category]![0].indexOf('%')
+                    ));
+              
+                    trends.add(FlSpot(trends.length.floorToDouble(), mark));
+              
+                    if (mark > trendMax) trendMax = mark;
+                    if (mark < trendMin) trendMin = mark;
+                  }
                 }
-              }
-              
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Text(
-                    category,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
-              
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: AspectRatio(
-                      aspectRatio: 1.2,
-                      child: LineChart(
-                        LineChartData(
-                          gridData: const FlGridData(
-                            drawVerticalLine: false
-                          ),
-                          titlesData: FlTitlesData(
-                            topTitles: const AxisTitles(
-                              sideTitles: SideTitles(showTitles: false)
-                            ),
-                            bottomTitles: const AxisTitles(
-                              sideTitles: SideTitles(showTitles: false)
-                            ),
-                            rightTitles: const AxisTitles(
-                              sideTitles: SideTitles(showTitles: false)
-                            ),
-                            leftTitles: AxisTitles(
-                              sideTitles: SideTitles(
-                                showTitles: true,
-                                maxIncluded: false,
-                                minIncluded: false,
-                                interval: ((trendMax - trendMin) / 5).ceilToDouble() + 1,
-                                reservedSize: 25,
-                                getTitlesWidget: (value, meta) => Text('${value.ceil()}%',
-                                                style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w600),
-                                              ),
-                              ),
-                            ),
-                          ),
-                          lineBarsData: [
-                            LineChartBarData(
-                              isCurved: true,
-                              preventCurveOverShooting: true,
-                              spots: trends,
-                              color: Theme.of(context).colorScheme.secondary,
-                            )
-                          ],
-                          lineTouchData: const LineTouchData(
-                            touchTooltipData: LineTouchTooltipData(
-                              tooltipRoundedRadius: 20,
-                            )
-                          ),
-                          maxY: min(100.5, trendMax+3),
-                          minY: max(-0.5, trendMin-3),
-                          maxX: (trends.length > 1) ? trends.length-1 : trends.length-0,
-                          minX: (trends.length > 1) ? 0 : -1,
-                          
-                        )
+                
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 25),
+                      child: Text(
+                        category,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600),
                       ),
                     ),
-                  ),
-                ],
-              );
-              }
-            ),
+                
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: AspectRatio(
+                        aspectRatio: 1.2,
+                        child: LineChart(
+                          LineChartData(
+                            gridData: const FlGridData(
+                              drawVerticalLine: false
+                            ),
+                            titlesData: FlTitlesData(
+                              topTitles: const AxisTitles(
+                                sideTitles: SideTitles(showTitles: false)
+                              ),
+                              bottomTitles: const AxisTitles(
+                                sideTitles: SideTitles(showTitles: false)
+                              ),
+                              rightTitles: const AxisTitles(
+                                sideTitles: SideTitles(showTitles: false)
+                              ),
+                              leftTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                                  showTitles: true,
+                                  maxIncluded: false,
+                                  minIncluded: false,
+                                  interval: ((trendMax - trendMin) / 5).ceilToDouble() + 1,
+                                  reservedSize: 25,
+                                  getTitlesWidget: (value, meta) => Text('${value.ceil()}%',
+                                                  style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w600),
+                                                ),
+                                ),
+                              ),
+                            ),
+                            lineBarsData: [
+                              LineChartBarData(
+                                isCurved: true,
+                                preventCurveOverShooting: true,
+                                spots: trends,
+                                color: Theme.of(context).colorScheme.secondary,
+                              )
+                            ],
+                            lineTouchData: const LineTouchData(
+                              touchTooltipData: LineTouchTooltipData(
+                                tooltipRoundedRadius: 20,
+                              )
+                            ),
+                            maxY: min(100.5, trendMax+3),
+                            minY: max(-0.5, trendMin-3),
+                            maxX: (trends.length > 1) ? trends.length-1 : trends.length-0,
+                            minX: (trends.length > 1) ? 0 : -1,
+                            
+                          )
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+                }
+              ),
+            ) : const SizedBox.shrink(),
           ],
         ),
       ),

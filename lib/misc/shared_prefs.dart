@@ -1,5 +1,4 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import '../models_services/events_model.dart';
 
 class SharedPrefs {
   late final SharedPreferences _sharedPrefs;
@@ -19,10 +18,15 @@ class SharedPrefs {
   }
 
 
-  // -=-  Theme Changing  -=-
+  // -=-  UI Changing  -=-
   bool get isLightTheme => _sharedPrefs.getBool('isLightTheme') ?? false;
   set isLightTheme(bool value) {
     _sharedPrefs.setBool('isLightTheme', value);
+  }
+
+  bool get blurCourseOverview => _sharedPrefs.getBool('blurCourseOverview') ?? false;
+  set blurCourseOverview(bool value) {
+    _sharedPrefs.setBool('blurCourseOverview', value);
   }
 
 
@@ -35,6 +39,17 @@ class SharedPrefs {
   String get password => _sharedPrefs.getString('taPassword') ?? '';
   set password(String value) {
     _sharedPrefs.setString('taPassword', value);
+  }
+
+  // -=-  Teachassist HTML Information  -=-
+  String get studentData => _sharedPrefs.getString('taStudentData') ?? '';
+  set studentData(String value) {
+    _sharedPrefs.setString('taStudentData', value);
+  }
+
+  String get courseData => _sharedPrefs.getString('taCourseData') ?? '';
+  set courseData(String value) {
+    _sharedPrefs.setString('taCourseData', value);
   }
 }
 

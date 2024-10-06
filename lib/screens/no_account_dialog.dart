@@ -20,13 +20,13 @@ class NoAccountDialog extends Container {
           FittedBox(
             fit: BoxFit.contain,
             child: Text('You\'re Not Signed In',
-                style: GoogleFonts.lato(fontSize: 20, fontWeight: FontWeight.w900)),
+                style: GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w900)),
           ),
 
           FittedBox(
           fit: BoxFit.contain,
           child: Text('Sign In For More Features',
-              style: GoogleFonts.lato(fontSize: 12, fontWeight: FontWeight.w400)),
+              style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400)),
           ),
 
           FittedBox(
@@ -50,7 +50,7 @@ class NoAccountDialog extends Container {
                 },
                 icon: const Icon(Icons.login),
                 label: Text('Sign In',
-                  style: GoogleFonts.lato(fontSize: 14, fontWeight: FontWeight.w400)
+                  style: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.w400)
                 ),
               ),
             ),

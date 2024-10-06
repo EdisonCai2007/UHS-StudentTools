@@ -1,6 +1,10 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:html/dom.dart' as dom;
+import 'package:wolfpackapp/misc/internet_connection.dart';
+import 'package:wolfpackapp/screens/user_offline_dialog.dart';
 
 import '../../models_services/teachassist_model.dart';
 import '../../misc/shared_prefs.dart';
@@ -18,19 +22,34 @@ class _AppointmentPickerContainerState extends State<AppointmentPickerContainer>
   dom.Document guidanceTimeHtmlData = dom.Document();
   List dateSchedule = [];
 
+  bool online = false;
+
   final searchController = TextEditingController();
+
+  @override
+  void initState() {
+    _checkUserConnection();
+    super.initState();
+  }
+
+  void _checkUserConnection() async {
+    bool _online = await checkUserConnection();
+    setState(() {
+      online = _online;
+    });
+  }
 
   Future<void> _fetchGuidanceDate(date) async {
     guidanceDateHtmlData = await fetchGuidanceDate(
         sharedPrefs.username, sharedPrefs.password, date);
   }
 
-  Future<void> _fetchGuidanceTime(counselor, i) async {
-    guidanceTimeHtmlData = await fetchGuidanceTime(
-        sharedPrefs.username, sharedPrefs.password,
-        dateSchedule[counselor]['data'][i].substring(dateSchedule[counselor]['data'][i].indexOf('?')+1,dateSchedule[counselor]['data'][i].indexOf('>')-1).replaceAll('&amp;', '&')
-    );
-  }
+  // Future<void> _fetchGuidanceTime(counselor, i) async {
+  //   guidanceTimeHtmlData = await fetchGuidanceTime(
+  //       sharedPrefs.username, sharedPrefs.password,
+  //       dateSchedule[counselor]['data'][i].substring(dateSchedule[counselor]['data'][i].indexOf('?')+1,dateSchedule[counselor]['data'][i].indexOf('>')-1).replaceAll('&amp;', '&')
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +83,8 @@ class _AppointmentPickerContainerState extends State<AppointmentPickerContainer>
             const SizedBox(
               height: 30,
             ),
-            TextField(
+            
+            (online) ? TextField(
               controller: searchController,
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.search),
@@ -75,7 +95,8 @@ class _AppointmentPickerContainerState extends State<AppointmentPickerContainer>
                 ),
               ),
               onTap: selectDate,
-            ),
+            ) : Center(child: UserOfflineDialog()),
+
             searchController.text != ''
                 ? dateSchedule.isEmpty
                     ? SizedBox(

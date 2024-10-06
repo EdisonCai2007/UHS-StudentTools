@@ -66,7 +66,7 @@ class _GuidanceScreenState extends State<GuidanceScreen> {
       #######################
       */
       body: SingleChildScrollView(
-        physics: const ClampingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         controller: ScrollController(),
         child: Stack(
           clipBehavior: Clip.none,

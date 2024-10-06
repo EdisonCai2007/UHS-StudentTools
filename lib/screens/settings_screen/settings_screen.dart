@@ -38,10 +38,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
       drawer: const MenuDrawer(),
 
       body: ListView(
+        padding: const EdgeInsets.all(20),
         children: [
-
           Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.symmetric(vertical: 5),
             child: SwitchListTile(
               title: Text('Dark Mode',
                 style: GoogleFonts.roboto(
@@ -50,6 +50,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
               value: !sharedPrefs.isLightTheme,
               onChanged: (e) {
                 Provider.of<ThemeManager>(context, listen: false).toggleThemeMode();
+              }
+            ),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5),
+            child: SwitchListTile(
+              title: Text('Blur Course Overview',
+                style: GoogleFonts.roboto(
+                fontSize: 20, fontWeight: FontWeight.w400)),
+              secondary: const Icon(Icons.blur_on),
+              value: sharedPrefs.blurCourseOverview,
+              onChanged: (e) {
+                setState(() {
+                  sharedPrefs.blurCourseOverview = e;
+                });
               }
             ),
           ),

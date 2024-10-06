@@ -147,7 +147,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               if (!context.mounted) return;
                               showDialog(context: context, builder: (context) => const InvalidLoginAlert());
                             } else {
-                              // print('Valid Login');
                               sharedPrefs.username = username;
                               sharedPrefs.password = password;
 

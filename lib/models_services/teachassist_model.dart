@@ -1,8 +1,12 @@
+// ignore_for_file: constant_identifier_names
+
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 import 'package:html/dom.dart' as dom;
+import 'package:wolfpackapp/misc/internet_connection.dart';
 
 import '../misc/shared_prefs.dart';
 
@@ -45,48 +49,57 @@ Future<List<String?>> authorizeUser(String username, String password) async {
 }
 
 Future<dom.Document> fetchMarks(username, password) async {
-  var cookies = await authorizeUser(username, password);
+  if (await checkUserConnection()) {
+    var cookies = await authorizeUser(username, password);
 
-  try {
-    http.Response response = await http.get(
-      Uri.parse('$DASHBOARDURL?student_id=${cookies[1]}'),
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Cookie': 'session_token=${cookies[0]}; student_id=${cookies[1]}',
-      },
-    );
+    try {
+      http.Response response = await http.get(
+        Uri.parse('$DASHBOARDURL?student_id=${cookies[1]}'),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Cookie': 'session_token=${cookies[0]}; student_id=${cookies[1]}',
+        },
+      );
 
-    // log('body==${response.body}');
-    if (response.statusCode == 200) {
-      return dom.Document.html(response.body);
-    } else {
+      // log('body==${response.body}');
+      if (response.statusCode == 200) {
+        sharedPrefs.studentData = response.body;
+        return dom.Document.html(response.body);
+      } else {
+        throw Exception('Failed to load TeachAssist Marks');
+      }
+    } catch (e) {
       throw Exception('Failed to load TeachAssist Marks');
     }
-  } catch (e) {
-    throw Exception('Failed to load TeachAssist Marks');
+  } else {
+    return dom.Document.html(sharedPrefs.studentData);
   }
 }
 
-Future<dom.Document> fetchCourse(username,password, subjectId) async {
-  var cookies = await authorizeUser(username, password);
+Future<String> fetchCourse(username,password, subjectId) async {
+  if (await checkUserConnection()) {
+    var cookies = await authorizeUser(username, password);
 
-  try {
-    http.Response response = await http.get(
-      Uri.parse('$COURSEURL?subject_id=$subjectId&student_id=${cookies[1]}'),
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Cookie': 'session_token=${cookies[0]}; student_id=${cookies[1]}',
-      },
-    );
+    try {
+      http.Response response = await http.get(
+        Uri.parse('$COURSEURL?subject_id=$subjectId&student_id=${cookies[1]}'),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Cookie': 'session_token=${cookies[0]}; student_id=${cookies[1]}',
+        },
+      );
 
-    // log('body==${response.body}');
-    if (response.statusCode == 200) {
-      return dom.Document.html(response.body);
-    } else {
+      // log('body==${response.body}');
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        throw Exception('Failed to load TeachAssist Marks');
+      }
+    } catch (e) {
       throw Exception('Failed to load TeachAssist Marks');
     }
-  } catch (e) {
-    throw Exception('Failed to load TeachAssist Marks');
+  } else {
+    return json.decode(sharedPrefs.courseData)[subjectId.toString()];
   }
 }
 
@@ -198,6 +211,8 @@ class TeachAssistModel {
   }
 
   static Future loadCourses() async {
+    Map<String, String> jsonData = {};
+
     courses = [];
     for (int i = 0; i < ((rawData!.length - 1) / 3).floor(); i++) {
       courses.add(<String, dynamic>{});
@@ -214,7 +229,13 @@ class TeachAssistModel {
       courses[i]["Course Average"] = (rawData![i * 3 + 2].contains('=')) ? rawData![i * 3 + 2].substring(
           rawData![i * 3 + 2].indexOf('=')+1,rawData![i * 3 + 2].indexOf('%')) : null;
       courses[i]["Subject ID"] = ((subjectIds[i * 3 + 2] ?? '').contains('=')) ? subjectIds[i * 3 + 2]!.substring(subjectIds[i * 3 + 2]!.indexOf('=')+1, subjectIds[i * 3 + 2]!.indexOf('&')): null;
+
+      if (courses[i]["Subject ID"] != null) {
+        jsonData[courses[i]["Subject ID"]] = await fetchCourse(sharedPrefs.username, sharedPrefs.password, courses[i]["Subject ID"]);
+      }
     }
+
+    sharedPrefs.courseData = json.encode(jsonData);
   }
 
   static Future clearCourses() async {

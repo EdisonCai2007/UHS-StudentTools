@@ -165,6 +165,28 @@ class _ResourcesScreenState extends State<ResourcesScreen> {
             },
           ),
 
+          Padding(
+            padding: const EdgeInsets.all(30),
+            child: Text('User Experience',
+                style: GoogleFonts.roboto(
+                fontSize: 20, fontWeight: FontWeight.w900)
+            ),
+          ),
+
+          ListTile(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 30),
+            leading: const Icon(Icons.assignment),
+            title: Text('Feedback & Bug Form',
+              style: GoogleFonts.roboto(
+              fontSize: 16, fontWeight: FontWeight.w400)
+            ),
+            trailing: const Icon(Icons.keyboard_arrow_right),
+            tileColor: Theme.of(context).colorScheme.primaryContainer,
+            onTap: () {
+              launchUrl(Uri.parse('https://docs.google.com/forms/d/e/1FAIpQLSeg1JpslRNHNROuVORrgH4ghHk8IDLyrhgYMRRUNvqBBs37qw/viewform?usp=sf_link'));
+            },
+          ),
+
         ],
       ),
     );

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:wolfpackapp/misc/internet_connection.dart';
 import 'package:wolfpackapp/models_services/uhs_teachers_model.dart';
+import 'package:wolfpackapp/screens/user_offline_dialog.dart';
 
 import '../../menu_drawer.dart';
 
@@ -16,7 +18,17 @@ class ContactTeachersScreen extends StatefulWidget {
 class _ContactTeachersScreenState extends State<ContactTeachersScreen> {
   final searchController = TextEditingController();
   List<Map<String, String>> teachers = UHSTeachersModel.teachers;
+  bool online = false;
 
+  @override
+  void initState() {
+    _checkUserConnection();
+    super.initState();
+  }
+
+  void _checkUserConnection() async {
+    online = await checkUserConnection();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,10 +70,10 @@ class _ContactTeachersScreenState extends State<ContactTeachersScreen> {
           ),
 
 
-          Expanded(
+          (teachers.isNotEmpty) ? Expanded(
             flex: 1,
             child: ListView.builder(
-              physics: const ClampingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               itemCount: teachers.length,
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
@@ -142,7 +154,16 @@ class _ContactTeachersScreenState extends State<ContactTeachersScreen> {
                 );
               }
             ),
-          ),
+          ) : online ?
+          Text(
+            'Filters Result in No Teachers...',
+            style: GoogleFonts.roboto(
+              fontSize: 20,
+              fontWeight: FontWeight.w300,
+              fontStyle: FontStyle.italic,
+            ),
+            overflow: TextOverflow.visible,
+          ) : UserOfflineDialog(),
         ],
       ),
     );

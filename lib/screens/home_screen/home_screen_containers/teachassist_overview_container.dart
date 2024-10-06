@@ -1,9 +1,11 @@
 import 'dart:developer';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:wolfpackapp/misc/shared_prefs.dart';
 import 'package:wolfpackapp/models_services/teachassist_model.dart';
 import 'package:wolfpackapp/screens/courses_screen/courses_screen.dart';
 
@@ -18,8 +20,7 @@ class TeachAssistOverviewContainer extends StatefulWidget {
       _TeachAssistOverviewContainerState();
 }
 
-class _TeachAssistOverviewContainerState
-    extends State<TeachAssistOverviewContainer> {
+class _TeachAssistOverviewContainerState extends State<TeachAssistOverviewContainer> {
   double average = 0;
 
   @override
@@ -56,107 +57,116 @@ class _TeachAssistOverviewContainerState
           borderRadius: const BorderRadius.all(Radius.elliptical(20, 20)),
           boxShadow: const [BoxShadow(blurRadius: 5)],
         ),
+        clipBehavior: Clip.antiAlias,
         height: 300,
         margin: const EdgeInsets.all(10),
         padding: const EdgeInsets.only(top: 30),
-        child: (TeachAssistModel.courses.isEmpty) ? NoAccountDialog() : Column(
-          children: [
-            SizedBox(
-              width: 100,
-              height: 100,
-              child: Stack(
-                children: [
-                  Container(
-                    foregroundDecoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        width: 2,
-                        color: Theme.of(context).colorScheme.tertiary,
+        child: (TeachAssistModel.courses.isEmpty) ? NoAccountDialog() : ImageFiltered(
+          imageFilter: ImageFilter.blur(
+            sigmaX: (sharedPrefs.blurCourseOverview) ? 10 : 0,
+            sigmaY: (sharedPrefs.blurCourseOverview) ? 10 : 0,
+            tileMode: TileMode.decal
+          ),
+          child: Column(
+            children: [
+              SizedBox(
+                width: 100,
+                height: 100,
+                child: Stack(
+                  children: [
+                    Container(
+                      foregroundDecoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          width: 2,
+                          color: Theme.of(context).colorScheme.tertiary,
+                        ),
+                      ),
+                      child: CircularPercentIndicator(
+                          radius: 50,
+                          lineWidth: 10,
+                          backgroundColor: Theme.of(context).colorScheme.tertiary,
+                          percent: (!average.isNaN ? average : 0) / 100,
+                          center: Text('${average.toStringAsFixed(1)}%',
+                              style: GoogleFonts.roboto(
+                                  fontSize: 18, fontWeight: FontWeight.w800)),
+                          linearGradient: LinearGradient(
+                              begin: Alignment.topRight,
+                              end: Alignment.center,
+                              colors: <Color>[
+                                Theme.of(context).colorScheme.secondary,
+                                Theme.of(context).colorScheme.secondary,
+                              ]),
+                          animation: true,
+                          curve: Curves.easeInOut,
+                          rotateLinearGradient: true,
+                          circularStrokeCap: CircularStrokeCap.round),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          width: 2,
+                          color: Theme.of(context).colorScheme.tertiary,
+                        ),
                       ),
                     ),
-                    child: CircularPercentIndicator(
-                        radius: 50,
-                        lineWidth: 10,
-                        backgroundColor: Theme.of(context).colorScheme.tertiary,
-                        percent: (!average.isNaN ? average : 0) / 100,
-                        center: Text('$average%',
-                            style: GoogleFonts.roboto(
-                                fontSize: 18, fontWeight: FontWeight.w800)),
-                        linearGradient: LinearGradient(
-                            begin: Alignment.topRight,
-                            end: Alignment.center,
-                            colors: <Color>[
-                              Theme.of(context).colorScheme.secondary,
-                              Theme.of(context).colorScheme.secondary,
-                            ]),
-                        animation: true,
-                        curve: Curves.easeInOut,
-                        rotateLinearGradient: true,
-                        circularStrokeCap: CircularStrokeCap.round),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        width: 2,
-                        color: Theme.of(context).colorScheme.tertiary,
-                      ),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ...List.generate(
-                        TeachAssistModel.courses.length,
-                        (index) => Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 6),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              border: Border.all(
-                                width: 2,
-                                color: Theme.of(context).colorScheme.tertiary,
+          
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ...List.generate(
+                          TeachAssistModel.courses.length,
+                          (index) => Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 6),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                border: Border.all(
+                                  width: 2,
+                                  color: Theme.of(context).colorScheme.tertiary,
+                                ),
                               ),
-                            ),
-                            child: LinearPercentIndicator(
-                              padding: EdgeInsets.zero,
-                              lineHeight: 20,
-                              backgroundColor: Theme.of(context).colorScheme.tertiary,
-                              percent: double.parse(TeachAssistModel.courses[index]['Course Average'] ?? '0') / 100,
-                              center: Text(
-                                  TeachAssistModel.courses[index]['Code'],
-                                  style: GoogleFonts.roboto(
-                                      fontSize: 10, fontWeight: FontWeight.w800)),
-                              linearGradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.center,
-                                colors: <Color>[
-                                  Theme.of(context).colorScheme.secondary,
-                                  Theme.of(context).colorScheme.secondary,
-                                ],
+                              child: LinearPercentIndicator(
+                                padding: EdgeInsets.zero,
+                                lineHeight: 20,
+                                backgroundColor: Theme.of(context).colorScheme.tertiary,
+                                percent: double.parse(TeachAssistModel.courses[index]['Course Average'] ?? '0') / 100,
+                                center: Text(
+                                    TeachAssistModel.courses[index]['Code'],
+                                    style: GoogleFonts.roboto(
+                                        fontSize: 10, fontWeight: FontWeight.w800)),
+                                linearGradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.center,
+                                  colors: <Color>[
+                                    Theme.of(context).colorScheme.secondary,
+                                    Theme.of(context).colorScheme.secondary,
+                                  ],
+                                ),
+                                animation: true,
+                                curve: Curves.easeInOut,
+                                barRadius: const Radius.circular(15),
                               ),
-                              animation: true,
-                              curve: Curves.easeInOut,
-                              barRadius: const Radius.circular(15),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

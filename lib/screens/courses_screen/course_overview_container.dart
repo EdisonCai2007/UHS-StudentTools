@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'package:html/dom.dart' as dom;
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -31,7 +32,7 @@ class _CourseOverviewContainerState extends State<CourseOverviewContainer> {
         final id = widget.course['Subject ID'];
 
         if (id != null) {
-          final fetchedData = await fetchCourse(sharedPrefs.username, sharedPrefs.password, id);
+          final fetchedData = dom.Document.html(await fetchCourse(sharedPrefs.username, sharedPrefs.password, id));
 
           // ignore: use_build_context_synchronously
           PageNavigator.changePage(context, SingleCourseScreen(courseCode: widget.course['Code'], fetchedData: fetchedData,));
@@ -125,7 +126,7 @@ class _CourseOverviewContainerState extends State<CourseOverviewContainer> {
                         lineWidth: 12,
                         backgroundColor: Theme.of(context).colorScheme.tertiary,
                         percent: double.parse(widget.course['Course Average']) / 100,
-                        center: Text('${widget.course['Course Average']}%',
+                        center: Text('${double.parse(widget.course['Course Average']).toStringAsFixed(1)}%',
                             style: GoogleFonts.lato(
                                 fontSize: 24, fontWeight: FontWeight.w600)),
                         linearGradient: LinearGradient(

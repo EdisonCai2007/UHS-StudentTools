@@ -89,7 +89,7 @@ class _CoursesScreenState extends State<CoursesScreen> {
       #######################
       */
       body: SingleChildScrollView(
-        physics: const ClampingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         controller: ScrollController(),
         child: (TeachAssistModel.courses.isEmpty) ? Padding(
           padding: const EdgeInsets.all(30),
@@ -130,7 +130,7 @@ class _CoursesScreenState extends State<CoursesScreen> {
                           lineWidth: 15,
                            backgroundColor: Theme.of(context).colorScheme.tertiary,
                           percent: (!average.isNaN ? average : 0) / 100,
-                          center: Text('$average%',
+                          center: Text('${average.toStringAsFixed(1)}%',
                               style: GoogleFonts.lato(
                                   fontSize: 30, fontWeight: FontWeight.w800)),
                           linearGradient: LinearGradient(
