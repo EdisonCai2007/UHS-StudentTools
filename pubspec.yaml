@@ -46,6 +46,7 @@ dependencies:
   flutter_dotenv: ^5.1.0
   fl_chart: ^0.69.0
   fluttertoast: ^8.2.5
+  flutter_exit_app: ^1.1.4
 
 dev_dependencies:
   flutter_test:
