@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:wolfpackapp/misc/page_navigator.dart';
 import 'package:wolfpackapp/screens/courses_screen/course_overview_container.dart';
 import 'package:wolfpackapp/screens/no_account_dialog.dart';
 
@@ -46,119 +47,123 @@ class _CoursesScreenState extends State<CoursesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      /*
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) => PageNavigator.backButton(context),
+      child: Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.background,
+        /*
       ####################
       #=-=-= AppBar =-=-=#
       ####################
       */
-      appBar: AppBar(
-        title: Text('Courses', style: GoogleFonts.lato(fontSize: 20)),
-        foregroundColor: Theme.of(context).colorScheme.onSurface,
-        centerTitle: true,
-      ),
+        appBar: AppBar(
+          title: Text('Courses', style: GoogleFonts.lato(fontSize: 20)),
+          foregroundColor: Theme.of(context).colorScheme.onSurface,
+          centerTitle: true,
+        ),
 
-      /*
+        /*
       ###################################
       #=-=-= Bottom Navigation Bar =-=-=#
       ###################################
       */
-      // bottomNavigationBar: BottomAppBar(
-      //   shadowColor: Colors.black,
-      //   child: Center(
-      //     child: Text(
-      //       'Nav Bar Placeholder Text',
-      //       style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-      //     ),
-      //   ),
-      // ),
+        // bottomNavigationBar: BottomAppBar(
+        //   shadowColor: Colors.black,
+        //   child: Center(
+        //     child: Text(
+        //       'Nav Bar Placeholder Text',
+        //       style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+        //     ),
+        //   ),
+        // ),
 
-      /*
+        /*
       #########################
       #=-=-= Menu Drawer =-=-=#
       #########################
       */
-      drawer: const MenuDrawer(),
+        drawer: const MenuDrawer(),
 
-      /*
+        /*
       #######################
       #=-=-=-=-=-=-=-=-=-=-=#
       #=-=-= Main Body =-=-=#
       #=-=-=-=-=-=-=-=-=-=-=#
       #######################
       */
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        controller: ScrollController(),
-        child: (TeachAssistModel.courses.isEmpty) ? Padding(
-          padding: const EdgeInsets.all(30),
-          child: Center(
-            child: NoAccountDialog()
-          ),
-        ) : Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 30, bottom: 10),
-              child: Center(
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          width: 2,
-                          color: Theme.of(context).colorScheme.tertiary,
+        body: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          controller: ScrollController(),
+          child: (TeachAssistModel.courses.isEmpty) ? Padding(
+            padding: const EdgeInsets.all(30),
+            child: Center(
+                child: NoAccountDialog()
+            ),
+          ) : Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 30, bottom: 10),
+                child: Center(
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            width: 2,
+                            color: Theme.of(context).colorScheme.tertiary,
+                          ),
                         ),
+                        height: 170,
+                        width: 170,
                       ),
-                      height: 170,
-                      width: 170,
-                    ),
 
-                    Container(
-                      foregroundDecoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          width: 2,
-                          color: Theme.of(context).colorScheme.tertiary,
+                      Container(
+                        foregroundDecoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            width: 2,
+                            color: Theme.of(context).colorScheme.tertiary,
+                          ),
                         ),
+                        child: CircularPercentIndicator(
+                            radius: 100,
+                            lineWidth: 15,
+                            backgroundColor: Theme.of(context).colorScheme.tertiary,
+                            percent: (!average.isNaN ? average : 0) / 100,
+                            center: Text('${average.toStringAsFixed(1)}%',
+                                style: GoogleFonts.lato(
+                                    fontSize: 30, fontWeight: FontWeight.w800)),
+                            linearGradient: LinearGradient(
+                                begin: Alignment.topRight,
+                                end: Alignment.center,
+                                colors: <Color>[
+                                  Theme.of(context).colorScheme.secondary,
+                                  Theme.of(context).colorScheme.secondary,
+                                ]),
+                            rotateLinearGradient: true,
+                            animation: true,
+                            curve: Curves.easeInOut,
+                            circularStrokeCap: CircularStrokeCap.round),
                       ),
-                      child: CircularPercentIndicator(
-                          radius: 100,
-                          lineWidth: 15,
-                           backgroundColor: Theme.of(context).colorScheme.tertiary,
-                          percent: (!average.isNaN ? average : 0) / 100,
-                          center: Text('${average.toStringAsFixed(1)}%',
-                              style: GoogleFonts.lato(
-                                  fontSize: 30, fontWeight: FontWeight.w800)),
-                          linearGradient: LinearGradient(
-                              begin: Alignment.topRight,
-                              end: Alignment.center,
-                              colors: <Color>[
-                                Theme.of(context).colorScheme.secondary,
-                                Theme.of(context).colorScheme.secondary,
-                              ]),
-                          rotateLinearGradient: true,
-                          animation: true,
-                          curve: Curves.easeInOut,
-                          circularStrokeCap: CircularStrokeCap.round),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
 
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: List.generate(TeachAssistModel.courses.length, (index) =>
-                  CourseOverviewContainer(course: TeachAssistModel.courses[index])
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: List.generate(TeachAssistModel.courses.length, (index) =>
+                    CourseOverviewContainer(course: TeachAssistModel.courses[index])
+                ),
               ),
-            ),
-            
-            const Padding(padding: EdgeInsets.only(bottom: 30)),
-          ],
+
+              const Padding(padding: EdgeInsets.only(bottom: 30)),
+            ],
+          ),
         ),
       ),
     );

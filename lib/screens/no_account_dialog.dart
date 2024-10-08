@@ -46,7 +46,7 @@ class NoAccountDialog extends Container {
                   sharedPrefs.username = '';
                   sharedPrefs.password = '';
                   TeachAssistModel.clearCourses();
-                  PageNavigator.changePage(context, const LoginScreen());
+                  PageNavigator.navigatePage(context, const LoginScreen());
                 },
                 icon: const Icon(Icons.login),
                 label: Text('Sign In',

@@ -44,7 +44,7 @@ class MenuDrawer extends Drawer {
                 style: GoogleFonts.roboto(
                     fontSize: 18, fontWeight: FontWeight.w400)),
             onTap: () {
-              PageNavigator.changePage(context, const HomeScreen());
+              PageNavigator.navigatePage(context, const HomeScreen());
             },
           ),
 
@@ -54,7 +54,7 @@ class MenuDrawer extends Drawer {
                 style: GoogleFonts.roboto(
                     fontSize: 18, fontWeight: FontWeight.w400)),
             onTap: () {
-              PageNavigator.changePage(context, const CoursesScreen());
+              PageNavigator.navigatePage(context, const CoursesScreen());
             },
           ),
 
@@ -64,7 +64,7 @@ class MenuDrawer extends Drawer {
                 style: GoogleFonts.roboto(
                     fontSize: 18, fontWeight: FontWeight.w400)),
             onTap: () {
-              PageNavigator.changePage(context, const ContactTeachersScreen());
+              PageNavigator.navigatePage(context, const ContactTeachersScreen());
             },
           ),
 
@@ -74,7 +74,7 @@ class MenuDrawer extends Drawer {
                 style: GoogleFonts.roboto(
                     fontSize: 18, fontWeight: FontWeight.w400)),
             onTap: () {
-              PageNavigator.changePage(context, const GuidanceScreen());
+              PageNavigator.navigatePage(context, const GuidanceScreen());
             },
           ),
 
@@ -84,7 +84,7 @@ class MenuDrawer extends Drawer {
                 style: GoogleFonts.roboto(
                     fontSize: 18, fontWeight: FontWeight.w400)),
             onTap: () {
-              PageNavigator.changePage(context, const EventsScreen());
+              PageNavigator.navigatePage(context, const EventsScreen());
             },
           ),
 
@@ -94,7 +94,7 @@ class MenuDrawer extends Drawer {
                 style: GoogleFonts.roboto(
                     fontSize: 18, fontWeight: FontWeight.w400)),
             onTap: () {
-              PageNavigator.changePage(context, const ResourcesScreen());
+              PageNavigator.navigatePage(context, const ResourcesScreen());
             },
           ),
 
@@ -117,7 +117,7 @@ class MenuDrawer extends Drawer {
                       sharedPrefs.username = '';
                       sharedPrefs.password = '';
                       TeachAssistModel.clearCourses();
-                      PageNavigator.changePage(context, const LoginScreen());
+                      PageNavigator.navigatePage(context, const LoginScreen());
                     },
                     child: Icon(sharedPrefs.username != '' ? Icons.logout : Icons.login),
                   ),
@@ -130,7 +130,7 @@ class MenuDrawer extends Drawer {
                       foregroundColor: Theme.of(context).colorScheme.onSurface,
                     ),
                     onPressed: () {
-                      PageNavigator.changePage(context, const SettingsScreen());
+                      PageNavigator.navigatePage(context, const SettingsScreen());
                     },
                     child: const Icon(Icons.settings),
                   ),

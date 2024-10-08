@@ -1,4 +1,3 @@
-import 'dart:collection';
 import 'package:html/dom.dart' as dom;
 
 import 'package:flutter/material.dart';
@@ -35,7 +34,7 @@ class _CourseOverviewContainerState extends State<CourseOverviewContainer> {
           final fetchedData = dom.Document.html(await fetchCourse(sharedPrefs.username, sharedPrefs.password, id));
 
           // ignore: use_build_context_synchronously
-          PageNavigator.changePage(context, SingleCourseScreen(courseCode: widget.course['Code'], fetchedData: fetchedData,));
+          PageNavigator.navigatePage(context, SingleCourseScreen(courseCode: widget.course['Code'], fetchedData: fetchedData));
         }
       },
       child: Container(

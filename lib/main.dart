@@ -35,7 +35,6 @@ Future main() async {
   if (sharedPrefs.username != '' && sharedPrefs.password != '') await TeachAssistModel().init();
   await UHSTeachersModel().init();
   await AccountModel().init();
-  //await EventsModel().init();
 
   runApp(ChangeNotifierProvider(
     create: (context) => ThemeManager(),
@@ -71,8 +70,8 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: (sharedPrefs.username == '' && sharedPrefs.password == '')
-          ? const LoginScreen()
-          : const HomeScreen(),
+            ? const LoginScreen()
+            : const HomeScreen(),
       routes: {
         '/loginScreen': (context) => const LoginScreen(),
         '/homeScreen': (context) => const HomeScreen(),
@@ -83,7 +82,7 @@ class _MyAppState extends State<MyApp> {
         '/settingsScreen': (context) => const SettingsScreen(),
         '/eventsScreen': (context) => const EventsScreen(),
       },
-      title: 'UHS Student Tools',
+      title: 'UHS Wolfpackapp',
       theme: Provider.of<ThemeManager>(context).themeData,
     );
   }

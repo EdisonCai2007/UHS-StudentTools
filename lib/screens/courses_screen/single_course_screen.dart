@@ -7,7 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'package:wolfpackapp/misc/shared_prefs.dart';
+import 'package:wolfpackapp/misc/page_navigator.dart';
 import 'package:wolfpackapp/screens/courses_screen/assignment.dart';
 
 import '/menu_drawer.dart';
@@ -78,7 +78,10 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) => PageNavigator.backButton(context),
+      child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         /*
         ####################
@@ -90,14 +93,14 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
           foregroundColor: Theme.of(context).colorScheme.onSurface,
           centerTitle: true,
         ),
-      
+
         /*
         #########################
         #=-=-= Menu Drawer =-=-=#
         #########################
         */
         drawer: const MenuDrawer(),
-      
+
         /*
         #######################
         #=-=-=-=-=-=-=-=-=-=-=#
@@ -107,319 +110,320 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
         */
         body: SingleChildScrollView(
           child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Center(
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      width: 2,
-                      color: Theme.of(context).colorScheme.tertiary,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Center(
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          width: 2,
+                          color: Theme.of(context).colorScheme.tertiary,
+                        ),
+                      ),
+                      height: 120,
+                      width: 120,
                     ),
-                  ),
-                  height: 120,
-                  width: 120,
-                ),
-        
-                Container(
-                  height: 180,
-                  foregroundDecoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      width: 2,
-                      color: Theme.of(context).colorScheme.tertiary,
-                    ),
-                  ),
-                  child: CircularPercentIndicator(
-                      radius: 70,
-                      lineWidth: 10,
-                        backgroundColor: Theme.of(context).colorScheme.tertiary,
-                      percent: courseAverage / 100,
-                      center: Text('${courseAverage.toStringAsFixed(1)}%',
-                          style: GoogleFonts.lato(
-                              fontSize: 25, fontWeight: FontWeight.w800)),
-                      linearGradient: LinearGradient(
-                          begin: Alignment.topRight,
-                          end: Alignment.center,
-                          colors: <Color>[
-                            Theme.of(context).colorScheme.secondary,
-                            Theme.of(context).colorScheme.secondary,
-                          ]),
-                      rotateLinearGradient: true,
-                      animation: true,
-                      curve: Curves.easeInOut,
-                      circularStrokeCap: CircularStrokeCap.round),
-                  ),
-                ],
-              ),
-            ),
 
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: SizedBox(
-                      height: 40,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: ElevatedButton(
+                    Container(
+                      height: 180,
+                      foregroundDecoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          width: 2,
+                          color: Theme.of(context).colorScheme.tertiary,
+                        ),
+                      ),
+                      child: CircularPercentIndicator(
+                          radius: 70,
+                          lineWidth: 10,
+                          backgroundColor: Theme.of(context).colorScheme.tertiary,
+                          percent: courseAverage / 100,
+                          center: Text('${courseAverage.toStringAsFixed(1)}%',
+                              style: GoogleFonts.lato(
+                                  fontSize: 25, fontWeight: FontWeight.w800)),
+                          linearGradient: LinearGradient(
+                              begin: Alignment.topRight,
+                              end: Alignment.center,
+                              colors: <Color>[
+                                Theme.of(context).colorScheme.secondary,
+                                Theme.of(context).colorScheme.secondary,
+                              ]),
+                          rotateLinearGradient: true,
+                          animation: true,
+                          curve: Curves.easeInOut,
+                          circularStrokeCap: CircularStrokeCap.round),
+                    ),
+                  ],
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: SizedBox(
+                        height: 40,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: ElevatedButton(
+                              style: Theme.of(context).elevatedButtonTheme.style,
+                              onPressed: (showAssignments == true) ? null : () {
+                                setState(() {
+                                  showAssignments = true;
+                                  showTrends = false;
+                                });
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: FittedBox(
+                                  fit: BoxFit.fitHeight,
+                                  child: Text('Assignments',
+                                      style: GoogleFonts.lato(
+                                          color: Theme.of(context).colorScheme.primary,
+                                          fontSize: 20, fontWeight: FontWeight.w600)),
+                                ),
+                              )
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    Expanded(
+                      flex: 1,
+                      child: SizedBox(
+                        height: 40,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: ElevatedButton(
                             style: Theme.of(context).elevatedButtonTheme.style,
-                            onPressed: (showAssignments == true) ? null : () {
+                            onPressed: (showTrends == true) ? null : () {
                               setState(() {
-                                showAssignments = true;
-                                showTrends = false;
+                                showTrends = true;
+                                showAssignments = false;
                               });
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(10),
                               child: FittedBox(
                                 fit: BoxFit.fitHeight,
-                                child: Text('Assignments',
+                                child: Text('Trends',
                                     style: GoogleFonts.lato(
                                         color: Theme.of(context).colorScheme.primary,
                                         fontSize: 20, fontWeight: FontWeight.w600)),
                               ),
-                            )
-                        ),
-                      ),
-                    ),
-                  ),
-              
-                  Expanded(
-                    flex: 1,
-                    child: SizedBox(
-                      height: 40,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: ElevatedButton(
-                          style: Theme.of(context).elevatedButtonTheme.style,
-                          onPressed: (showTrends == true) ? null : () {
-                            setState(() {
-                              showTrends = true;
-                              showAssignments = false;
-                            });
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: FittedBox(
-                              fit: BoxFit.fitHeight,
-                              child: Text('Trends',
-                                  style: GoogleFonts.lato(
-                                      color: Theme.of(context).colorScheme.primary,
-                                      fontSize: 20, fontWeight: FontWeight.w600)),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          
-            (showAssignments) ? Column(
-              children: <Widget>[
-                for (final assignment in courseData)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primaryContainer,
-                        borderRadius: const BorderRadius.all(Radius.elliptical(20, 20)),
-                        boxShadow: const [BoxShadow(blurRadius: 5)],
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            assignment.title,
-                            overflow: TextOverflow.visible,
-                            style: GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w800)
-                          ),
-          
-                          const Padding(padding: EdgeInsets.only(top: 15)),
-          
-                          Column(
-                            children: <Widget>[
-                              for (final category in assignment.categories.entries)
-                              (category.value.length <= 1) ? const SizedBox(height: 0,) :
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-          
-                                      Expanded(
-                                        flex: 1,
-                                        child: Text(
-                                          category.value[0],
-                                          style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600),
+
+              (showAssignments) ? Column(
+                children: <Widget>[
+                  for (final assignment in courseData)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primaryContainer,
+                          borderRadius: const BorderRadius.all(Radius.elliptical(20, 20)),
+                          boxShadow: const [BoxShadow(blurRadius: 5)],
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                                assignment.title,
+                                overflow: TextOverflow.visible,
+                                style: GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w800)
+                            ),
+
+                            const Padding(padding: EdgeInsets.only(top: 15)),
+
+                            Column(
+                                children: <Widget>[
+                                  for (final category in assignment.categories.entries)
+                                    (category.value.length <= 1) ? const SizedBox(height: 0,) :
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      children: [
+                                        Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+
+                                            Expanded(
+                                              flex: 1,
+                                              child: Text(
+                                                category.value[0],
+                                                style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600),
+                                              ),
+                                            ),
+
+                                            Expanded(
+                                              flex: 1,
+                                              child: Align(
+                                                alignment: Alignment.centerRight,
+                                                child: Text(
+                                                  category.value[1],
+                                                  style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ),
-          
-                                      Expanded(
-                                        flex: 1,
-                                        child: Align(
-                                          alignment: Alignment.centerRight,
-                                          child: Text(
-                                            category.value[1],
-                                            style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600),
+
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 10),
+                                          child: LinearPercentIndicator(
+                                            padding: EdgeInsets.zero,
+                                            lineHeight: 8,
+                                            backgroundColor: Theme.of(context).colorScheme.tertiary,
+                                            percent: double.parse(
+                                                category.value[0].substring(
+                                                    category.value[0].indexOf('=')+ 2,
+                                                    category.value[0].indexOf('%')
+                                                )) / 100,
+                                            linearGradient: LinearGradient(
+                                              begin: Alignment.topCenter,
+                                              end: Alignment.center,
+                                              colors: <Color>[
+                                                Theme.of(context).colorScheme.secondary,
+                                                Theme.of(context).colorScheme.secondary,
+                                              ],
+                                            ),
+                                            animation: true,
+                                            curve: Curves.easeInOut,
+                                            barRadius: const Radius.circular(15),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-          
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 10),
-                                    child: LinearPercentIndicator(
-                                      padding: EdgeInsets.zero,
-                                      lineHeight: 8,
-                                      backgroundColor: Theme.of(context).colorScheme.tertiary,
-                                      percent: double.parse(
-                                        category.value[0].substring(
-                                            category.value[0].indexOf('=')+ 2,
-                                            category.value[0].indexOf('%')
-                                          )) / 100,
-                                      linearGradient: LinearGradient(
-                                        begin: Alignment.topCenter,
-                                        end: Alignment.center,
-                                        colors: <Color>[
-                                          Theme.of(context).colorScheme.secondary,
-                                          Theme.of(context).colorScheme.secondary,
-                                        ],
-                                      ),
-                                      animation: true,
-                                      curve: Curves.easeInOut,
-                                      barRadius: const Radius.circular(15),
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ]
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-              ],
-            ) : const SizedBox.shrink(),
-            
-            (showTrends) ? Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 10, mainAxisSpacing: 20),
-                padding: const EdgeInsets.all(10),
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: categories.length,
-                itemBuilder: (context, index) {
-                List<FlSpot> trends = [];
-                double trendMax = 0;
-                double trendMin = 100;
-              
-                final category = categories[index];
-              
-                for (final assignment in courseData) {
-                  if(assignment.categories[category]![0].isNotEmpty) {
-                    final mark = double.parse(assignment.categories[category]![0]
-                    .substring(
-                      assignment.categories[category]![0].indexOf('=')+ 2,
-                      assignment.categories[category]![0].indexOf('%')
-                    ));
-              
-                    trends.add(FlSpot(trends.length.floorToDouble(), mark));
-              
-                    if (mark > trendMax) trendMax = mark;
-                    if (mark < trendMin) trendMin = mark;
-                  }
-                }
-                
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 25),
-                      child: Text(
-                        category,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: AspectRatio(
-                          aspectRatio: 1.2,
-                          child: LineChart(
-                              LineChartData(
-                                gridData: const FlGridData(
-                                    drawVerticalLine: false
-                                ),
-                                titlesData: FlTitlesData(
-                                  topTitles: const AxisTitles(
-                                      sideTitles: SideTitles(showTitles: false)
-                                  ),
-                                  bottomTitles: const AxisTitles(
-                                      sideTitles: SideTitles(showTitles: false)
-                                  ),
-                                  rightTitles: const AxisTitles(
-                                      sideTitles: SideTitles(showTitles: false)
-                                  ),
-                                  leftTitles: AxisTitles(
-                                    sideTitles: SideTitles(
-                                      showTitles: true,
-                                      maxIncluded: false,
-                                      minIncluded: false,
-                                      interval: ((trendMax - trendMin) / 5).ceilToDouble() + 1,
-                                      reservedSize: 25,
-                                      getTitlesWidget: (value, meta) => Text('${value.ceil()}%',
-                                        style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w600),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                lineBarsData: [
-                                  LineChartBarData(
-                                    isCurved: true,
-                                    preventCurveOverShooting: true,
-                                    spots: trends,
-                                    color: Theme.of(context).colorScheme.secondary,
-                                  )
-                                ],
-                                lineTouchData: const LineTouchData(
-                                    touchTooltipData: LineTouchTooltipData(
-                                      tooltipRoundedRadius: 20,
+                                      ],
                                     )
-                                ),
-                                maxY: min(100.5, trendMax+3),
-                                minY: max(-0.5, trendMin-3),
-                                maxX: (trends.length > 1) ? trends.length-1 : trends.length-0,
-                                minX: (trends.length > 1) ? 0 : -1,
-
-                              )
-                          ),
+                                ]
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  ],
-                );
-                }
-              ),
-            ) : const SizedBox.shrink(),
-          ],
+                ],
+              ) : const SizedBox.shrink(),
+
+              (showTrends) ? Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: GridView.builder(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 10, mainAxisSpacing: 20),
+                    padding: const EdgeInsets.all(10),
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: categories.length,
+                    itemBuilder: (context, index) {
+                      List<FlSpot> trends = [];
+                      double trendMax = 0;
+                      double trendMin = 100;
+
+                      final category = categories[index];
+
+                      for (final assignment in courseData) {
+                        if(assignment.categories[category]![0].isNotEmpty) {
+                          final mark = double.parse(assignment.categories[category]![0]
+                              .substring(
+                              assignment.categories[category]![0].indexOf('=')+ 2,
+                              assignment.categories[category]![0].indexOf('%')
+                          ));
+
+                          trends.add(FlSpot(trends.length.floorToDouble(), mark));
+
+                          if (mark > trendMax) trendMax = mark;
+                          if (mark < trendMin) trendMin = mark;
+                        }
+                      }
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 25),
+                            child: Text(
+                              category,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600),
+                            ),
+                          ),
+
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 10),
+                              child: AspectRatio(
+                                aspectRatio: 1.2,
+                                child: LineChart(
+                                    LineChartData(
+                                      gridData: const FlGridData(
+                                          drawVerticalLine: false
+                                      ),
+                                      titlesData: FlTitlesData(
+                                        topTitles: const AxisTitles(
+                                            sideTitles: SideTitles(showTitles: false)
+                                        ),
+                                        bottomTitles: const AxisTitles(
+                                            sideTitles: SideTitles(showTitles: false)
+                                        ),
+                                        rightTitles: const AxisTitles(
+                                            sideTitles: SideTitles(showTitles: false)
+                                        ),
+                                        leftTitles: AxisTitles(
+                                          sideTitles: SideTitles(
+                                            showTitles: true,
+                                            maxIncluded: false,
+                                            minIncluded: false,
+                                            interval: ((trendMax - trendMin) / 5).ceilToDouble() + 1,
+                                            reservedSize: 25,
+                                            getTitlesWidget: (value, meta) => Text('${value.ceil()}%',
+                                              style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w600),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      lineBarsData: [
+                                        LineChartBarData(
+                                          isCurved: true,
+                                          preventCurveOverShooting: true,
+                                          spots: trends,
+                                          color: Theme.of(context).colorScheme.secondary,
+                                        )
+                                      ],
+                                      lineTouchData: const LineTouchData(
+                                          touchTooltipData: LineTouchTooltipData(
+                                            tooltipRoundedRadius: 20,
+                                          )
+                                      ),
+                                      maxY: min(100.5, trendMax+3),
+                                      minY: max(-0.5, trendMin-3),
+                                      maxX: (trends.length > 1) ? trends.length-1 : trends.length-0,
+                                      minX: (trends.length > 1) ? 0 : -1,
+
+                                    )
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+                ),
+              ) : const SizedBox.shrink(),
+            ],
+          ),
         ),
       ),
     );

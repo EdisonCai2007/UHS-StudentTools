@@ -1,11 +1,9 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wolfpackapp/models_services/account_model.dart';
 import 'package:wolfpackapp/models_services/teachassist_model.dart';
 import 'package:wolfpackapp/screens/home_screen/home_screen.dart';
 import 'package:wolfpackapp/misc/shared_prefs.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:wolfpackapp/misc/page_navigator.dart';
 
 /*
@@ -29,142 +27,146 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
 
-    return Form(
-      child: Builder(
-        builder: (context) {
-          return Scaffold(
-            resizeToAvoidBottomInset: false,
-            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-            extendBody: true,
-            body: Column(
-              children: [
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) => PageNavigator.backButton(context),
+      child: Form(
+        child: Builder(
+            builder: (context) {
+              return Scaffold(
+                resizeToAvoidBottomInset: false,
+                backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+                extendBody: true,
+                body: Column(
+                  children: [
 
-                /*
+                    /*
                 ####################
                 #=-=-= Header =-=-=#
                 ####################
                 */
-                Flexible(
-                  flex: 3,
-                  child: AspectRatio(
-                    aspectRatio: 1 / 1,
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          top: 90, left: 60, right: 60, bottom: 20),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: SizedBox.fromSize(
-                          size: const Size.fromRadius(500), // Image radius
-                          child: const Image(
-                            image: AssetImage('assets/test logo.png'),
-                            fit: BoxFit.cover,
+                    Flexible(
+                      flex: 3,
+                      child: AspectRatio(
+                        aspectRatio: 1 / 1,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              top: 90, left: 60, right: 60, bottom: 20),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: SizedBox.fromSize(
+                              size: const Size.fromRadius(500), // Image radius
+                              child: const Image(
+                                image: AssetImage('assets/test logo.png'),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ),
 
-                /*
+                    /*
                 ##################
                 #=-=-= Form =-=-=#
                 ##################
                 */
 
-                Flexible(
-                  flex: 3,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 20),//EdgeInsets.all(50),
-                    child: Column(
-                      children: [
-                        // Username
-                        UsernameField(controller: _usernameController),
+                    Flexible(
+                      flex: 3,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 20),//EdgeInsets.all(50),
+                        child: Column(
+                          children: [
+                            // Username
+                            UsernameField(controller: _usernameController),
 
-                        const SizedBox(height: 15),
+                            const SizedBox(height: 15),
 
-                        // Password
-                        PasswordField(controller: _passwordController),
+                            // Password
+                            PasswordField(controller: _passwordController),
 
-                        const SizedBox(height: 10),
+                            const SizedBox(height: 10),
 
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: TextButton(
-                            child: Text('Sign In as Guest',
-                              style: GoogleFonts.lato(
-                                color: Theme.of(context).colorScheme.secondary,
-                                fontSize: 14, fontWeight: FontWeight.w600,
-                                decoration: TextDecoration.underline,
+                            Align(
+                              alignment: Alignment.topRight,
+                              child: TextButton(
+                                child: Text('Sign In as Guest',
+                                  style: GoogleFonts.lato(
+                                    color: Theme.of(context).colorScheme.secondary,
+                                    fontSize: 14, fontWeight: FontWeight.w600,
+                                    decoration: TextDecoration.underline,
+                                  ),
+
+                                ),
+                                onPressed: () async {
+                                  PageNavigator.navigatePage(context, const HomeScreen());
+                                },
                               ),
-
                             ),
-                            onPressed: () async {
-                              PageNavigator.changePage(context, const HomeScreen());
-                            },
-                          ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
 
 
-                /*
+                    /*
                 ############################
                 #=-=-= Sign In Button =-=-=#
                 ############################
                 */
 
-                Flexible(
-                  flex: 1,
-                  child: SizedBox(
-                    height: 100,
-                    width: double.infinity,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
-                      child: ElevatedButton(
-                        style: Theme.of(context).elevatedButtonTheme.style,
+                    Flexible(
+                      flex: 1,
+                      child: SizedBox(
+                        height: 100,
+                        width: double.infinity,
                         child: Padding(
-                          padding: const EdgeInsets.all(15),
-                          child: FittedBox(
-                            fit: BoxFit.fitHeight,
-                            child: Text('Sign In',
-                                style: GoogleFonts.lato(
-                                    color: Theme.of(context).colorScheme.primary,
-                                    fontSize: 20, fontWeight: FontWeight.w600)),
+                          padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
+                          child: ElevatedButton(
+                            style: Theme.of(context).elevatedButtonTheme.style,
+                            child: Padding(
+                              padding: const EdgeInsets.all(15),
+                              child: FittedBox(
+                                fit: BoxFit.fitHeight,
+                                child: Text('Sign In',
+                                    style: GoogleFonts.lato(
+                                        color: Theme.of(context).colorScheme.primary,
+                                        fontSize: 20, fontWeight: FontWeight.w600)),
+                              ),
+                            ),
+                            onPressed: () async {
+                              if (Form.of(context).validate()) {
+                                String username = _usernameController.text.trim();
+                                String password = _passwordController.text.trim();
+
+                                var response = await authorizeUser(username, password);
+                                if (response[0] == 'Failed to Authorize User') {
+                                  if (!context.mounted) return;
+                                  showDialog(context: context, builder: (context) => const TeachAssistErrorAlert());
+                                } else if (response[0] == 'Invalid Login') {
+                                  if (!context.mounted) return;
+                                  showDialog(context: context, builder: (context) => const InvalidLoginAlert());
+                                } else {
+                                  sharedPrefs.username = username;
+                                  sharedPrefs.password = password;
+
+                                  await TeachAssistModel().init();
+                                  AccountModel.parseAccount();
+                                  if (!context.mounted) return;
+                                  PageNavigator.navigatePage(context, const HomeScreen());
+                                }
+                              }
+                            },
                           ),
                         ),
-                        onPressed: () async {
-                          if (Form.of(context).validate()) {
-                            String username = _usernameController.text.trim();
-                            String password = _passwordController.text.trim();
-
-                            var response = await authorizeUser(username, password);
-                            if (response[0] == 'Failed to Authorize User') {
-                              if (!context.mounted) return;
-                              showDialog(context: context, builder: (context) => const TeachAssistErrorAlert());
-                            } else if (response[0] == 'Invalid Login') {
-                              if (!context.mounted) return;
-                              showDialog(context: context, builder: (context) => const InvalidLoginAlert());
-                            } else {
-                              sharedPrefs.username = username;
-                              sharedPrefs.password = password;
-
-                              await TeachAssistModel().init();
-                              AccountModel.parseAccount();
-                              if (!context.mounted) return;
-                              PageNavigator.changePage(context, const HomeScreen());
-                            }
-                          }
-                        },
                       ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
-          );
-        }
+              );
+            }
+        ),
       ),
     );
   }

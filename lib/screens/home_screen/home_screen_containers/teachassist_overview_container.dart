@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -49,7 +48,7 @@ class _TeachAssistOverviewContainerState extends State<TeachAssistOverviewContai
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        PageNavigator.changePage(context, const CoursesScreen());
+        PageNavigator.navigatePage(context, const CoursesScreen());
       },
       child: Container(
         decoration: BoxDecoration(
