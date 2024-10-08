@@ -39,7 +39,6 @@ class HomeScreen extends StatelessWidget {
 
           if (isWithinExitTimeRange) {
             Fluttertoast.cancel();
-
             FlutterExitApp.exitApp(iosForceExit: false);
           } else {
             Fluttertoast.showToast(
