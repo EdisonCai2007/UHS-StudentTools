@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_exit_app/flutter_exit_app.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wolfpackapp/misc/page_navigator.dart';
 
@@ -28,7 +28,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop) {
+      onPopInvoked: (bool didPop) {
         if (PageNavigator.pageHistory.isNotEmpty) {
           PageNavigator.backButton(context);
         } else {
@@ -40,11 +40,7 @@ class HomeScreen extends StatelessWidget {
           if (isWithinExitTimeRange) {
             Fluttertoast.cancel();
 
-            if (Platform.isAndroid) {
-              SystemNavigator.pop();
-            } else if (Platform.isIOS) {
-              exit(0);
-            }
+            FlutterExitApp.exitApp(iosForceExit: true);
           } else {
             Fluttertoast.showToast(
               msg: 'Press \'back\' again to exit!',
