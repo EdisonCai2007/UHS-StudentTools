@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:wolfpackapp/misc/internet_connection.dart';
+import 'package:wolfpackapp/misc/time_converter.dart';
 import 'package:wolfpackapp/screens/user_offline_dialog.dart';
 
 import '../../models_services/teachassist_model.dart';
@@ -22,7 +23,7 @@ class _AppointmentPickerContainerState extends State<AppointmentPickerContainer>
   dom.Document guidanceTimeHtmlData = dom.Document();
   List dateSchedule = [];
 
-  bool online = false;
+  bool online = true;
 
   final searchController = TextEditingController();
 
@@ -222,10 +223,11 @@ class _AppointmentPickerContainerState extends State<AppointmentPickerContainer>
                         backgroundColor: Theme.of(context).colorScheme.background,
                       ),
                       child: Text(
+                        TimeConverter.get12Format(
                         dateSchedule[counselor]['data'][i].substring(
                           dateSchedule[counselor]['data'][i].indexOf('tm=')+3,
-                          dateSchedule[counselor]['data'][i].indexOf('&amp',dateSchedule[counselor]['data'][i].indexOf('tm=')+3)-3
-                        ),
+                          dateSchedule[counselor]['data'][i].indexOf('&amp',dateSchedule[counselor]['data'][i].indexOf('tm=')+3)
+                        )),
                         style: GoogleFonts.roboto(
                             fontSize: 14, fontWeight: FontWeight.w400)
                       ),

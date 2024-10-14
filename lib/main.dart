@@ -6,6 +6,7 @@ import 'package:wolfpackapp/firebase_options.dart';
 import 'package:wolfpackapp/models_services/account_model.dart';
 import 'package:wolfpackapp/models_services/teachassist_model.dart';
 import 'package:wolfpackapp/models_services/uhs_teachers_model.dart';
+import 'package:wolfpackapp/screens/guidance_screen/appointment_list.dart';
 import 'package:wolfpackapp/screens/resources_screen/resources_screen.dart';
 import 'package:wolfpackapp/misc/shared_prefs.dart';
 import 'package:wolfpackapp/themes/theme_manager.dart';
@@ -33,6 +34,12 @@ Future main() async {
 
   await sharedPrefs.init();
   if (sharedPrefs.username != '' && sharedPrefs.password != '') await TeachAssistModel().init();
+  
+  void _initAppointmentList() async {
+    await initAppointmentList(30);
+  }
+  _initAppointmentList();
+
   await UHSTeachersModel().init();
   await AccountModel().init();
 

@@ -63,19 +63,19 @@ class _ScheduleOverviewContainerState extends State<ScheduleOverviewContainer> {
           ###################
           */
           SizedBox(
-            height: 70,
+            height: 60,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
                   flex: 4,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Container(
                       alignment: Alignment.topLeft,
                       child: FittedBox(
                         fit: BoxFit.fitHeight,
-                        child: Text(TimeConstants().getPeriod(minuteTime),
+                        child: Text(TimeConstants().getPeriod(minuteTime)[0],
                             style: GoogleFonts.roboto(
                                 fontSize: 70, fontWeight: FontWeight.w800)),
                       ),
@@ -147,6 +147,18 @@ class _ScheduleOverviewContainerState extends State<ScheduleOverviewContainer> {
               ),
               barRadius: const Radius.circular(15),
             ),
+          ),
+
+          Container(
+            padding: const EdgeInsets.only(top: 5),
+            alignment: Alignment.topLeft,
+            child:
+            (TimeConstants().getPeriod(minuteTime)[1] != ' ') ? FittedBox(
+              fit: BoxFit.fitHeight,
+              child: Text(TimeConstants().getPeriod(minuteTime)[1],
+                  style: GoogleFonts.roboto(
+                      fontSize: 15, fontWeight: FontWeight.w400)),
+            ) : const SizedBox.shrink(),
           ),
 
           /*

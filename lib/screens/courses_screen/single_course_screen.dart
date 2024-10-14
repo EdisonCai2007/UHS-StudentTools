@@ -36,6 +36,7 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
   List<Assignment> courseData = [];
   double courseAverage = 0;
   List<String> categories = [];
+  Map<String, double> assignmentAverages = {};
 
   bool showAssignments = true;
   bool showTrends = false;
@@ -57,11 +58,26 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
     // Fetch all course categories (Knowledge, Thinking, Application etc.)
     categories = rawData[0].skip(1).map((category) => category.text).toList();
 
-    // Fetch marks from each category per assignment 
+    // Fetch marks from each assignment 
     for (final element in rawData) {
       if (element[0].attributes.containsKey('rowspan')) {
         // Fetch assignment title
         final title = element[0].text;
+
+        List<List<double?>> categoryData = [];
+        for (final category in element.skip(1)) {
+          final tempData = category.text.trim().replaceAll('\t', '').split('\n');
+
+          if (tempData.length > 1) {
+            final score = double.parse(tempData[0].substring(0,tempData[0].indexOf(' ')));
+            final total = double.parse(tempData[0].substring(tempData[0].indexOf('/ ')+2, tempData[0].indexOf(' =')));
+            final weight = double.tryParse(tempData[1].substring(tempData[1].indexOf('=')+1));
+
+            categoryData.add([score, total, weight ?? -1]);
+          } else {
+            categoryData.add([]);
+          }
+        }
 
         // Fetch assignment marks
         final marks = element.skip(1).map((category) => category.text.trim().replaceAll('\t', '').split('\n'));
@@ -69,10 +85,25 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
         courseData.add(
           Assignment(
             title: title,
-            categories: LinkedHashMap.fromIterables(categories,marks),
+            categories: LinkedHashMap.fromIterables(categories,categoryData),
             )
         );
       }
+    }
+
+    for (final assignment in courseData) {
+      double earnedPercentage = 0;
+      double weightPercentage = 0;
+      for (final category in assignment.categories.entries) {
+        if (category.value.isNotEmpty) {
+          weightPercentage += category.value[2];
+          earnedPercentage += category.value[0] / category.value[1] * category.value[2];
+        }
+      }
+
+      assignmentAverages[assignment.title] = earnedPercentage / weightPercentage;
+
+      print(assignmentAverages[assignment.title]);
     }
   }
 
@@ -91,6 +122,7 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
         appBar: AppBar(
           title: Text(widget.courseCode, style: GoogleFonts.lato(fontSize: 20)),
           foregroundColor: Theme.of(context).colorScheme.onSurface,
+          leading: const BackButton(),
           centerTitle: true,
         ),
 
@@ -230,90 +262,7 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
               (showAssignments) ? Column(
                 children: <Widget>[
                   for (final assignment in courseData)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.primaryContainer,
-                          borderRadius: const BorderRadius.all(Radius.elliptical(20, 20)),
-                          boxShadow: const [BoxShadow(blurRadius: 5)],
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                                assignment.title,
-                                overflow: TextOverflow.visible,
-                                style: GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w800)
-                            ),
-
-                            const Padding(padding: EdgeInsets.only(top: 15)),
-
-                            Column(
-                                children: <Widget>[
-                                  for (final category in assignment.categories.entries)
-                                    (category.value.length <= 1) ? const SizedBox(height: 0,) :
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-
-                                            Expanded(
-                                              flex: 1,
-                                              child: Text(
-                                                category.value[0],
-                                                style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600),
-                                              ),
-                                            ),
-
-                                            Expanded(
-                                              flex: 1,
-                                              child: Align(
-                                                alignment: Alignment.centerRight,
-                                                child: Text(
-                                                  category.value[1],
-                                                  style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(vertical: 10),
-                                          child: LinearPercentIndicator(
-                                            padding: EdgeInsets.zero,
-                                            lineHeight: 8,
-                                            backgroundColor: Theme.of(context).colorScheme.tertiary,
-                                            percent: double.parse(
-                                                category.value[0].substring(
-                                                    category.value[0].indexOf('=')+ 2,
-                                                    category.value[0].indexOf('%')
-                                                )) / 100,
-                                            linearGradient: LinearGradient(
-                                              begin: Alignment.topCenter,
-                                              end: Alignment.center,
-                                              colors: <Color>[
-                                                Theme.of(context).colorScheme.secondary,
-                                                Theme.of(context).colorScheme.secondary,
-                                              ],
-                                            ),
-                                            animation: true,
-                                            curve: Curves.easeInOut,
-                                            barRadius: const Radius.circular(15),
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                ]
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    AssignmentOverview(assignment: assignment, assignmentAverages: assignmentAverages),
                 ],
               ) : const SizedBox.shrink(),
 
@@ -329,25 +278,23 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
                       List<FlSpot> trends = [];
                       double trendMax = 0;
                       double trendMin = 100;
-
+              
                       final category = categories[index];
-
+              
                       for (final assignment in courseData) {
-                        if(assignment.categories[category]![0].isNotEmpty) {
-                          final mark = double.parse(assignment.categories[category]![0]
-                              .substring(
-                              assignment.categories[category]![0].indexOf('=')+ 2,
-                              assignment.categories[category]![0].indexOf('%')
-                          ));
-
+                        if(assignment.categories[category]!.isNotEmpty && assignment.categories[category]![2] > 0) {
+                          final mark = double.parse((assignment.categories[category]![0] / assignment.categories[category]![1] * 100).toStringAsFixed(1));
+              
                           trends.add(FlSpot(trends.length.floorToDouble(), mark));
-
+              
                           if (mark > trendMax) trendMax = mark;
                           if (mark < trendMin) trendMin = mark;
                         }
                       }
-
-                      return Column(
+              
+                      print(trends.isNotEmpty);
+              
+                      return (trends.isNotEmpty) ? Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.max,
                         children: [
@@ -360,7 +307,7 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
                               style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600),
                             ),
                           ),
-
+              
                           Expanded(
                             child: Padding(
                               padding: const EdgeInsets.only(top: 10),
@@ -368,8 +315,9 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
                                 aspectRatio: 1.2,
                                 child: LineChart(
                                     LineChartData(
-                                      gridData: const FlGridData(
-                                          drawVerticalLine: false
+                                      gridData: FlGridData(
+                                          drawVerticalLine: false,
+                                          horizontalInterval: ((trendMax - trendMin) / 5).ceilToDouble() + 1,
                                       ),
                                       titlesData: FlTitlesData(
                                         topTitles: const AxisTitles(
@@ -407,22 +355,193 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
                                             tooltipRoundedRadius: 20,
                                           )
                                       ),
-                                      maxY: min(100.5, trendMax+3),
-                                      minY: max(-0.5, trendMin-3),
+                                      maxY: min(100.5, trendMax+3.09),
+                                      minY: max(-0.5, trendMin-3.09),
                                       maxX: (trends.length > 1) ? trends.length-1 : trends.length-0,
                                       minX: (trends.length > 1) ? 0 : -1,
-
+              
                                     )
                                 ),
                               ),
                             ),
                           ),
                         ],
-                      );
+                      ) : null;
                     }
                 ),
               ) : const SizedBox.shrink(),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class AssignmentOverview extends StatefulWidget {
+  const AssignmentOverview({
+    super.key,
+    required this.assignment,
+    required this.assignmentAverages,
+  });
+
+  final Assignment assignment;
+  final Map<String, double> assignmentAverages;
+
+  @override
+  State<AssignmentOverview> createState() => _AssignmentOverviewState();
+}
+
+class _AssignmentOverviewState extends State<AssignmentOverview> {
+  bool isSelected = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            isSelected = !isSelected;
+          });
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primaryContainer,
+            borderRadius: const BorderRadius.all(Radius.elliptical(20, 20)),
+            boxShadow: const [BoxShadow(blurRadius: 5)],
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+          child: AnimatedSize(
+            alignment: Alignment.topCenter,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: Text(
+                          widget.assignment.title,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w800)
+                      ),
+                    ),
+              
+                    Expanded(
+                      flex: 1,
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.tertiary,
+                                borderRadius:
+                                    const BorderRadius.all(Radius.elliptical(5, 5)),
+                              ),
+                              alignment: Alignment.center,
+                              margin: const EdgeInsets.all(5),
+                              padding: const EdgeInsets.all(5),
+                              child: FittedBox(
+                                fit: BoxFit.fitHeight,
+                                child: Text('${(widget.assignmentAverages[widget.assignment.title]!*100).toStringAsFixed(1)}%',
+                                    style: GoogleFonts.roboto(
+                                        fontSize: 16, fontWeight: FontWeight.w800)),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              
+                const Padding(padding: EdgeInsets.only(top: 10)),
+            
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: LinearPercentIndicator(
+                    padding: EdgeInsets.zero,
+                    lineHeight: 8,
+                    backgroundColor: Theme.of(context).colorScheme.tertiary,
+                    percent: widget.assignmentAverages[widget.assignment.title]!,
+                    linearGradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.center,
+                      colors: <Color>[
+                        Theme.of(context).colorScheme.secondary,
+                        Theme.of(context).colorScheme.secondary,
+                      ],
+                    ),
+                    animation: true,
+                    curve: Curves.easeInOut,
+                    barRadius: const Radius.circular(15),
+                  ),
+                ),
+            
+                (isSelected) ? Column(
+                  children: <Widget>[
+                    for (final category in widget.assignment.categories.entries)
+                    (category.value.length <= 1) ? const SizedBox.shrink() :
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+              
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                '${category.key.split(' ').map((l) => l[0]).join()} ${(category.value[2] > 0) ? '(Weight: ${category.value[2]}' : '(No Weight'})',
+                                style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600),
+                              ),
+                            ),
+              
+                            Expanded(
+                              flex: 1,
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  '${category.value[0]} / ${category.value[1]} = ${(category.value[0] / category.value[1] * 100).toStringAsFixed(1)}%',
+                                  style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+              
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: LinearPercentIndicator(
+                            padding: EdgeInsets.zero,
+                            lineHeight: 8,
+                            backgroundColor: Theme.of(context).colorScheme.tertiary,
+                            percent: category.value[0] / category.value[1],
+                            linearGradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.center,
+                              colors: <Color>[
+                                Theme.of(context).colorScheme.secondary,
+                                Theme.of(context).colorScheme.secondary,
+                              ],
+                            ),
+                            animation: true,
+                            curve: Curves.easeInOut,
+                            barRadius: const Radius.circular(15),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ]
+                ) : const SizedBox.shrink()
+              ],
+            ),
           ),
         ),
       ),

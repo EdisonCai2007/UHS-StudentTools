@@ -1,8 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:wolfpackapp/screens/guidance_screen/appointment_list.dart';
 
-class AppointmentOverviewContainer extends StatelessWidget {
+
+class AppointmentOverviewContainer extends StatefulWidget {
   const AppointmentOverviewContainer({super.key});
+
+  @override
+  State<AppointmentOverviewContainer> createState() => _AppointmentOverviewContainerState();
+}
+
+class _AppointmentOverviewContainerState extends State<AppointmentOverviewContainer> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +35,76 @@ class AppointmentOverviewContainer extends StatelessWidget {
 
             const SizedBox(height: 30,),
 
-            FittedBox (
-              fit: BoxFit.scaleDown,
-              child: Text('You have no appointments today',
-                style: GoogleFonts.lato(fontSize: 20, fontWeight: FontWeight.w500)),
+            StreamBuilder<Map<String,String>>(
+              stream: appointmentStream,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return FittedBox (
+                    fit: BoxFit.scaleDown,
+                    child: Text('Loading Appointments...',
+                      style: GoogleFonts.lato(fontSize: 20, fontWeight: FontWeight.w500)),
+                  );
+                } else if (snapshot.connectionState == ConnectionState.active) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.tertiary,
+                      borderRadius: const BorderRadius.all(Radius.elliptical(10, 10)),
+                      boxShadow: const [BoxShadow(blurRadius: 5)],
+                    ),
+                    padding: const EdgeInsets.all(15),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          flex: 5,
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: FittedBox (
+                              fit: BoxFit.scaleDown,
+                              child: Text(snapshot.data!['Name']!,
+                                style: GoogleFonts.lato(fontSize: 20, fontWeight: FontWeight.w500)),
+                            ),
+                          ),
+                        ),
+
+                        const Expanded(
+                          flex: 1,
+                          child: SizedBox.shrink()
+                        ),
+
+                        Expanded(
+                          flex: 10,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              FittedBox (
+                                fit: BoxFit.scaleDown,
+                                child: Text(snapshot.data!['Date']!,
+                                  style: GoogleFonts.lato(fontSize: 20, fontWeight: FontWeight.w500)),
+                              ),
+                          
+                              Padding(
+                                padding: const EdgeInsets.only(top:8),
+                                child: FittedBox (
+                                  fit: BoxFit.scaleDown,
+                                  child: Text('See More',
+                                    style: GoogleFonts.lato(fontSize: 14, fontWeight: FontWeight.w500)),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                } else {
+                  return FittedBox (
+                    fit: BoxFit.scaleDown,
+                    child: Text('You have no appointments this month',
+                      style: GoogleFonts.lato(fontSize: 20, fontWeight: FontWeight.w500)),
+                  );
+                }
+              },
             ),
           ],
       ),

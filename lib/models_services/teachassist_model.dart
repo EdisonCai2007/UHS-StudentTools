@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 import 'package:html/dom.dart' as dom;
@@ -27,7 +28,7 @@ Future<List<String?>> authorizeUser(String username, String password) async {
           'password': password,
           'submit': 'Login',
         }
-    ).timeout(const Duration(milliseconds: 1000));
+    ).timeout(const Duration(milliseconds: 3000));
 
      //print("statusCode === ${res.statusCode}");
      //print("headers === ${res.headers}");
@@ -104,7 +105,6 @@ Future<String> fetchCourse(username,password, subjectId) async {
 
 Future<dom.Document> fetchGuidanceDate(username, password, date) async {
   var cookies = await authorizeUser(username, password);
-
   try {
     http.Response response = await http.get(
       Uri.parse(
@@ -124,7 +124,7 @@ Future<dom.Document> fetchGuidanceDate(username, password, date) async {
       throw Exception('Failed to load Guidance Appointments');
     }
   } catch (e) {
-    throw Exception('Failed to load Guidance Appointments');
+    throw Exception('Failed to load Guidance Appointments $e');
   }
 }
 
@@ -155,6 +155,43 @@ Future<dom.Document> fetchGuidanceTime (username, password, string) async {
 }
 
 Future<dom.Document> bookGuidanceAppointment (username, password, dt, tm, id, school_id, reason, withParent, online) async {
+  var cookies = await authorizeUser(username, password);
+
+  try {
+    http.Response response = await http.post(
+      Uri.parse(GUIDANCEDATEURL),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Cookie': 'session_token=${cookies[0]}; student_id=${cookies[1]}',
+      },
+      body: {
+        'dt': dt,
+        'tm': tm,
+        'id': id,
+        'action': '',
+        'inputDate': '',
+        'school_id': school_id,
+        'reason': reason ?? '',
+        'withParent': withParent ?? '',
+        'online': online ?? '',
+        'submit': 'Submit Reason',
+      }
+    );
+
+    // log('code==${response.statusCode}');
+    // log('headers==${response.headers}');
+    // log('body==${response.body}');
+    if (response.statusCode == 200) {
+      return dom.Document.html(response.body);
+    } else {
+      throw Exception('Failed to load Guidance Appointments');
+    }
+  } catch (e) {
+    throw Exception('Failed to load Guidance Appointments');
+  }
+}
+
+cancelGuidanceAppointment (username, password, dt, tm, id, school_id, reason, withParent, online) async {
   var cookies = await authorizeUser(username, password);
 
   try {

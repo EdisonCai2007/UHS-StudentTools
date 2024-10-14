@@ -96,21 +96,21 @@ class _EventsScreenState extends State<EventsScreen> {
                                 ),
                               ),
 
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  shape: const CircleBorder(),
-                                  backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
-                                  shadowColor: const Color.fromRGBO(0, 0, 0, 0),
-                                  foregroundColor: Theme.of(context).colorScheme.secondary,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    _searchController.clear();
-                                    _applyFilters();
-                                  });
-                                },
-                                child: const Icon(Icons.delete_forever),
-                              ),
+                              // ElevatedButton(
+                              //   style: ElevatedButton.styleFrom(
+                              //     shape: const CircleBorder(),
+                              //     backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
+                              //     shadowColor: const Color.fromRGBO(0, 0, 0, 0),
+                              //     foregroundColor: Theme.of(context).colorScheme.secondary,
+                              //   ),
+                              //   onPressed: () {
+                              //     setState(() {
+                              //       _searchController.clear();
+                              //       _applyFilters();
+                              //     });
+                              //   },
+                              //   child: const Icon(Icons.delete_forever),
+                              // ),
                             ],
                           ),
 
@@ -184,8 +184,18 @@ class _EventsScreenState extends State<EventsScreen> {
                   // -=-  Events List  -=-
                   _events.isNotEmpty ? Expanded(
                     flex: 1,
+                    child: ShaderMask(
+                    shaderCallback: (Rect rect) {
+                      return const LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Colors.black, Colors.transparent, Colors.transparent, Colors.black],
+                        stops: [0.0, 0.02, 1.0, 1.0], // 10% purple, 80% transparent, 10% purple
+                      ).createShader(rect);
+                    },
+                    blendMode: BlendMode.dstOut,
                     child: ListView.builder(
-                      physics: const ClampingScrollPhysics(),
+                      physics: const BouncingScrollPhysics(),
                       itemCount: _events.length,
                       itemBuilder: (BuildContext context, int index) {
                         return Padding(
@@ -270,13 +280,14 @@ class _EventsScreenState extends State<EventsScreen> {
                                           : (DateTime.parse(_events[index].startDate).difference(DateTime.now()).inHours / 24).ceil() == 0
                                           ? Text('Today', style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w500, color: Colors.redAccent))
                                           : Text('The Past', style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w500, color: Colors.redAccent))
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
                   )
                       : Align(

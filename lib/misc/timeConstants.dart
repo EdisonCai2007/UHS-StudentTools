@@ -6,13 +6,14 @@ const int beforeSchool = 0; // 12:00 AM
 const int period1Start = 505; // 8:25 AM
 const int period2Start = 585; // 9:45 AM
 const int period3Start = 665; // 11:05 AM
-const int period4Start = 745; // 12:25 AM
+const int period4Start = 745; // 12:25 PM
 const int period5Start = 825; // 1:45 PM
 const int afterSchool = 905; // 3:05 PM
 var list = [beforeSchool, period1Start, period2Start, period3Start, period4Start, period5Start, afterSchool];
 
 class TimeConstants {
-  HashMap<int, String> timeToPeriod = HashMap();
+  final HashMap<int, String> timeToPeriod = HashMap();
+  final HashMap<int, String> periodToTimestamp = HashMap();
 
   TimeConstants() {
     timeToPeriod[beforeSchool] = "Before School";
@@ -22,15 +23,23 @@ class TimeConstants {
     timeToPeriod[period4Start] = "Period 4";
     timeToPeriod[period5Start] = "Period 5";
     timeToPeriod[afterSchool] = "After School";
+
+    periodToTimestamp[beforeSchool] = " ";
+    periodToTimestamp[period1Start] = "8:25 AM - 9:45 AM";
+    periodToTimestamp[period2Start] = "9:45 AM - 11:05 AM";
+    periodToTimestamp[period3Start] = "11:05 AM - 12:25 PM";
+    periodToTimestamp[period4Start] = "12:25 PM - 1:45 PM";
+    periodToTimestamp[period5Start] = "1:45 PM - 3:05 PM";
+    periodToTimestamp[afterSchool] = " ";
   }
 
-  String getPeriod(currentTime) {
+  List<String> getPeriod(currentTime) {
     for (int x = list.length-1; x >= 0; x--) {
       if (currentTime >= list[x]) {
-        return timeToPeriod[list[x]] ?? "Error";
+        return [timeToPeriod[list[x]]!,periodToTimestamp[list[x]]!];
       }
     }
-    return timeToPeriod[afterSchool] ?? "Error";
+    return [timeToPeriod[afterSchool]!,periodToTimestamp[afterSchool]!];
   }
 
   double getPeriodProgress(currentTime) {
@@ -49,7 +58,7 @@ class TimeConstants {
   }
 
   List<String> getPeriodClass(currentTime) {
-    final period = getPeriod(currentTime).replaceAll(RegExp('[^0-9]'), '');
+    final period = getPeriod(currentTime)[0].replaceAll(RegExp('[^0-9]'), '');
 
     if (period != '') {
       for (var course in TeachAssistModel.courses) {

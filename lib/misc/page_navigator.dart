@@ -17,8 +17,6 @@ class PageNavigator {
   }
 
   static void navigatePage(BuildContext context, Widget newPage) {
-    print('navigatePage PAGE HISTORY: $pageHistory');
-
     if (nextPage != null) {
       if (pageHistory.isEmpty || (pageHistory.isNotEmpty && pageHistory.first != newPage)) {
         pageHistory.addFirst(nextPage!);
