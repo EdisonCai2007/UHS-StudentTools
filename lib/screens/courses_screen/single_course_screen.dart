@@ -271,7 +271,7 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
                 child: GridView.builder(
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 10, mainAxisSpacing: 20),
                     padding: const EdgeInsets.all(10),
-                    physics: const NeverScrollableScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: categories.length,
                     itemBuilder: (context, index) {
@@ -423,16 +423,16 @@ class _AssignmentOverviewState extends State<AssignmentOverview> {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Expanded(
-                      flex: 3,
+                      flex: 5,
                       child: Text(
                           widget.assignment.title,
-                          overflow: TextOverflow.ellipsis,
+                          overflow: TextOverflow.visible,
                           style: GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w800)
                       ),
                     ),
               
                     Expanded(
-                      flex: 1,
+                      flex: 2,
                       child: Align(
                         alignment: Alignment.bottomRight,
                         child: Row(
@@ -461,7 +461,7 @@ class _AssignmentOverviewState extends State<AssignmentOverview> {
                   ],
                 ),
               
-                const Padding(padding: EdgeInsets.only(top: 10)),
+                const Padding(padding: EdgeInsets.only(top: 6)),
             
                 Padding(
                   padding: const EdgeInsets.only(bottom: 10),
@@ -483,9 +483,13 @@ class _AssignmentOverviewState extends State<AssignmentOverview> {
                     barRadius: const Radius.circular(15),
                   ),
                 ),
+
+
             
                 (isSelected) ? Column(
                   children: <Widget>[
+                    const Padding(padding: EdgeInsets.only(top: 20)),
+
                     for (final category in widget.assignment.categories.entries)
                     (category.value.length <= 1) ? const SizedBox.shrink() :
                     Column(
@@ -499,7 +503,7 @@ class _AssignmentOverviewState extends State<AssignmentOverview> {
                               flex: 1,
                               child: Text(
                                 '${category.key.split(' ').map((l) => l[0]).join()} ${(category.value[2] > 0) ? '(Weight: ${category.value[2]}' : '(No Weight'})',
-                                style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600),
+                                style: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.w500),
                               ),
                             ),
               
@@ -509,7 +513,7 @@ class _AssignmentOverviewState extends State<AssignmentOverview> {
                                 alignment: Alignment.centerRight,
                                 child: Text(
                                   '${category.value[0]} / ${category.value[1]} = ${(category.value[0] / category.value[1] * 100).toStringAsFixed(1)}%',
-                                  style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600),
+                                  style: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.w500),
                                 ),
                               ),
                             ),

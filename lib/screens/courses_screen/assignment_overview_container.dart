@@ -26,7 +26,7 @@ class _AssignmentOverviewContainerState extends State<AssignmentOverviewContaine
           Expanded(
             flex: 1,
             child: ListView.builder(
-              physics: const ClampingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               itemCount: widget.assignment.categories.length,
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
