@@ -38,7 +38,7 @@ class EventsModel {
     //SharedPreferences prefs = await SharedPreferences.getInstance();
     //prefs.remove('eventsData');
 
-    if (sharedPrefs.eventsData.isEmpty || sharedPrefs.eventsRequestDate.isEmpty || DateTime.now().subtract(const Duration(days: 1)).isAfter(DateTime.parse(sharedPrefs.eventsRequestDate))) {
+    if (sharedPrefs.eventsData.isEmpty || sharedPrefs.eventsRequestDate.isEmpty || DateTime.now().subtract(const Duration(hours: 12)).isAfter(DateTime.parse(sharedPrefs.eventsRequestDate))) {
       await loadNewEvents();
     } else {
       await loadSavedEvents();
