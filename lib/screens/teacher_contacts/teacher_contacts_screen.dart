@@ -6,7 +6,7 @@ import 'package:wolfpackapp/misc/page_navigator.dart';
 import 'package:wolfpackapp/models_services/uhs_teachers_model.dart';
 import 'package:wolfpackapp/screens/user_offline_dialog.dart';
 
-import '../../menu_drawer.dart';
+import '../../misc/menu_drawer.dart';
 
 
 class ContactTeachersScreen extends StatefulWidget {

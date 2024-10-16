@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:wolfpackapp/misc/page_navigator.dart';
 import 'package:wolfpackapp/misc/shared_prefs.dart';
 
-import '../../menu_drawer.dart';
+import '../../misc/menu_drawer.dart';
 import '../../themes/theme_manager.dart';
 
 

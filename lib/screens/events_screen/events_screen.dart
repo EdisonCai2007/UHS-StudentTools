@@ -5,7 +5,7 @@ import 'package:wolfpackapp/models_services/events_model.dart';
 import 'package:wolfpackapp/misc/month_converter.dart';
 import 'package:wolfpackapp/misc/time_converter.dart';
 import 'package:intl/intl.dart';
-import '/menu_drawer.dart';
+import '../../misc/menu_drawer.dart';
 
 class EventsScreen extends StatefulWidget {
   const EventsScreen({super.key});

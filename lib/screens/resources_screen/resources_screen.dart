@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wolfpackapp/misc/page_navigator.dart';
 
-import '../../menu_drawer.dart';
+import '../../misc/menu_drawer.dart';
 
 class ResourcesScreen extends StatefulWidget {
   const ResourcesScreen({super.key});

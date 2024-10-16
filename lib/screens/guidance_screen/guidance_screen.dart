@@ -6,7 +6,7 @@ import 'package:wolfpackapp/misc/page_navigator.dart';
 import 'package:wolfpackapp/screens/guidance_screen/appointment_overview_container.dart';
 import 'package:wolfpackapp/screens/guidance_screen/appointment_picker_container.dart';
 
-import '/menu_drawer.dart';
+import '../../misc/menu_drawer.dart';
 
 /*
 ########################

@@ -38,12 +38,12 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Moxin Guo" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="ciQ-9B-96O">
-                                <rect key="frame" x="173.66666666666666" y="490" width="84.999999999999972" height="22"/>
+                                <rect key="frame" x="166" y="490" width="98" height="26"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="85" id="NDl-tf-4qU"/>
-                                    <constraint firstAttribute="height" constant="22" id="sPL-2X-hzz"/>
+                                    <constraint firstAttribute="width" constant="98" id="NDl-tf-4qU"/>
+                                    <constraint firstAttribute="height" constant="26" id="sPL-2X-hzz"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="18"/>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="22"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>

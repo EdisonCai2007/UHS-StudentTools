@@ -6,7 +6,7 @@ import 'package:wolfpackapp/screens/courses_screen/course_overview_container.dar
 import 'package:wolfpackapp/screens/no_account_dialog.dart';
 
 import '../../models_services/teachassist_model.dart';
-import '/menu_drawer.dart';
+import '../../misc/menu_drawer.dart';
 
 /*
 ########################

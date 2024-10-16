@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:flutter_exit_app/flutter_exit_app.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wolfpackapp/misc/page_navigator.dart';
 
-import '/menu_drawer.dart';
+import '../../misc/menu_drawer.dart';
 import 'home_screen_containers/welcome_container.dart';
 
 import 'home_screen_containers/daily_weather_overview_container.dart';
@@ -40,7 +40,7 @@ class HomeScreen extends StatelessWidget {
           if (isWithinExitTimeRange) {
             Fluttertoast.cancel();
             
-            FlutterExitApp.exitApp(iosForceExit: false);
+            SystemNavigator.pop();
           } else {
             Fluttertoast.showToast(
               msg: 'Press \'back\' again to exit!',

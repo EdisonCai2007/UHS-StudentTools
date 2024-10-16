@@ -10,7 +10,7 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:wolfpackapp/misc/page_navigator.dart';
 import 'package:wolfpackapp/screens/courses_screen/assignment.dart';
 
-import '/menu_drawer.dart';
+import '../../misc/menu_drawer.dart';
 
 /*
 ########################
