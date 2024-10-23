@@ -61,6 +61,9 @@ class _CoursesScreenState extends State<CoursesScreen> {
           title: Text('Courses', style: GoogleFonts.lato(fontSize: 20)),
           foregroundColor: Theme.of(context).colorScheme.onSurface,
           centerTitle: true,
+          shape: const Border(
+            bottom: BorderSide(color: Colors.transparent),
+          ),
         ),
 
         /*

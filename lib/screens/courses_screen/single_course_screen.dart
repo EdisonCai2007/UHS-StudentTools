@@ -124,6 +124,9 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
           foregroundColor: Theme.of(context).colorScheme.onSurface,
           leading: const BackButton(),
           centerTitle: true,
+          shape: const Border(
+            bottom: BorderSide(color: Colors.transparent),
+          ),
         ),
 
         /*

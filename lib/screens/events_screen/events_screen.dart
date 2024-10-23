@@ -44,6 +44,9 @@ class _EventsScreenState extends State<EventsScreen> {
           title: Text('Events', style: GoogleFonts.lato(fontSize: 20)),
           foregroundColor: Theme.of(context).colorScheme.onSurface,
           centerTitle: true,
+          shape: const Border(
+            bottom: BorderSide(color: Colors.transparent),
+          ),
         ),
 
         drawer: const MenuDrawer(),

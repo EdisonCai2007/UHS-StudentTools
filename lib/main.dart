@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:provider/provider.dart';
 import 'package:wolfpackapp/misc/firebase_options.dart';
 import 'package:wolfpackapp/models_services/account_model.dart';
 import 'package:wolfpackapp/models_services/teachassist_model.dart';
@@ -9,6 +8,9 @@ import 'package:wolfpackapp/models_services/uhs_teachers_model.dart';
 import 'package:wolfpackapp/screens/guidance_screen/appointment_list.dart';
 import 'package:wolfpackapp/screens/resources_screen/resources_screen.dart';
 import 'package:wolfpackapp/misc/shared_prefs.dart';
+import 'package:wolfpackapp/src/features/updates/data/updates_repository.dart';
+import 'package:wolfpackapp/src/features/updates/domain/update_status.dart';
+import 'package:wolfpackapp/src/features/updates/presentation/mandatory_update_screen.dart';
 import 'package:wolfpackapp/themes/theme_manager.dart';
 
 import 'screens/settings_screen/settings_screen.dart';
@@ -19,6 +21,8 @@ import 'package:wolfpackapp/screens/guidance_screen/guidance_screen.dart';
 import 'package:wolfpackapp/screens/login_screen/login_screen.dart';
 import 'package:wolfpackapp/screens/events_screen/events_screen.dart';
 
+import 'package:provider/provider.dart' as provider;
+import 'package:flutter_riverpod/flutter_riverpod.dart' as riverpod;
 import 'dart:io';
 
 // - 🏁 START HERE 🏁 -
@@ -43,10 +47,14 @@ Future main() async {
   await UHSTeachersModel().init();
   await AccountModel().init();
 
-  runApp(ChangeNotifierProvider(
-    create: (context) => ThemeManager(),
-    child: const MyApp(),
-  ));
+  runApp(
+      riverpod.ProviderScope(
+          child: provider.ChangeNotifierProvider(
+            create: (context) => ThemeManager(),
+            child: MyApp(),
+          )
+      )
+  );
 }
 
 class MyHttpOverrides extends HttpOverrides {
@@ -59,26 +67,42 @@ class MyHttpOverrides extends HttpOverrides {
 }
 
 // MyApp Widget; Holds Themes and Pages
+/*
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
-}
+}*/
 
-class _MyAppState extends State<MyApp> {
-  @override
-  void initState() {
-    super.initState();
-  }
+class MyApp extends riverpod.ConsumerWidget {
+  const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, riverpod.WidgetRef ref) {
+    final updateStatusValue = ref.watch(deviceUpdateStatusProvider);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: (sharedPrefs.username == '' && sharedPrefs.password == '')
-            ? const LoginScreen()
-            : const HomeScreen(),
+      home: updateStatusValue.when(
+          data: (updateStatus) {
+            if (updateStatus == UpdateStatus.mandatory) {
+              return const MandatoryUpdateScreen();
+            }
+
+            return (sharedPrefs.username == '' && sharedPrefs.password == '')
+                ? const LoginScreen()
+                : const HomeScreen();
+          },
+          error: (e, s) => const Center(
+            child: Text(
+              'Sorry, there was a problem with loading the app, please try again later!'
+            ),
+          ),
+          loading: () => CircularProgressIndicator(
+            color: Theme.of(context).colorScheme.secondary,
+          ),
+      ),
       routes: {
         '/loginScreen': (context) => const LoginScreen(),
         '/homeScreen': (context) => const HomeScreen(),
@@ -90,7 +114,7 @@ class _MyAppState extends State<MyApp> {
         '/eventsScreen': (context) => const EventsScreen(),
       },
       title: 'UHS Wolfpackapp',
-      theme: Provider.of<ThemeManager>(context).themeData,
+      theme: provider.Provider.of<ThemeManager>(context).themeData,
     );
   }
 }
