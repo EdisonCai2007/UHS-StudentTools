@@ -29,7 +29,7 @@ class MenuDrawer extends Drawer {
           DrawerHeader(
             margin: EdgeInsets.zero,
             child: Center(
-              child: Text('UHS Wolfpackapp',
+              child: Text('Wolfpackapp',
                 style: GoogleFonts.roboto(
                   fontSize: 30, fontWeight: FontWeight.w900
                 ),

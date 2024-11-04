@@ -69,7 +69,9 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
           final tempData = category.text.trim().replaceAll('\t', '').split('\n');
 
           if (tempData.length > 1) {
-            final score = double.parse(tempData[0].substring(0,tempData[0].indexOf(' ')));
+            final score = (RegExp(r'[0-9]').hasMatch(tempData[0].substring(0, tempData[0].indexOf(' '))))
+                ? double.parse(tempData[0].substring(0, tempData[0].indexOf(' ')))
+                : 0.0;
             final total = double.parse(tempData[0].substring(tempData[0].indexOf('/ ')+2, tempData[0].indexOf(' =')));
             final weight = double.tryParse(tempData[1].substring(tempData[1].indexOf('=')+1));
 
@@ -102,8 +104,6 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
       }
 
       assignmentAverages[assignment.title] = earnedPercentage / weightPercentage;
-
-      print(assignmentAverages[assignment.title]);
     }
   }
 

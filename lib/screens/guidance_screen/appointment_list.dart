@@ -7,9 +7,9 @@ import 'package:wolfpackapp/misc/shared_prefs.dart';
 import 'package:wolfpackapp/misc/time_converter.dart';
 import 'package:wolfpackapp/models_services/teachassist_model.dart';
 
-final controller = StreamController<Map<String, String>>();
 
-Stream<Map<String, String>> get appointmentStream => controller.stream;
+bool appointmentListLoaded = false;
+List<Map<String, String>> appointmentList = [];
 
 Future initAppointmentList(int range) async {
   if (await checkUserConnection()) {
@@ -22,10 +22,11 @@ Future initAppointmentList(int range) async {
           .map((element) => element.innerHtml.trim())
           .toList()) {
         List<String> parsedData = parseAppointmentList(data);
-        controller.sink.add({'Name': parsedData[0], 'Date': parsedData[1], 'Action': parsedData[2]});
+        appointmentList.add({'Name': parsedData[0], 'Date': parsedData[1], 'Action': parsedData[2]});
       }
       day = day.add(const Duration(days:1));
     }
+    appointmentListLoaded = true;
   }
 }
 

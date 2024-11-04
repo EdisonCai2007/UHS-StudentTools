@@ -1,7 +1,5 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:wolfpackapp/misc/firebase_options.dart';
 import 'package:wolfpackapp/models_services/account_model.dart';
 import 'package:wolfpackapp/models_services/teachassist_model.dart';
 import 'package:wolfpackapp/models_services/uhs_teachers_model.dart';
@@ -30,19 +28,18 @@ Future main() async {
   await dotenv.load(fileName: ".env");
 
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
 
   HttpOverrides.global = MyHttpOverrides();
 
   await sharedPrefs.init();
-  if (sharedPrefs.username != '' && sharedPrefs.password != '') await TeachAssistModel().init();
-  
-  void _initAppointmentList() async {
-    await initAppointmentList(30);
+  if (sharedPrefs.username != '' && sharedPrefs.password != '') {
+    await TeachAssistModel().init();
+    
+    void _initAppointmentList() async {
+      await initAppointmentList(30);
+    }
+    _initAppointmentList();
   }
-  _initAppointmentList();
 
   await UHSTeachersModel().init();
   await AccountModel().init();

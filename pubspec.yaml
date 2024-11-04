@@ -37,12 +37,10 @@ dependencies:
   http: 1.2.0
   html: ^0.15.4
   lottie: ^3.1.0
-  firebase_core: ^2.27.0
   shared_preferences: ^2.2.3
   gsheets: ^0.5.0
   url_launcher: ^6.3.0
   percent_indicator: ^4.2.3
-  firebase_storage: ^11.6.9
   flutter_dotenv: ^5.1.0
   fl_chart: ^0.69.0
   fluttertoast: ^8.2.5
