@@ -45,12 +45,12 @@ class _AppointmentPickerContainerState extends State<AppointmentPickerContainer>
         sharedPrefs.username, sharedPrefs.password, date);
   }
 
-  // Future<void> _fetchGuidanceTime(counselor, i) async {
-  //   guidanceTimeHtmlData = await fetchGuidanceTime(
-  //       sharedPrefs.username, sharedPrefs.password,
-  //       dateSchedule[counselor]['data'][i].substring(dateSchedule[counselor]['data'][i].indexOf('?')+1,dateSchedule[counselor]['data'][i].indexOf('>')-1).replaceAll('&amp;', '&')
-  //   );
-  // }
+  Future<void> _fetchGuidanceTime(counselor, i) async {
+    guidanceTimeHtmlData = await fetchGuidanceTime(
+        sharedPrefs.username, sharedPrefs.password,
+        dateSchedule[counselor]['data'][i].substring(dateSchedule[counselor]['data'][i].indexOf('?')+1,dateSchedule[counselor]['data'][i].indexOf('>')-1).replaceAll('&amp;', '&')
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -235,46 +235,46 @@ class _AppointmentPickerContainerState extends State<AppointmentPickerContainer>
                         if (dateSchedule[counselor]['type'] == 'guidance') {
                           showDialog(context: context, builder: (context) =>
                             AppointmentConfirmation(data: dateSchedule[counselor], itemNum: i),
-                          );
-                          /*
-                          await _fetchGuidanceTime(counselor, i);
-                    
-                          final labels = guidanceTimeHtmlData
-                              .querySelectorAll('body > div > form > label')
-                              .map((element) => element.innerHtml.trim())
-                              .toList();
-                          final values = guidanceTimeHtmlData
-                              .querySelectorAll('body > div > form > input')
-                              .map((element) => element.attributes['value']!)
-                              .toList();
-                    
-                          checkListItems = [];
-                          for (int j = 0; j < labels.length; j++) {
-                            checkListItems.add({
-                              'label': labels[j],
-                              'value': values[j + 6],
-                              'selected': false,
-                            });
-                          }
-                    
-                          if (!context.mounted) return;
-                          showDialog(context: context, builder: (context) =>
-                              AppointmentOptionAlert(
-                                checkListItems: checkListItems,
-                                dt: dateSchedule[counselor]['data'][i].substring(dateSchedule[counselor]['data'][i].indexOf('dt=') + 3,
-                                  dateSchedule[counselor]['data'][i].indexOf('&amp', dateSchedule[counselor]['data'][i].indexOf('dt=') + 3),
-                                ),
-                                tm: dateSchedule[counselor]['data'][i].substring(dateSchedule[counselor]['data'][i].indexOf('tm=') + 3,
-                                  dateSchedule[counselor]['data'][i].indexOf('&amp', dateSchedule[counselor]['data'][i].indexOf('tm=') + 3),
-                                ),
-                                id: dateSchedule[counselor]['data'][i].substring(dateSchedule[counselor]['data'][i].indexOf('id=') + 3,
-                                  dateSchedule[counselor]['data'][i].indexOf('&amp', dateSchedule[counselor]['data'][i].indexOf('id=') + 3),
-                                ),
-                                school_id: dateSchedule[counselor]['data'][i].substring(dateSchedule[counselor]['data'][i].indexOf('school_id=') + 10,
-                                    dateSchedule[counselor]['data'][i].indexOf('">', dateSchedule[counselor]['data'][i].indexOf('school_id=') + 10)
-                                ),
-                              ))
-                              */
+                        );
+                        
+                        await _fetchGuidanceTime(counselor, i);
+                  
+                        final labels = guidanceTimeHtmlData
+                            .querySelectorAll('body > div > form > label')
+                            .map((element) => element.innerHtml.trim())
+                            .toList();
+                        final values = guidanceTimeHtmlData
+                            .querySelectorAll('body > div > form > input')
+                            .map((element) => element.attributes['value']!)
+                            .toList();
+                  
+                        checkListItems = [];
+                        for (int j = 0; j < labels.length; j++) {
+                          checkListItems.add({
+                            'label': labels[j],
+                            'value': values[j + 6],
+                            'selected': false,
+                          });
+                        }
+                  
+                        if (!context.mounted) return;
+                        showDialog(context: context, builder: (context) =>
+                            AppointmentOptionAlert(
+                              checkListItems: checkListItems,
+                              dt: dateSchedule[counselor]['data'][i].substring(dateSchedule[counselor]['data'][i].indexOf('dt=') + 3,
+                                dateSchedule[counselor]['data'][i].indexOf('&amp', dateSchedule[counselor]['data'][i].indexOf('dt=') + 3),
+                              ),
+                              tm: dateSchedule[counselor]['data'][i].substring(dateSchedule[counselor]['data'][i].indexOf('tm=') + 3,
+                                dateSchedule[counselor]['data'][i].indexOf('&amp', dateSchedule[counselor]['data'][i].indexOf('tm=') + 3),
+                              ),
+                              id: dateSchedule[counselor]['data'][i].substring(dateSchedule[counselor]['data'][i].indexOf('id=') + 3,
+                                dateSchedule[counselor]['data'][i].indexOf('&amp', dateSchedule[counselor]['data'][i].indexOf('id=') + 3),
+                              ),
+                              school_id: dateSchedule[counselor]['data'][i].substring(dateSchedule[counselor]['data'][i].indexOf('school_id=') + 10,
+                                  dateSchedule[counselor]['data'][i].indexOf('">', dateSchedule[counselor]['data'][i].indexOf('school_id=') + 10)
+                              ),
+                            )
+                          );     
                         } else {
                           showDialog(context: context, builder: (context) =>
                             AppointmentConfirmation(data: dateSchedule[counselor], itemNum: i),
@@ -497,7 +497,6 @@ class _AppointmentConfirmationState extends State<AppointmentConfirmation> {
               null, null, null
             );
 
-            Navigator.pop(context);
             Navigator.pop(context);
             Navigator.pushNamed(context, '/guidanceScreen');
           }

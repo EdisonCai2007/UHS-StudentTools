@@ -18,6 +18,7 @@ import '../../misc/menu_drawer.dart';
 ########################
 */
 
+
 class SingleCourseScreen extends StatefulWidget {
   final String courseCode;
   final dom.Document fetchedData;
@@ -32,14 +33,17 @@ class SingleCourseScreen extends StatefulWidget {
   State<SingleCourseScreen> createState() => _SingleCourseScreenState();
 }
 
+
 class _SingleCourseScreenState extends State<SingleCourseScreen> {
   List<Assignment> courseData = [];
+  List<Assignment> tempCourseData = [];
   double courseAverage = 0;
-  List<String> categories = [];
+  Map<String, List<dynamic>> categories = {};
   Map<String, double> assignmentAverages = {};
 
   bool showAssignments = true;
   bool showTrends = false;
+  bool editCourses = false;
 
   @override
   void initState() {
@@ -56,7 +60,7 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
     courseAverage = double.parse(courseAverageString.substring(0,courseAverageString.indexOf('%')));
     
     // Fetch all course categories (Knowledge, Thinking, Application etc.)
-    categories = rawData[0].skip(1).map((category) => category.text).toList();
+    categories = {for (var name in rawData[0].skip(1).map((category) => category.text)) name : [0,0,0]};
 
     // Fetch marks from each assignment 
     for (final element in rawData) {
@@ -87,24 +91,87 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
         courseData.add(
           Assignment(
             title: title,
-            categories: LinkedHashMap.fromIterables(categories,categoryData),
+            categories: LinkedHashMap.fromIterables(categories.keys,categoryData),
             )
         );
       }
     }
 
-    for (final assignment in courseData) {
+    tempCourseData = List.from(courseData);
+    
+    resetAverage();
+  }
+  
+  resetAverage() {
+    categories.updateAll((key, value) => [0,0,0]);
+    for (final assignment in tempCourseData) {
       double earnedPercentage = 0;
       double weightPercentage = 0;
       for (final category in assignment.categories.entries) {
         if (category.value.isNotEmpty) {
-          weightPercentage += category.value[2];
           earnedPercentage += category.value[0] / category.value[1] * category.value[2];
+          weightPercentage += category.value[2];
+
+          if (category.value[2] > 0) {
+            categories[category.key]![0] += category.value[0];
+            categories[category.key]![1] += category.value[1];
+            categories[category.key]![2] += category.value[2];
+          }
         }
       }
 
-      assignmentAverages[assignment.title] = earnedPercentage / weightPercentage;
+      setState(() {
+        assignmentAverages[assignment.title] = earnedPercentage / weightPercentage;
+      });
     }
+
+    double earnedPercentage = 0.0;
+    double weightPercentage = 0.0;
+    for (final category in categories.entries) {
+      if (category.value.isNotEmpty && category.value[2] > 0) {
+        earnedPercentage += category.value[0] / category.value[1] * category.value[2];
+        weightPercentage += category.value[2];
+      }
+    }
+
+    setState(() {
+      courseAverage = (earnedPercentage / weightPercentage) * 100; 
+    });
+  }
+
+  editAssignment(String title) {
+
+  }
+
+  removeAssignment(String title) {
+    categories.updateAll((key, value) => [0,0,0]);
+    for (final assignment in tempCourseData) {
+      if (assignment.title != title) {
+        for (final category in assignment.categories.entries) {
+          if (category.value.isNotEmpty) {
+            if (category.value[2] > 0) {
+              categories[category.key]![0] += category.value[0];
+              categories[category.key]![1] += category.value[1];
+              categories[category.key]![2] += category.value[2];
+            }
+          }
+        }
+      }
+    }
+
+    double earnedPercentage = 0.0;
+    double weightPercentage = 0.0;
+    for (final category in categories.entries) {
+      if (category.value.isNotEmpty && category.value[2] > 0) {
+        earnedPercentage += category.value[0] / category.value[1] * category.value[2];
+        weightPercentage += category.value[2];
+      }
+    }
+
+    setState(() {
+      courseAverage = (earnedPercentage / weightPercentage) * 100; 
+      tempCourseData.removeWhere((a) => a.title == title);
+    });
   }
 
   @override
@@ -123,6 +190,24 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
           title: Text(widget.courseCode, style: GoogleFonts.lato(fontSize: 20)),
           foregroundColor: Theme.of(context).colorScheme.onSurface,
           leading: const BackButton(),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: IconButton(
+                splashRadius: 25,
+                onPressed: () {
+                  setState(() {
+                    if (editCourses) {
+                      tempCourseData = List.from(courseData);
+                      resetAverage();
+                    }
+                    editCourses = !editCourses;
+                  });
+                },
+                icon: !editCourses ? const Icon(Icons.edit) : Icon(Icons.edit_off, color: Theme.of(context).colorScheme.secondary,)
+              ),
+            ),
+          ],
           centerTitle: true,
           shape: const Border(
             bottom: BorderSide(color: Colors.transparent),
@@ -176,7 +261,7 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
                           radius: 70,
                           lineWidth: 10,
                           backgroundColor: Theme.of(context).colorScheme.tertiary,
-                          percent: courseAverage / 100,
+                          percent: (courseAverage.isNaN) ? 0 : courseAverage / 100,
                           center: Text('${courseAverage.toStringAsFixed(1)}%',
                               style: GoogleFonts.lato(
                                   fontSize: 25, fontWeight: FontWeight.w800)),
@@ -188,6 +273,7 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
                                 Theme.of(context).colorScheme.secondary,
                               ]),
                           rotateLinearGradient: true,
+                          animateFromLastPercent: true,
                           animation: true,
                           curve: Curves.easeInOut,
                           circularStrokeCap: CircularStrokeCap.round),
@@ -262,10 +348,36 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
                 ),
               ),
 
+              (editCourses) ? Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.tertiary,
+                    borderRadius: const BorderRadius.all(Radius.elliptical(20, 20)),
+                    boxShadow: const [BoxShadow(blurRadius: 5)],
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 25),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Icon(Icons.add),
+                      ),
+
+                      Text('Add an Assignment',
+                        style: GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w400),
+                      ),
+                    ],
+                  ),
+                ),
+              ) : const SizedBox.shrink(),
+
+
               (showAssignments) ? Column(
                 children: <Widget>[
-                  for (final assignment in courseData)
-                    AssignmentOverview(assignment: assignment, assignmentAverages: assignmentAverages),
+                  for (final assignment in tempCourseData)
+                    AssignmentOverview(assignment: assignment, assignmentAverages: assignmentAverages, editing: editCourses, editAssignment: editAssignment, removeAssignment: removeAssignment),
                 ],
               ) : const SizedBox.shrink(),
 
@@ -276,15 +388,15 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
                     padding: const EdgeInsets.all(10),
                     physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: categories.length,
+                    itemCount: categories.keys.length,
                     itemBuilder: (context, index) {
                       List<FlSpot> trends = [];
                       double trendMax = 0;
                       double trendMin = 100;
               
-                      final category = categories[index];
+                      final category = categories.keys.elementAt(index);
               
-                      for (final assignment in courseData) {
+                      for (final assignment in tempCourseData) {
                         if(assignment.categories[category]!.isNotEmpty && assignment.categories[category]![2] > 0) {
                           final mark = double.parse((assignment.categories[category]![0] / assignment.categories[category]![1] * 100).toStringAsFixed(1));
               
@@ -294,9 +406,7 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
                           if (mark < trendMin) trendMin = mark;
                         }
                       }
-              
-                      print(trends.isNotEmpty);
-              
+                            
                       return (trends.isNotEmpty) ? Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.max,
@@ -386,10 +496,16 @@ class AssignmentOverview extends StatefulWidget {
     super.key,
     required this.assignment,
     required this.assignmentAverages,
+    required this.editing,
+    required this.editAssignment,
+    required this.removeAssignment
   });
 
   final Assignment assignment;
   final Map<String, double> assignmentAverages;
+  final bool editing;
+  final Function editAssignment;
+  final Function removeAssignment;
 
   @override
   State<AssignmentOverview> createState() => _AssignmentOverviewState();
@@ -404,9 +520,11 @@ class _AssignmentOverviewState extends State<AssignmentOverview> {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: GestureDetector(
         onTap: () {
-          setState(() {
-            isSelected = !isSelected;
-          });
+          if (!widget.editing) {
+            setState(() {
+              isSelected = !isSelected;
+            });
+          }
         },
         child: Container(
           decoration: BoxDecoration(
@@ -414,12 +532,13 @@ class _AssignmentOverviewState extends State<AssignmentOverview> {
             borderRadius: const BorderRadius.all(Radius.elliptical(20, 20)),
             boxShadow: const [BoxShadow(blurRadius: 5)],
           ),
-          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+          padding: EdgeInsets.only(top: 15, right: 15, left: 15, bottom: (widget.editing) ? 8 : 15),
           child: AnimatedSize(
             alignment: Alignment.topCenter,
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
@@ -441,7 +560,7 @@ class _AssignmentOverviewState extends State<AssignmentOverview> {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Container(
+                            (!widget.editing) ? Container(
                               decoration: BoxDecoration(
                                 color: Theme.of(context).colorScheme.tertiary,
                                 borderRadius:
@@ -454,8 +573,36 @@ class _AssignmentOverviewState extends State<AssignmentOverview> {
                                 fit: BoxFit.fitHeight,
                                 child: Text('${(widget.assignmentAverages[widget.assignment.title]!*100).toStringAsFixed(1)}%',
                                     style: GoogleFonts.roboto(
-                                        fontSize: 16, fontWeight: FontWeight.w800)),
+                                        fontSize: 16, fontWeight: FontWeight.w800))
                               ),
+                            ) :
+
+                            Row(
+                              children: [
+                                // Edit Button
+                                IconButton(
+                                  padding: EdgeInsets.zero,
+                                  splashRadius: 20,
+                                  onPressed: () {
+                                    
+                                  },
+                                  icon: const Icon(Icons.edit_note)
+                                ),
+
+                                // Delete Button
+                                IconButton(
+                                  padding: EdgeInsets.zero,
+                                  splashRadius: 20,
+                                  onPressed: () {
+                                    setState(() {
+                                      widget.removeAssignment(widget.assignment.title);
+                                    });
+                                  },
+                                  icon: Icon(
+                                    Icons.delete,
+                                    color: Theme.of(context).colorScheme.secondary)
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -466,7 +613,7 @@ class _AssignmentOverviewState extends State<AssignmentOverview> {
               
                 const Padding(padding: EdgeInsets.only(top: 6)),
             
-                Padding(
+                (!widget.editing) ? Padding(
                   padding: const EdgeInsets.only(bottom: 10),
                   child: LinearPercentIndicator(
                     padding: EdgeInsets.zero,
@@ -485,11 +632,11 @@ class _AssignmentOverviewState extends State<AssignmentOverview> {
                     curve: Curves.easeInOut,
                     barRadius: const Radius.circular(15),
                   ),
-                ),
+                ) : const SizedBox.shrink(),
 
 
             
-                (isSelected) ? Column(
+                (isSelected && !widget.editing) ? Column(
                   children: <Widget>[
                     const Padding(padding: EdgeInsets.only(top: 20)),
 
@@ -555,3 +702,4 @@ class _AssignmentOverviewState extends State<AssignmentOverview> {
     );
   }
 }
+
