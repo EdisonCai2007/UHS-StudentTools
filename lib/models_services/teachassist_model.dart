@@ -239,7 +239,7 @@ class TeachAssistModel {
         .toList();
 
     subjectIds = fetchedData.querySelectorAll('body > div > div > div > table > tbody > tr > td')
-        .map((element) => element.children.isNotEmpty ? element.children[0].attributes['href'] : null)
+        .map((element) => element.children.isNotEmpty ? element.children[element.children.length-1].attributes['href'] : null)
         .toList();
 
     loadCourses();
@@ -261,8 +261,8 @@ class TeachAssistModel {
       courses[i]["Room"] = rawData![i * 3]
           .substring(rawData![i * 3].indexOf('  - ')+8);
       courses[i]["Semester"] = rawData![i * 3 + 1].substring(6,7) == '9' ? 1 : 2;
-      courses[i]["Course Average"] = (rawData![i * 3 + 2].contains('=')) ? rawData![i * 3 + 2].substring(
-          rawData![i * 3 + 2].indexOf('=')+1,rawData![i * 3 + 2].indexOf('%')) : null;
+      courses[i]["Course Average"] = (rawData![i * 3 + 2].contains('=')) ? rawData![i * 3 + 2]
+          .substring(rawData![i * 3 + 2].indexOf('=')+1,rawData![i * 3 + 2].lastIndexOf('%')) : null;
       courses[i]["Subject ID"] = ((subjectIds[i * 3 + 2] ?? '').contains('=')) ? subjectIds[i * 3 + 2]!.substring(subjectIds[i * 3 + 2]!.indexOf('=')+1, subjectIds[i * 3 + 2]!.indexOf('&')): null;
 
       if (courses[i]["Subject ID"] != null) {

@@ -139,10 +139,6 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
     });
   }
 
-  editAssignment(String title) {
-
-  }
-
   removeAssignment(String title) {
     categories.updateAll((key, value) => [0,0,0]);
     for (final assignment in tempCourseData) {
@@ -187,7 +183,7 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
         ####################
         */
         appBar: AppBar(
-          title: Text(widget.courseCode, style: GoogleFonts.lato(fontSize: 20)),
+          title: Text(widget.courseCode, style: GoogleFonts.roboto(fontSize: 20)),
           foregroundColor: Theme.of(context).colorScheme.onSurface,
           leading: const BackButton(),
           actions: [
@@ -197,10 +193,6 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
                 splashRadius: 25,
                 onPressed: () {
                   setState(() {
-                    if (editCourses) {
-                      tempCourseData = List.from(courseData);
-                      resetAverage();
-                    }
                     editCourses = !editCourses;
                   });
                 },
@@ -263,8 +255,8 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
                           backgroundColor: Theme.of(context).colorScheme.tertiary,
                           percent: (courseAverage.isNaN) ? 0 : courseAverage / 100,
                           center: Text('${courseAverage.toStringAsFixed(1)}%',
-                              style: GoogleFonts.lato(
-                                  fontSize: 25, fontWeight: FontWeight.w800)),
+                              style: GoogleFonts.roboto(
+                                  fontSize: 25, fontWeight: FontWeight.w600)),
                           linearGradient: LinearGradient(
                               begin: Alignment.topRight,
                               end: Alignment.center,
@@ -306,7 +298,7 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
                                 child: FittedBox(
                                   fit: BoxFit.fitHeight,
                                   child: Text('Assignments',
-                                      style: GoogleFonts.lato(
+                                      style: GoogleFonts.roboto(
                                           color: Theme.of(context).colorScheme.primary,
                                           fontSize: 20, fontWeight: FontWeight.w600)),
                                 ),
@@ -335,7 +327,7 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
                               child: FittedBox(
                                 fit: BoxFit.fitHeight,
                                 child: Text('Trends',
-                                    style: GoogleFonts.lato(
+                                    style: GoogleFonts.roboto(
                                         color: Theme.of(context).colorScheme.primary,
                                         fontSize: 20, fontWeight: FontWeight.w600)),
                               ),
@@ -348,27 +340,30 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
                 ),
               ),
 
-              (editCourses) ? Padding(
+              (editCourses && showAssignments) ? Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.tertiary,
-                    borderRadius: const BorderRadius.all(Radius.elliptical(20, 20)),
-                    boxShadow: const [BoxShadow(blurRadius: 5)],
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 25),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Icon(Icons.add),
-                      ),
-
-                      Text('Add an Assignment',
-                        style: GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w400),
-                      ),
-                    ],
+                child: ElevatedButton(
+                  style: Theme.of(context).elevatedButtonTheme.style,
+                  onPressed: () {
+                    
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 25),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Icon(Icons.add, color: Theme.of(context).colorScheme.primary),
+                        ),
+                    
+                        Text('Add An Assignment',
+                          style: GoogleFonts.roboto(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontSize: 20, fontWeight: FontWeight.w600)
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ) : const SizedBox.shrink(),
@@ -377,7 +372,7 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
               (showAssignments) ? Column(
                 children: <Widget>[
                   for (final assignment in tempCourseData)
-                    AssignmentOverview(assignment: assignment, assignmentAverages: assignmentAverages, editing: editCourses, editAssignment: editAssignment, removeAssignment: removeAssignment),
+                    AssignmentOverview(assignment: assignment, assignmentAverages: assignmentAverages, editingMode: editCourses, removeAssignment: removeAssignment),
                 ],
               ) : const SizedBox.shrink(),
 
@@ -492,20 +487,20 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
 }
 
 class AssignmentOverview extends StatefulWidget {
-  const AssignmentOverview({
+  AssignmentOverview({
     super.key,
     required this.assignment,
     required this.assignmentAverages,
-    required this.editing,
-    required this.editAssignment,
+    required this.editingMode,
     required this.removeAssignment
   });
 
   final Assignment assignment;
   final Map<String, double> assignmentAverages;
-  final bool editing;
-  final Function editAssignment;
+  final bool editingMode;
   final Function removeAssignment;
+
+  bool editingThis = false;
 
   @override
   State<AssignmentOverview> createState() => _AssignmentOverviewState();
@@ -514,13 +509,26 @@ class AssignmentOverview extends StatefulWidget {
 class _AssignmentOverviewState extends State<AssignmentOverview> {
   bool isSelected = false;
 
+  void changeName(String newName) {
+
+  }
+  void changeCategoryEarnedMark(String category, double newValue) {
+
+  }
+  void changeCategoryTotalMark(String category, double newValue) {
+
+  }
+  void changeCategoryWeight(String category, double newValue) {
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: GestureDetector(
         onTap: () {
-          if (!widget.editing) {
+          if (!widget.editingMode) {
             setState(() {
               isSelected = !isSelected;
             });
@@ -532,7 +540,7 @@ class _AssignmentOverviewState extends State<AssignmentOverview> {
             borderRadius: const BorderRadius.all(Radius.elliptical(20, 20)),
             boxShadow: const [BoxShadow(blurRadius: 5)],
           ),
-          padding: EdgeInsets.only(top: 15, right: 15, left: 15, bottom: (widget.editing) ? 8 : 15),
+          padding: EdgeInsets.only(top: 15, right: 15, left: 15, bottom: (widget.editingMode) ? 8 : 15),
           child: AnimatedSize(
             alignment: Alignment.topCenter,
             duration: const Duration(milliseconds: 300),
@@ -548,64 +556,63 @@ class _AssignmentOverviewState extends State<AssignmentOverview> {
                       flex: 5,
                       child: Text(
                           widget.assignment.title,
-                          overflow: TextOverflow.visible,
+                          overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w800)
                       ),
                     ),
               
-                    Expanded(
-                      flex: 2,
-                      child: Align(
-                        alignment: Alignment.bottomRight,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            (!widget.editing) ? Container(
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.tertiary,
-                                borderRadius:
-                                    const BorderRadius.all(Radius.elliptical(5, 5)),
-                              ),
-                              alignment: Alignment.center,
-                              margin: const EdgeInsets.all(5),
-                              padding: const EdgeInsets.all(5),
-                              child: FittedBox(
-                                fit: BoxFit.fitHeight,
-                                child: Text('${(widget.assignmentAverages[widget.assignment.title]!*100).toStringAsFixed(1)}%',
-                                    style: GoogleFonts.roboto(
-                                        fontSize: 16, fontWeight: FontWeight.w800))
-                              ),
-                            ) :
-
-                            Row(
-                              children: [
-                                // Edit Button
-                                IconButton(
-                                  padding: EdgeInsets.zero,
-                                  splashRadius: 20,
-                                  onPressed: () {
-                                    
-                                  },
-                                  icon: const Icon(Icons.edit_note)
-                                ),
-
-                                // Delete Button
-                                IconButton(
-                                  padding: EdgeInsets.zero,
-                                  splashRadius: 20,
-                                  onPressed: () {
-                                    setState(() {
-                                      widget.removeAssignment(widget.assignment.title);
-                                    });
-                                  },
-                                  icon: Icon(
-                                    Icons.delete,
-                                    color: Theme.of(context).colorScheme.secondary)
-                                ),
-                              ],
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          (!widget.editingMode) ? Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.tertiary,
+                              borderRadius:
+                                  const BorderRadius.all(Radius.elliptical(5, 5)),
                             ),
-                          ],
-                        ),
+                            alignment: Alignment.center,
+                            margin: const EdgeInsets.all(5),
+                            padding: const EdgeInsets.all(5),
+                            child: FittedBox(
+                              fit: BoxFit.fitHeight,
+                              child: Text('${(widget.assignmentAverages[widget.assignment.title]!*100).toStringAsFixed(1)}%',
+                                  style: GoogleFonts.roboto(
+                                      fontSize: 16, fontWeight: FontWeight.w800))
+                            ),
+                          ) :
+                    
+                          Row(
+                            children: [
+                              // Edit Button
+                              IconButton(
+                                padding: EdgeInsets.zero,
+                                splashRadius: 20,
+                                onPressed: () {
+                                  setState(() {
+                                    widget.editingThis = !widget.editingThis;
+                                  });
+                                },
+                                icon: const Icon(Icons.edit_note)
+                              ),
+                          
+                              // Delete Button
+                              IconButton(
+                                padding: EdgeInsets.zero,
+                                splashRadius: 20,
+                                onPressed: () {
+                                  setState(() {
+                                    widget.removeAssignment(widget.assignment.title);
+                                  });
+                                },
+                                icon: Icon(
+                                  Icons.delete,
+                                  color: Theme.of(context).colorScheme.secondary)
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -613,7 +620,7 @@ class _AssignmentOverviewState extends State<AssignmentOverview> {
               
                 const Padding(padding: EdgeInsets.only(top: 6)),
             
-                (!widget.editing) ? Padding(
+                (!widget.editingMode) ? Padding(
                   padding: const EdgeInsets.only(bottom: 10),
                   child: LinearPercentIndicator(
                     padding: EdgeInsets.zero,
@@ -633,12 +640,13 @@ class _AssignmentOverviewState extends State<AssignmentOverview> {
                     barRadius: const Radius.circular(15),
                   ),
                 ) : const SizedBox.shrink(),
-
-
-            
-                (isSelected && !widget.editing) ? Column(
+                
+                //#=-=-=-=-=-=-=-=-=-=-=#
+                //#   Category Blocks   #
+                //#=-=-=-=-=-=-=-=-=-=-=#
+                (isSelected && !widget.editingMode) ? Column(
                   children: <Widget>[
-                    const Padding(padding: EdgeInsets.only(top: 20)),
+                    const Padding(padding: EdgeInsets.only(top: 10)),
 
                     for (final category in widget.assignment.categories.entries)
                     (category.value.length <= 1) ? const SizedBox.shrink() :
@@ -693,6 +701,74 @@ class _AssignmentOverviewState extends State<AssignmentOverview> {
                       ],
                     ),
                   ]
+                ) : const SizedBox.shrink(),
+
+                //#=-=-=-=-=-=-=-=-=-=-=-=-=-=#
+                //#   Category Edit Sliders   #
+                //#=-=-=-=-=-=-=-=-=-=-=-=-=-=#
+                (widget.editingThis) ? Column(
+                  children: <Widget>[
+                    const Padding(padding: EdgeInsets.only(top: 10)),
+
+                    for (final category in widget.assignment.categories.entries)
+                    (category.value.length <= 1) ? const SizedBox.shrink() :
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+              
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                '${category.key.split(' ').map((l) => l[0]).join()} ${(category.value[2] > 0) ? '(Weight: ${category.value[2]}' : '(No Weight'})',
+                                style: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.w500),
+                              ),
+                            ),
+              
+                            Expanded(
+                              flex: 1,
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  '${category.value[0]} / ${category.value[1]} = ${(category.value[0] / category.value[1] * 100).toStringAsFixed(1)}%',
+                                  style: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+              
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: CategorySlider(
+                            changeCategoryEarnedMark: changeCategoryEarnedMark,
+                            changeCategoryTotalMark: changeCategoryTotalMark,
+                            changeCategoryWeight: changeCategoryWeight,
+                            init: category.value,
+                          )
+                          // child: LinearPercentIndicator(
+                          //   padding: EdgeInsets.zero,
+                          //   lineHeight: 8,
+                          //   backgroundColor: Theme.of(context).colorScheme.tertiary,
+                          //   percent: category.value[0] / category.value[1],
+                          //   linearGradient: LinearGradient(
+                          //     begin: Alignment.topCenter,
+                          //     end: Alignment.center,
+                          //     colors: <Color>[
+                          //       Theme.of(context).colorScheme.secondary,
+                          //       Theme.of(context).colorScheme.secondary,
+                          //     ],
+                          //   ),
+                          //   animation: true,
+                          //   curve: Curves.easeInOut,
+                          //   barRadius: const Radius.circular(15),
+                          // ),
+                        ),
+                      ],
+                    ),
+                  ]
                 ) : const SizedBox.shrink()
               ],
             ),
@@ -702,4 +778,136 @@ class _AssignmentOverviewState extends State<AssignmentOverview> {
     );
   }
 }
+
+class CategorySlider extends StatefulWidget {
+  const CategorySlider({
+    super.key,
+    required this.changeCategoryEarnedMark,
+    required this.changeCategoryTotalMark,
+    required this.changeCategoryWeight,
+    required this.init,
+  });
+
+  final Function changeCategoryEarnedMark;
+  final Function changeCategoryTotalMark;
+  final Function changeCategoryWeight;
+  final List<dynamic> init;
+
+  
+
+  @override
+  State<CategorySlider> createState() => _CategorySliderState();
+}
+
+class _CategorySliderState extends State<CategorySlider> {
+  List<dynamic> values = [];
+
+  @override
+  void initState() {
+    super.initState();
+    values = widget.init;
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Slider(
+      value: values[0],
+      max: values[1],
+      onChanged: (value) {
+        setState(() {
+          values[0] = value;
+        });
+        print(values[0]);
+      }
+    );
+  }
+}
+
+
+
+
+// class AssignmentConfiguration extends StatefulWidget {
+//   final Assignment? assignment;
+//   final Function addAssignment;
+//   final Function editAssignment;
+//   final bool isEditing;
+
+//   const AssignmentConfiguration(
+//     {super.key,
+//     this.assignment,
+//     required this.addAssignment,
+//     required this.editAssignment,
+//     required this.isEditing,
+//   });
+
+//   @override
+//   State<AssignmentConfiguration> createState() => _AssignmentConfigurationState();
+// }
+
+// class _AssignmentConfigurationState extends State<AssignmentConfiguration> {
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return AlertDialog(
+      
+//       title: Text((widget.isEditing) ? 'Edit ${widget.assignment!.title}' : 'Add Assignment',
+//         style: GoogleFonts.roboto(
+//           fontSize: 16, fontWeight: FontWeight.w900,
+//           color: Theme.of(context).colorScheme.secondary)
+//         ),
+
+//       content: (widget.assignment != null) ? Column(
+//         mainAxisSize: MainAxisSize.min,
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: <Widget>[
+//           for (final category in widget.assignment!.categories.keys) 
+//           Column(
+//             children: [
+//               Container(color: Colors.black),
+//               Row(
+//                 children: [
+//                   Text(category,
+//                   style: GoogleFonts.roboto(
+//                     fontSize: 16, fontWeight: FontWeight.w900,
+//                     color: Theme.of(context).colorScheme.primary)
+//                   ),
+//                 ],
+//               )
+//             ],
+//           ),
+            
+//         ],
+//       ) : 
+//       Column(
+//         mainAxisSize: MainAxisSize.min,
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+          
+//         ]
+//       ),
+                          
+//       actions: [
+//         TextButton(
+//           child: Text('CANCEL',
+//               style: GoogleFonts.roboto(
+//                   fontSize: 16, fontWeight: FontWeight.w900,
+//                   color: Theme.of(context).colorScheme.secondary)
+//           ),
+//           onPressed: () => Navigator.pop(context),
+//         ),
+
+//         TextButton(
+//           child: Text('CONFIRM',
+//               style: GoogleFonts.roboto(
+//                   fontSize: 16, fontWeight: FontWeight.w900,
+//                   color: Theme.of(context).colorScheme.secondary)
+//           ),
+//           onPressed: () {
+//             Navigator.pop(context);
+//           }
+//         ),
+//       ],
+//     );
+//   }
+// }
 
