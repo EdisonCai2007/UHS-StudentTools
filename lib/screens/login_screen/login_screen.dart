@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:wolfpackapp/misc/internet_connection.dart';
 import 'package:wolfpackapp/models_services/account_model.dart';
 import 'package:wolfpackapp/models_services/teachassist_model.dart';
 import 'package:wolfpackapp/screens/home_screen/home_screen.dart';
@@ -140,21 +141,26 @@ class _LoginScreenState extends State<LoginScreen> {
                                 String username = _usernameController.text.trim();
                                 String password = _passwordController.text.trim();
 
+                                if (await checkUserConnection()) {
                                 var response = await authorizeUser(username, password);
-                                if (response[0] == 'Failed to Authorize User') {
-                                  if (!context.mounted) return;
-                                  showDialog(context: context, builder: (context) => const TeachAssistErrorAlert());
-                                } else if (response[0] == 'Invalid Login') {
-                                  if (!context.mounted) return;
-                                  showDialog(context: context, builder: (context) => const InvalidLoginAlert());
-                                } else {
-                                  sharedPrefs.username = username;
-                                  sharedPrefs.password = password;
+                                  if (response[0] == 'Failed to Authorize User') {
+                                    if (!context.mounted) return;
+                                    showDialog(context: context, builder: (context) => const TeachAssistErrorAlert());
+                                  } else if (response[0] == 'Invalid Login') {
+                                    if (!context.mounted) return;
+                                    showDialog(context: context, builder: (context) => const InvalidLoginAlert());
+                                  } else {
+                                    sharedPrefs.username = username;
+                                    sharedPrefs.password = password;
 
-                                  await TeachAssistModel().init();
-                                  AccountModel.parseAccount();
+                                    await TeachAssistModel().init();
+                                    AccountModel.parseAccount();
+                                    if (!context.mounted) return;
+                                    PageNavigator.navigatePage(context, const HomeScreen());
+                                  }
+                                } else {
                                   if (!context.mounted) return;
-                                  PageNavigator.navigatePage(context, const HomeScreen());
+                                    showDialog(context: context, builder: (context) => const ConnectionErrorAlert());
                                 }
                               }
                             },
@@ -309,6 +315,29 @@ class TeachAssistErrorAlert extends StatelessWidget {
     return AlertDialog(
       title: const Text('ERROR'),
       content: const Text('Trouble accessing TeachAssist. Please try again later.'),
+      actions: [
+        TextButton(
+          child: Text('RETRY',
+            style: GoogleFonts.lato(
+            fontSize: 16, fontWeight: FontWeight.w900,
+            color: Theme.of(context).colorScheme.secondary)
+          ),
+          onPressed: () => Navigator.pop(context),)
+      ],
+    );
+  }
+}
+
+class ConnectionErrorAlert extends StatelessWidget {
+  const ConnectionErrorAlert({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('ERROR'),
+      content: const Text('Unable to connect to Internet. Please try again later.'),
       actions: [
         TextButton(
           child: Text('RETRY',

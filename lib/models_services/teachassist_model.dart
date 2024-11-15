@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:http/http.dart' as http;
 import 'package:html/dom.dart' as dom;
@@ -62,13 +63,13 @@ Future<dom.Document> fetchMarks(username, password) async {
 
       // log('body==${response.body}');
       if (response.statusCode == 200) {
-        sharedPrefs.studentData = response.body;
         return dom.Document.html(response.body);
       } else {
         throw Exception('Failed to load TeachAssist Marks');
       }
     } catch (e) {
-      throw Exception('Failed to load TeachAssist Marks');
+      return dom.Document.html(sharedPrefs.studentData);
+      // throw Exception('Failed to load TeachAssist Marks');
     }
   } else {
     return dom.Document.html(sharedPrefs.studentData);
@@ -95,7 +96,8 @@ Future<String> fetchCourse(username,password, subjectId) async {
         throw Exception('Failed to load TeachAssist Marks');
       }
     } catch (e) {
-      throw Exception('Failed to load TeachAssist Marks');
+      return json.decode(sharedPrefs.courseData)[subjectId.toString()];
+      // throw Exception('Failed to load TeachAssist Marks');
     }
   } else {
     return json.decode(sharedPrefs.courseData)[subjectId.toString()];
@@ -122,8 +124,8 @@ Future<dom.Document> fetchGuidanceDate(username, password, date) async {
     } else {
       throw Exception('Failed to load Guidance Appointments');
     }
-  } catch (e) {
-    throw Exception('Failed to load Guidance Appointments $e');
+  } catch (_) {
+    rethrow;
   }
 }
 
@@ -230,6 +232,7 @@ cancelGuidanceAppointment (username, password, dt, tm, id, school_id, reason, wi
 class TeachAssistModel {
   static List<Map<String, dynamic>> courses = [];
   static List<String>? rawData;
+  static List<String>? oldData;
   static List<String?> subjectIds = [];
 
   Future init() async {
@@ -238,11 +241,16 @@ class TeachAssistModel {
         .map((element) => element.text.trim().replaceAll(RegExp('[\t\n]'), ''))
         .toList();
 
+    oldData = (sharedPrefs.studentData.isNotEmpty) ? dom.Document.html(sharedPrefs.studentData).querySelectorAll('body > div > div > div > table > tbody > tr > td')
+        .map((element) => element.text.trim().replaceAll(RegExp('[\t\n]'), ''))
+        .toList() : null;
+
     subjectIds = fetchedData.querySelectorAll('body > div > div > div > table > tbody > tr > td')
         .map((element) => element.children.isNotEmpty ? element.children[element.children.length-1].attributes['href'] : null)
         .toList();
 
     loadCourses();
+    sharedPrefs.studentData = fetchedData.body!.innerHtml;
   }
 
   static Future loadCourses() async {
@@ -261,8 +269,21 @@ class TeachAssistModel {
       courses[i]["Room"] = rawData![i * 3]
           .substring(rawData![i * 3].indexOf('  - ')+8);
       courses[i]["Semester"] = rawData![i * 3 + 1].substring(6,7) == '9' ? 1 : 2;
-      courses[i]["Course Average"] = (rawData![i * 3 + 2].contains('=')) ? rawData![i * 3 + 2]
-          .substring(rawData![i * 3 + 2].indexOf('=')+1,rawData![i * 3 + 2].lastIndexOf('%')) : null;
+
+      //if (oldData![i * 3 + 2].contains('='))
+      if (rawData![i * 3 + 2].contains('=')) { // Current Mark Available
+        courses[i]["Course Average"] = rawData![i * 3 + 2]
+            .substring(rawData![i * 3 + 2].indexOf('=')+1,rawData![i * 3 + 2].lastIndexOf('%'));
+      } else if (oldData![i * 3 + 2].contains('=')) { // Old Mark Available
+        courses[i]["Course Average"] = oldData![i * 3 + 2]
+            .substring(oldData![i * 3 + 2].indexOf('=')+1,oldData![i * 3 + 2].lastIndexOf('%'));
+      } else if (rawData![i * 3 + 2].contains('MARK')) { // Term Mark Available
+        courses[i]["Course Average"] = rawData![i * 3 + 2]
+            .substring(rawData![i * 3 + 2].indexOf(':')+1,rawData![i * 3 + 2].indexOf('%'));
+      } else { // No Marks Available
+        courses[i]["Course Average"] = null;
+      }
+
       courses[i]["Subject ID"] = ((subjectIds[i * 3 + 2] ?? '').contains('=')) ? subjectIds[i * 3 + 2]!.substring(subjectIds[i * 3 + 2]!.indexOf('=')+1, subjectIds[i * 3 + 2]!.indexOf('&')): null;
 
       if (courses[i]["Subject ID"] != null) {

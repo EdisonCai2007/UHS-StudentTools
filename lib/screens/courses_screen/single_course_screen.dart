@@ -44,6 +44,7 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
   bool showAssignments = true;
   bool showTrends = false;
   bool editCourses = false;
+  int idGenerator = 0;
 
   @override
   void initState() {
@@ -79,7 +80,7 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
             final total = double.parse(tempData[0].substring(tempData[0].indexOf('/ ')+2, tempData[0].indexOf(' =')));
             final weight = double.tryParse(tempData[1].substring(tempData[1].indexOf('=')+1));
 
-            categoryData.add([score, total, weight ?? -1]);
+            categoryData.add([score, total, weight ?? 0]);
           } else {
             categoryData.add([]);
           }
@@ -88,9 +89,11 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
         // Fetch assignment marks
         final marks = element.skip(1).map((category) => category.text.trim().replaceAll('\t', '').split('\n'));
 
+        idGenerator++; // Creates Assignment ID
         courseData.add(
           Assignment(
             title: title,
+            id: idGenerator,
             categories: LinkedHashMap.fromIterables(categories.keys,categoryData),
             )
         );
@@ -109,7 +112,7 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
       double weightPercentage = 0;
       for (final category in assignment.categories.entries) {
         if (category.value.isNotEmpty) {
-          earnedPercentage += category.value[0] / category.value[1] * category.value[2];
+          earnedPercentage += category.value[0] / category.value[1] * ((category.value[2] > 0) ? category.value[2] : 1);
           weightPercentage += category.value[2];
 
           if (category.value[2] > 0) {
@@ -121,7 +124,7 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
       }
 
       setState(() {
-        assignmentAverages[assignment.title] = earnedPercentage / weightPercentage;
+        assignmentAverages[assignment.title] = earnedPercentage / ((weightPercentage > 0) ? weightPercentage : 1);
       });
     }
 
@@ -135,14 +138,17 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
     }
 
     setState(() {
-      courseAverage = (earnedPercentage / weightPercentage) * 100; 
+      courseAverage = (earnedPercentage / ((weightPercentage > 0) ? weightPercentage : 1)) * 100; 
     });
   }
 
-  removeAssignment(String title) {
+  removeAssignment(int id) {
+    setState(() {
+      tempCourseData.removeWhere((element) => element.id == id);
+    });
     categories.updateAll((key, value) => [0,0,0]);
     for (final assignment in tempCourseData) {
-      if (assignment.title != title) {
+      if (assignment.id != id) {
         for (final category in assignment.categories.entries) {
           if (category.value.isNotEmpty) {
             if (category.value[2] > 0) {
@@ -166,8 +172,27 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
 
     setState(() {
       courseAverage = (earnedPercentage / weightPercentage) * 100; 
-      tempCourseData.removeWhere((a) => a.title == title);
     });
+  }
+
+  addAssignment() {
+    List<List<double?>> categoryData = [];
+    for (int i = 0; i < categories.keys.length; i++) {
+      categoryData.add([0,100,0]);
+    }
+
+    idGenerator++; // Creates Assignment ID
+    setState(() {
+      tempCourseData.insert(0,
+        Assignment(
+          title: 'Untitled Assignment',
+          id: idGenerator,
+          categories: LinkedHashMap.fromIterables(categories.keys,categoryData),
+        )
+      );
+    });
+    
+    resetAverage();
   }
 
   @override
@@ -284,7 +309,7 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
                       child: SizedBox(
                         height: 40,
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: ElevatedButton(
                               style: Theme.of(context).elevatedButtonTheme.style,
                               onPressed: (showAssignments == true) ? null : () {
@@ -313,7 +338,7 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
                       child: SizedBox(
                         height: 40,
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: ElevatedButton(
                             style: Theme.of(context).elevatedButtonTheme.style,
                             onPressed: (showTrends == true) ? null : () {
@@ -345,7 +370,7 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
                 child: ElevatedButton(
                   style: Theme.of(context).elevatedButtonTheme.style,
                   onPressed: () {
-                    
+                    addAssignment();
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 25),
@@ -372,7 +397,7 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
               (showAssignments) ? Column(
                 children: <Widget>[
                   for (final assignment in tempCourseData)
-                    AssignmentOverview(assignment: assignment, assignmentAverages: assignmentAverages, editingMode: editCourses, removeAssignment: removeAssignment),
+                    AssignmentOverview(assignment: assignment, assignmentAverages: assignmentAverages, editingMode: editCourses, removeAssignment: removeAssignment, resetAverage: resetAverage,),
                 ],
               ) : const SizedBox.shrink(),
 
@@ -492,34 +517,30 @@ class AssignmentOverview extends StatefulWidget {
     required this.assignment,
     required this.assignmentAverages,
     required this.editingMode,
-    required this.removeAssignment
+    required this.removeAssignment,
+    required this.resetAverage,
   });
 
   final Assignment assignment;
   final Map<String, double> assignmentAverages;
   final bool editingMode;
   final Function removeAssignment;
-
-  bool editingThis = false;
+  final Function resetAverage;
 
   @override
   State<AssignmentOverview> createState() => _AssignmentOverviewState();
 }
 
 class _AssignmentOverviewState extends State<AssignmentOverview> {
+  bool editingThis = false;
   bool isSelected = false;
+  String markMode = 'percentage';
+  String name = '';
 
-  void changeName(String newName) {
-
-  }
-  void changeCategoryEarnedMark(String category, double newValue) {
-
-  }
-  void changeCategoryTotalMark(String category, double newValue) {
-
-  }
-  void changeCategoryWeight(String category, double newValue) {
-
+  @override
+  void initState() {
+    super.initState();
+    name = widget.assignment.title;
   }
 
   @override
@@ -554,10 +575,25 @@ class _AssignmentOverviewState extends State<AssignmentOverview> {
                   children: [
                     Expanded(
                       flex: 5,
-                      child: Text(
+                      child: (!editingThis) ? Text(
                           widget.assignment.title,
                           overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w800)
+                      ) : TextFormField(
+                          decoration: InputDecoration(
+                            isDense: true,
+                            hintText: 'Untitled Assignment',
+                            focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary)
+                              )
+                          ),
+                          initialValue: widget.assignment.title,
+                          style: GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w800),
+                          onChanged: (value) {
+                            setState(() {
+                              widget.assignment.title = (value.isNotEmpty) ? value : 'Untitled Assignment';
+                            });
+                          },
                       ),
                     ),
               
@@ -586,29 +622,36 @@ class _AssignmentOverviewState extends State<AssignmentOverview> {
                           Row(
                             children: [
                               // Edit Button
-                              IconButton(
-                                padding: EdgeInsets.zero,
-                                splashRadius: 20,
-                                onPressed: () {
-                                  setState(() {
-                                    widget.editingThis = !widget.editingThis;
-                                  });
-                                },
-                                icon: const Icon(Icons.edit_note)
+                              Material(
+                                color: Colors.transparent,
+                                child: IconButton(
+                                  padding: EdgeInsets.zero,
+                                  splashRadius: 20,
+                                  onPressed: () {
+                                    setState(() {
+                                      editingThis = !editingThis;
+                                    });
+                                  },
+                                  icon: const Icon(Icons.edit_note)
+                                ),
                               ),
                           
                               // Delete Button
-                              IconButton(
-                                padding: EdgeInsets.zero,
-                                splashRadius: 20,
-                                onPressed: () {
-                                  setState(() {
-                                    widget.removeAssignment(widget.assignment.title);
-                                  });
-                                },
-                                icon: Icon(
-                                  Icons.delete,
-                                  color: Theme.of(context).colorScheme.secondary)
+                              Material(
+                                color: Colors.transparent,
+                                child: IconButton(
+                                  padding: EdgeInsets.zero,
+                                  splashRadius: 20,
+                                  onPressed: () {
+                                    setState(() {
+                                      editingThis = false;
+                                      widget.removeAssignment(widget.assignment.id);
+                                    });
+                                  },
+                                  icon: Icon(
+                                    Icons.delete,
+                                    color: Theme.of(context).colorScheme.secondary)
+                                ),
                               ),
                             ],
                           ),
@@ -670,7 +713,7 @@ class _AssignmentOverviewState extends State<AssignmentOverview> {
                               child: Align(
                                 alignment: Alignment.centerRight,
                                 child: Text(
-                                  '${category.value[0]} / ${category.value[1]} = ${(category.value[0] / category.value[1] * 100).toStringAsFixed(1)}%',
+                                  '${category.value[0].toStringAsFixed(1)} / ${category.value[1].toStringAsFixed(1)} = ${(category.value[0] / category.value[1] * 100).toStringAsFixed(1)}%',
                                   style: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.w500),
                                 ),
                               ),
@@ -706,10 +749,8 @@ class _AssignmentOverviewState extends State<AssignmentOverview> {
                 //#=-=-=-=-=-=-=-=-=-=-=-=-=-=#
                 //#   Category Edit Sliders   #
                 //#=-=-=-=-=-=-=-=-=-=-=-=-=-=#
-                (widget.editingThis) ? Column(
+                (editingThis) ? Column(
                   children: <Widget>[
-                    const Padding(padding: EdgeInsets.only(top: 10)),
-
                     for (final category in widget.assignment.categories.entries)
                     (category.value.length <= 1) ? const SizedBox.shrink() :
                     Column(
@@ -718,53 +759,51 @@ class _AssignmentOverviewState extends State<AssignmentOverview> {
                         Row(
                           mainAxisSize: MainAxisSize.max,
                           children: [
-              
                             Expanded(
                               flex: 1,
                               child: Text(
-                                '${category.key.split(' ').map((l) => l[0]).join()} ${(category.value[2] > 0) ? '(Weight: ${category.value[2]}' : '(No Weight'})',
-                                style: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.w500),
+                                category.key,
+                                style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700),
                               ),
                             ),
-              
-                            Expanded(
-                              flex: 1,
-                              child: Align(
-                                alignment: Alignment.centerRight,
-                                child: Text(
-                                  '${category.value[0]} / ${category.value[1]} = ${(category.value[0] / category.value[1] * 100).toStringAsFixed(1)}%',
-                                  style: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.w500),
+
+                            // Fraction Button
+                            Material(
+                              color: Colors.transparent,
+                              child: IconButton(
+                                  padding: EdgeInsets.zero,
+                                  splashRadius: 20,
+                                  onPressed: () {
+                                    setState(() {
+                                      markMode = 'fraction';
+                                    });
+                                  },
+                                  icon: const Icon(Icons.tune,size: 15)
                                 ),
+                            ),
+                          
+                            // Percentage Button
+                            Material(
+                              color: Colors.transparent,
+                              child: IconButton(
+                                padding: EdgeInsets.zero,
+                                splashRadius: 20,
+                                onPressed: () {
+                                  setState(() {
+                                    markMode = 'percentage';
+                                  });
+                                },
+                                icon: const Icon(Icons.percent,size: 15)
                               ),
                             ),
                           ],
                         ),
-              
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: CategorySlider(
-                            changeCategoryEarnedMark: changeCategoryEarnedMark,
-                            changeCategoryTotalMark: changeCategoryTotalMark,
-                            changeCategoryWeight: changeCategoryWeight,
-                            init: category.value,
-                          )
-                          // child: LinearPercentIndicator(
-                          //   padding: EdgeInsets.zero,
-                          //   lineHeight: 8,
-                          //   backgroundColor: Theme.of(context).colorScheme.tertiary,
-                          //   percent: category.value[0] / category.value[1],
-                          //   linearGradient: LinearGradient(
-                          //     begin: Alignment.topCenter,
-                          //     end: Alignment.center,
-                          //     colors: <Color>[
-                          //       Theme.of(context).colorScheme.secondary,
-                          //       Theme.of(context).colorScheme.secondary,
-                          //     ],
-                          //   ),
-                          //   animation: true,
-                          //   curve: Curves.easeInOut,
-                          //   barRadius: const Radius.circular(15),
-                          // ),
+
+                        CategorySlider(
+                          markMode: markMode,
+                          resetAverage: widget.resetAverage,
+                          category: category.key,
+                          init: category.value,
                         ),
                       ],
                     ),
@@ -782,15 +821,15 @@ class _AssignmentOverviewState extends State<AssignmentOverview> {
 class CategorySlider extends StatefulWidget {
   const CategorySlider({
     super.key,
-    required this.changeCategoryEarnedMark,
-    required this.changeCategoryTotalMark,
-    required this.changeCategoryWeight,
+    required this.markMode,
+    required this.resetAverage,
+    required this.category,
     required this.init,
   });
 
-  final Function changeCategoryEarnedMark;
-  final Function changeCategoryTotalMark;
-  final Function changeCategoryWeight;
+  final String markMode;
+  final Function resetAverage;
+  final String category;
   final List<dynamic> init;
 
   
@@ -810,21 +849,240 @@ class _CategorySliderState extends State<CategorySlider> {
   
   @override
   Widget build(BuildContext context) {
-    return Slider(
-      value: values[0],
-      max: values[1],
-      onChanged: (value) {
-        setState(() {
-          values[0] = value;
-        });
-        print(values[0]);
-      }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 5),
+          child: Row(
+            children: (widget.markMode == 'fraction') ? <Widget>[
+              IntrinsicWidth(
+                child: TextFormField(
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    isDense: true,
+                    hintText: '0.0',
+                    contentPadding: EdgeInsets.zero,
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary)
+                    )
+                  ),
+                  controller: TextEditingController(text: values[0].toStringAsFixed(1)),
+                  
+                  style: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.w500),
+                  onFieldSubmitted: (value) {
+                    double mark = double.tryParse(value) ?? values[0];
+                    if (mark < 0) mark = 0;
+                    if (mark > 100) mark = 100;
+                    setState(() {
+                      (mark > values[1]) ? values[0] = values[1] : values[0] = mark;
+                    });
+                  },
+                ),
+              ),
+
+              Text(
+                ' / ',
+                style: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.w500),
+              ),
+
+              IntrinsicWidth(
+                child: TextFormField(
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    isDense: true,
+                    hintText: '0.0',
+                    contentPadding: EdgeInsets.zero,
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary)
+                    )
+                  ),
+                  controller: TextEditingController(text: values[1].toStringAsFixed(1)),
+                  style: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.w500),
+                  onFieldSubmitted: (value) {
+                    double mark = double.tryParse(value) ?? values[1];
+                    if (mark < 0) mark = 0;
+                    if (mark > 100) mark = 100;
+                    setState(() {
+                      values[1] = mark;
+                      if (values[0] > values[1]) {
+                        values[0] = mark;
+                      }
+                    });
+                  },
+                ),
+              ),
+
+              Text(
+                ' = ${(values[0] / values[1] * 100).toStringAsFixed(1)}%',
+                style: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.w500),
+              ),
+            ] : <Widget>[
+              IntrinsicWidth(
+                child: TextFormField(
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    isDense: true,
+                    hintText: '0.0',
+                    contentPadding: EdgeInsets.zero,
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary)
+                    )
+                  ),
+                  controller: TextEditingController(text: (values[0] / values[1] * 100).toStringAsFixed(1)),
+                  style: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.w500),
+                  onFieldSubmitted: (value) {
+                    double mark = double.tryParse(value) ?? (values[0] / values[1]) * 100;
+                    if (mark < 0) mark = 0;
+                    if (mark > 100) mark = 100;
+                    setState(() {
+                      values[0] = values[1] * (mark/100);
+                    });
+                  },
+                ),
+              ),
+
+              Text(
+                '%',
+                style: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),  
+        ),
+        (widget.markMode == 'fraction') ? Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5),
+          child: SliderTheme(
+            data: SliderThemeData(
+              thumbColor: Theme.of(context).colorScheme.secondary,
+              activeTrackColor: Theme.of(context).colorScheme.secondary,
+              inactiveTrackColor: Theme.of(context).colorScheme.tertiary,
+              overlayShape: SliderComponentShape.noOverlay,
+              thumbShape:const RoundSliderThumbShape(enabledThumbRadius: 7),
+            ),
+            child: Slider(
+              value: values[0],
+              max: values[1],
+              onChanged: (value) {
+                setState(() {
+                  values[0] = value;
+                  widget.resetAverage();
+                });
+              }
+            ),
+          ),
+        ) : const SizedBox.shrink(),
+        (widget.markMode == 'fraction') ? Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5),
+          child: SliderTheme(
+            data: SliderThemeData(
+              thumbColor: Theme.of(context).colorScheme.secondary,
+              activeTrackColor: Theme.of(context).colorScheme.secondary,
+              inactiveTrackColor: Theme.of(context).colorScheme.tertiary,
+              overlayShape: SliderComponentShape.noOverlay,
+              thumbShape:const RoundSliderThumbShape(enabledThumbRadius: 7),
+            ),
+            child: Slider(
+              value: values[1],
+              max: 100,
+              onChanged: (value) {
+                setState(() {
+                  values[1] = value;
+                  if (values[0] > values[1]) {
+                    values[0] = values[1];
+                  }
+                  widget.resetAverage();
+                });
+              }
+            ),
+          ),
+        ) : const SizedBox.shrink(),
+
+        (widget.markMode == 'percentage') ? Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5),
+          child: SliderTheme(
+            data: SliderThemeData(
+              thumbColor: Theme.of(context).colorScheme.secondary,
+              activeTrackColor: Theme.of(context).colorScheme.secondary,
+              inactiveTrackColor: Theme.of(context).colorScheme.tertiary,
+              overlayShape: SliderComponentShape.noOverlay,
+              thumbShape:const RoundSliderThumbShape(enabledThumbRadius: 7),
+            ),
+            child: Slider(
+              value: (values[0] / ((values[1] > 0) ? values[1] : 1)) * 100,
+              max: 100,
+              onChanged: (value) {
+                setState(() {
+                  if(values[1] == 0) values[1] = 100.0;
+                  values[0] = values[1] * (value / 100);
+                  widget.resetAverage();
+                });
+              }
+            ),
+          ),
+        ) : const SizedBox.shrink(),
+        Padding(
+          padding: const EdgeInsets.only(left: 5),
+          child: Row(
+            children: [
+              Text(
+                (values[2] > 0) ? 'Weight: ' : '(No Weight): ',
+                style: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.w500),
+              ),
+
+              IntrinsicWidth(
+                child: TextFormField(
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    isDense: true,
+                    hintText: '0.0',
+                    contentPadding: EdgeInsets.zero,
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary)
+                    )
+                  ),
+                  controller: TextEditingController(text: values[2].toStringAsFixed(1)),
+                  
+                  style: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.w500),
+                  onFieldSubmitted: (value) {
+                    double weight = double.tryParse(value) ?? values[2];
+                    if (weight < 0) weight = 0;
+                    if (weight > 100) weight = 100;
+                    setState(() {
+                      values[2] = weight;
+                    });
+                  },
+                ),
+              ),
+
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5),
+          child: SliderTheme(
+            data: SliderThemeData(
+              thumbColor: Theme.of(context).colorScheme.secondary,
+              activeTrackColor: Theme.of(context).colorScheme.secondary,
+              inactiveTrackColor: Theme.of(context).colorScheme.tertiary,
+              overlayShape: SliderComponentShape.noOverlay,
+              thumbShape:const RoundSliderThumbShape(enabledThumbRadius: 7),
+            ),
+            child: Slider(
+              value: values[2],
+              max: 100,
+              onChanged: (value) {
+                setState(() {
+                  values[2] = value;
+                  widget.resetAverage();
+                });
+              }
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
-
-
-
 
 // class AssignmentConfiguration extends StatefulWidget {
 //   final Assignment? assignment;
@@ -910,4 +1168,3 @@ class _CategorySliderState extends State<CategorySlider> {
 //     );
 //   }
 // }
-
