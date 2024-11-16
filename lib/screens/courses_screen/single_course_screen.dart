@@ -858,7 +858,6 @@ class _CategorySliderState extends State<CategorySlider> {
             children: (widget.markMode == 'fraction') ? <Widget>[
               IntrinsicWidth(
                 child: TextFormField(
-                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     isDense: true,
                     hintText: '0.0',
@@ -888,7 +887,6 @@ class _CategorySliderState extends State<CategorySlider> {
 
               IntrinsicWidth(
                 child: TextFormField(
-                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     isDense: true,
                     hintText: '0.0',
@@ -920,7 +918,6 @@ class _CategorySliderState extends State<CategorySlider> {
             ] : <Widget>[
               IntrinsicWidth(
                 child: TextFormField(
-                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     isDense: true,
                     hintText: '0.0',
@@ -1031,7 +1028,6 @@ class _CategorySliderState extends State<CategorySlider> {
 
               IntrinsicWidth(
                 child: TextFormField(
-                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     isDense: true,
                     hintText: '0.0',

@@ -52,13 +52,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         aspectRatio: 1 / 1,
                         child: Padding(
                           padding: const EdgeInsets.only(
-                              top: 90, left: 60, right: 60, bottom: 20),
+                              top: 90, left: 30, right: 30, bottom: 0),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
                             child: SizedBox.fromSize(
-                              size: const Size.fromRadius(500), // Image radius
+                              size: const Size.fromRadius(900), // Image radius
                               child: const Image(
-                                image: AssetImage('assets/test_logo.png'),
+                                image: AssetImage('assets/logo.png'),
                                 fit: BoxFit.cover,
                               ),
                             ),
