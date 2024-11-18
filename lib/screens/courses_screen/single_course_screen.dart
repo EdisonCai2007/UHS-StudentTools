@@ -703,7 +703,7 @@ class _AssignmentOverviewState extends State<AssignmentOverview> {
                             Expanded(
                               flex: 1,
                               child: Text(
-                                '${category.key.split(' ').map((l) => l[0]).join()} ${(category.value[2] > 0) ? '(Weight: ${category.value[2]}' : '(No Weight'})',
+                                '${category.key.split(' ').map((l) => l[0]).join()} ${(category.value[2] > 0) ? '(Weight: ${category.value[2].toStringAsFixed(1)}' : '(No Weight'})',
                                 style: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.w500),
                               ),
                             ),

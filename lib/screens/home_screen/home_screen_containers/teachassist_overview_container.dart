@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -25,6 +26,10 @@ class _TeachAssistOverviewContainerState extends State<TeachAssistOverviewContai
   @override
   void initState() {
     super.initState();
+
+    Timer.periodic(const Duration(seconds: 5), (Timer t) {
+      if (mounted) setState(() {});
+    });
 
     double numCourses = 0.0;
     for (final course in TeachAssistModel.courses) {
