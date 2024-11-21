@@ -749,7 +749,7 @@ class _AssignmentOverviewState extends State<AssignmentOverview> {
                 //#=-=-=-=-=-=-=-=-=-=-=-=-=-=#
                 //#   Category Edit Sliders   #
                 //#=-=-=-=-=-=-=-=-=-=-=-=-=-=#
-                (editingThis) ? Column(
+                (editingThis && widget.editingMode) ? Column(
                   children: <Widget>[
                     for (final category in widget.assignment.categories.entries)
                     (category.value.length <= 1) ? const SizedBox.shrink() :

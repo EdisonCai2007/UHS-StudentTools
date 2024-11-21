@@ -274,7 +274,7 @@ class TeachAssistModel {
       if (rawData![i * 3 + 2].contains('=')) { // Current Mark Available
         courses[i]["Course Average"] = rawData![i * 3 + 2]
             .substring(rawData![i * 3 + 2].indexOf('=')+1,rawData![i * 3 + 2].lastIndexOf('%'));
-      } else if (oldData![i * 3 + 2].contains('=')) { // Old Mark Available
+      } else if (oldData!= null && oldData![i * 3 + 2].contains('=')) { // Old Mark Available
         courses[i]["Course Average"] = oldData![i * 3 + 2]
             .substring(oldData![i * 3 + 2].indexOf('=')+1,oldData![i * 3 + 2].lastIndexOf('%'));
       } else if (rawData![i * 3 + 2].contains('MARK')) { // Term Mark Available

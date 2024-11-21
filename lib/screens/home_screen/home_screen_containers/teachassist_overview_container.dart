@@ -27,7 +27,7 @@ class _TeachAssistOverviewContainerState extends State<TeachAssistOverviewContai
   void initState() {
     super.initState();
 
-    Timer.periodic(const Duration(seconds: 5), (Timer t) {
+    Timer.periodic(const Duration(seconds: 1), (Timer t) {
       if (mounted) setState(() {});
     });
 

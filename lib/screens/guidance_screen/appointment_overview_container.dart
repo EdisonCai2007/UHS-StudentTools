@@ -93,15 +93,16 @@ class _AppointmentOverviewContainerState extends State<AppointmentOverviewContai
                     child: Text(appointmentList[0]['Date']!,
                       style: GoogleFonts.lato(fontSize: 20, fontWeight: FontWeight.w500)),
                   ),
-              
-                  Padding(
-                    padding: const EdgeInsets.only(top:8),
-                    child: FittedBox (
-                      fit: BoxFit.scaleDown,
-                      child: Text('See More',
-                        style: GoogleFonts.lato(fontSize: 14, fontWeight: FontWeight.w500)),
-                    ),
-                  ),
+
+                  const SizedBox(height: 20)
+                  // Padding(
+                  //   padding: const EdgeInsets.only(top:8),
+                  //   child: FittedBox (
+                  //     fit: BoxFit.scaleDown,
+                  //     child: Text('See More',
+                  //       style: GoogleFonts.lato(fontSize: 14, fontWeight: FontWeight.w500)),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
