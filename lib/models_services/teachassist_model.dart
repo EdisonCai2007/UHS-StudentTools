@@ -44,7 +44,11 @@ Future<List<String?>> authorizeUser(String username, String password) async {
       throw ['Failed to Authorize User'];
     }
   } catch (e) {
-    return ['Invalid Login'];
+    if (e == TimeoutException) {
+      return ['Error 1: Couldn\'t Connect to the Internet'];
+    } else {
+      return ['Error $e: Couldn\'t Connect to the Internet'];
+    }
   }
 }
 

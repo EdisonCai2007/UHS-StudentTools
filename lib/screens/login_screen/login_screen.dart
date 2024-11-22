@@ -148,7 +148,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                     showDialog(context: context, builder: (context) => const TeachAssistErrorAlert());
                                   } else if (response[0] == 'Invalid Login') {
                                     if (!context.mounted) return;
-                                    showDialog(context: context, builder: (context) => const InvalidLoginAlert());
+                                    showDialog(context: context, builder: (context) => const InvalidLoginAlert(message:'The username and/or password are invalid. Please try again.'));
+                                  } else if (response[0]!.contains('Error')) {
+                                    showDialog(context: context, builder: (context) =>  InvalidLoginAlert(message: response[0] ?? ''));
                                   } else {
                                     sharedPrefs.username = username;
                                     sharedPrefs.password = password;
@@ -283,7 +285,10 @@ class _PasswordFieldState extends State<PasswordField> {
 }
 
 class InvalidLoginAlert extends StatelessWidget {
+  final String message;
+
   const InvalidLoginAlert({
+    required this.message,
     super.key,
   });
 
@@ -291,7 +296,7 @@ class InvalidLoginAlert extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('INVALID LOGIN'),
-      content: const Text('The username and/or password are invalid. Please try again.'),
+      content: Text(message),
       actions: [
         TextButton(
           child: Text('RETRY',
