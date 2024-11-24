@@ -28,20 +28,21 @@ Future<List<String?>> authorizeUser(String username, String password) async {
           'password': password,
           'submit': 'Login',
         }
-    ).timeout(const Duration(milliseconds: 3000));
+    ).timeout(const Duration(seconds: 30));
 
-     //print("statusCode === ${res.statusCode}");
-     //print("headers === ${res.headers}");
-     //print("body === ${res.body}");
-    if (res.statusCode == 302) {
+    //print("statusCode === ${res.statusCode}");
+    print("headers === ${res.headers}");
+    //print("body === ${res.body}");
+    final headers = res.headersSplitValues['set-cookie'];
+    if (res.statusCode == 302 && headers!.length > 5) {
       var cookies = [
-        res.headersSplitValues['set-cookie']?[5].substring(14, res.headersSplitValues['set-cookie']?[5].indexOf(';',14)),
+        headers![5].substring(14, res.headersSplitValues['set-cookie']?[5].indexOf(';',14)),
         res.headersSplitValues['set-cookie']?[6].substring(11, 17)
       ];
       //print("cookies === $cookies");
       return cookies;
     } else {
-      throw ['Failed to Authorize User'];
+      return ['Failed to Authorize User'];
     }
   } catch (e) {
     if (e == TimeoutException) {
