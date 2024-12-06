@@ -152,6 +152,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                   } else if (response[0]!.contains('Error')) {
                                     showDialog(context: context, builder: (context) =>  InvalidLoginAlert(message: response[0] ?? ''));
                                   } else {
+                                    if (username != sharedPrefs.username) {
+                                      sharedPrefs.studentData = '';
+                                      sharedPrefs.courseData = '';
+                                    }
                                     sharedPrefs.username = username;
                                     sharedPrefs.password = password;
 

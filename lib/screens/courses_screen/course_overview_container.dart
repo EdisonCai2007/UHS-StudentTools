@@ -34,7 +34,7 @@ class _CourseOverviewContainerState extends State<CourseOverviewContainer> {
           final fetchedData = dom.Document.html(await fetchCourse(sharedPrefs.username, sharedPrefs.password, id));
 
           // ignore: use_build_context_synchronously
-          PageNavigator.navigatePage(context, SingleCourseScreen(courseCode: widget.course['Code'], fetchedData: fetchedData));
+          PageNavigator.navigatePage(context, SingleCourseScreen(courseCode: widget.course['Code'], courseID: id, fetchedData: fetchedData));
         }
       },
       child: Container(

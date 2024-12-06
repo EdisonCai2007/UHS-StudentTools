@@ -2,7 +2,7 @@
 
 import 'dart:async';
 import 'dart:convert';
-import 'dart:math';
+import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 import 'package:html/dom.dart' as dom;
@@ -14,6 +14,8 @@ const String LOGINURL = 'https://ta.yrdsb.ca/yrdsb/index.php';
 const String DASHBOARDURL = 'https://ta.yrdsb.ca/live/students/listReports.php';
 const String COURSEURL = 'https://ta.yrdsb.ca/live/students/viewReport.php';
 const String GUIDANCEDATEURL = 'https://ta.yrdsb.ca/live/students/bookAppointment.php';
+
+bool coursesLoaded = false;
 
 Future<List<String?>> authorizeUser(String username, String password) async {
   try {
@@ -31,12 +33,12 @@ Future<List<String?>> authorizeUser(String username, String password) async {
     ).timeout(const Duration(seconds: 30));
 
     //print("statusCode === ${res.statusCode}");
-    print("headers === ${res.headers}");
+    // print("headers === ${res.headers}");
     //print("body === ${res.body}");
     final headers = res.headersSplitValues['set-cookie'];
     if (res.statusCode == 302 && headers!.length > 5) {
       var cookies = [
-        headers![5].substring(14, res.headersSplitValues['set-cookie']?[5].indexOf(';',14)),
+        headers[5].substring(14, res.headersSplitValues['set-cookie']?[5].indexOf(';',14)),
         res.headersSplitValues['set-cookie']?[6].substring(11, 17)
       ];
       //print("cookies === $cookies");
@@ -45,11 +47,7 @@ Future<List<String?>> authorizeUser(String username, String password) async {
       return ['Failed to Authorize User'];
     }
   } catch (e) {
-    if (e == TimeoutException) {
-      return ['Error 1: Couldn\'t Connect to the Internet'];
-    } else {
-      return ['Error $e: Couldn\'t Connect to the Internet'];
-    }
+      return ['Error: Couldn\'t Connect to the Internet'];
   }
 }
 
@@ -110,7 +108,7 @@ Future<String> fetchCourse(username,password, subjectId) async {
 }
 
 Future<dom.Document> fetchGuidanceDate(username, password, date) async {
-  var cookies = await authorizeUser(username, password);
+  final cookies =  await authorizeUser(username, password);
   try {
     http.Response response = await http.get(
       Uri.parse(
@@ -260,33 +258,55 @@ class TeachAssistModel {
 
   static Future loadCourses() async {
     Map<String, String> jsonData = {};
+    coursesLoaded = false;
 
     courses = [];
     for (int i = 0; i < ((rawData!.length - 1) / 3).floor(); i++) {
       courses.add(<String, dynamic>{});
-      courses[i]['Code'] = rawData![i * 3]
+
+      if (oldData == null || rawData![i * 3].substring(0, rawData![i * 3].indexOf(':')-1) == oldData![i * 3].substring(0, oldData![i * 3].indexOf(':')-1)) {
+        courses[i]['Code'] = rawData![i * 3]
           .substring(0, rawData![i * 3].indexOf(':')-1);
-      courses[i]["Name"] = rawData![i * 3]
+          courses[i]["Name"] = rawData![i * 3]
           .substring(rawData![i * 3].indexOf(':')+2, rawData![i * 3].indexOf('Block:'));
-      courses[i]["Period"] = rawData![i * 3]
+        courses[i]["Period"] = rawData![i * 3]
           .substring(rawData![i * 3].indexOf('Block:') + 7,rawData![i * 3].indexOf('  - '))
           .trim().replaceAll('P', '').split(',');
-      courses[i]["Room"] = rawData![i * 3]
+        courses[i]["Room"] = rawData![i * 3]
           .substring(rawData![i * 3].indexOf('  - ')+8);
-      courses[i]["Semester"] = rawData![i * 3 + 1].substring(6,7) == '9' ? 1 : 2;
+        courses[i]["Semester"] = rawData![i * 3 + 1].substring(6,7) == '9' ? 1 : 2;
 
-      //if (oldData![i * 3 + 2].contains('='))
-      if (rawData![i * 3 + 2].contains('=')) { // Current Mark Available
-        courses[i]["Course Average"] = rawData![i * 3 + 2]
-            .substring(rawData![i * 3 + 2].indexOf('=')+1,rawData![i * 3 + 2].lastIndexOf('%'));
-      } else if (oldData!= null && oldData![i * 3 + 2].contains('=')) { // Old Mark Available
-        courses[i]["Course Average"] = oldData![i * 3 + 2]
-            .substring(oldData![i * 3 + 2].indexOf('=')+1,oldData![i * 3 + 2].lastIndexOf('%'));
-      } else if (rawData![i * 3 + 2].contains('MARK')) { // Term Mark Available
-        courses[i]["Course Average"] = rawData![i * 3 + 2]
-            .substring(rawData![i * 3 + 2].indexOf(':')+1,rawData![i * 3 + 2].indexOf('%'));
-      } else { // No Marks Available
-        courses[i]["Course Average"] = null;
+        if (rawData![i * 3 + 2].contains('=')) { // Current Mark Available
+          courses[i]["Course Average"] = rawData![i * 3 + 2]
+              .substring(rawData![i * 3 + 2].indexOf('=')+1,rawData![i * 3 + 2].lastIndexOf('%'));
+        } else if (oldData!= null && oldData![i * 3 + 2].contains('=')) { // Old Mark Available
+          courses[i]["Course Average"] = oldData![i * 3 + 2]
+              .substring(oldData![i * 3 + 2].indexOf('=')+1,oldData![i * 3 + 2].lastIndexOf('%'));
+        } else if (rawData![i * 3 + 2].contains('MARK')) { // Term Mark Available
+          courses[i]["Course Average"] = rawData![i * 3 + 2]
+              .substring(rawData![i * 3 + 2].indexOf(':')+1,rawData![i * 3 + 2].indexOf('%'));
+        } else { // No Marks Available
+          courses[i]["Course Average"] = null;
+        }
+      } else {
+        courses[i]['Code'] = oldData![i * 3]
+          .substring(0, oldData![i * 3].indexOf(':')-1);
+          courses[i]["Name"] = oldData![i * 3]
+          .substring(oldData![i * 3].indexOf(':')+2, oldData![i * 3].indexOf('Block:'));
+        courses[i]["Period"] = oldData![i * 3]
+          .substring(oldData![i * 3].indexOf('Block:') + 7,oldData![i * 3].indexOf('  - '))
+          .trim().replaceAll('P', '').split(',');
+        courses[i]["Room"] = oldData![i * 3]
+          .substring(oldData![i * 3].indexOf('  - ')+8);
+        courses[i]["Semester"] = oldData![i * 3 + 1].substring(6,7) == '9' ? 1 : 2;
+      
+      if (oldData!= null && oldData![i * 3 + 2].contains('=')) { // Old Mark Available
+          courses[i]["Course Average"] = oldData![i * 3 + 2]
+              .substring(oldData![i * 3 + 2].indexOf('=')+1,oldData![i * 3 + 2].lastIndexOf('%'));
+        } else { // No Marks Available
+          courses[i]["Course Average"] = null;
+        }
+        
       }
 
       courses[i]["Subject ID"] = ((subjectIds[i * 3 + 2] ?? '').contains('=')) ? subjectIds[i * 3 + 2]!.substring(subjectIds[i * 3 + 2]!.indexOf('=')+1, subjectIds[i * 3 + 2]!.indexOf('&')): null;
@@ -297,6 +317,7 @@ class TeachAssistModel {
     }
 
     sharedPrefs.courseData = json.encode(jsonData);
+    coursesLoaded = true;
   }
 
   static Future clearCourses() async {

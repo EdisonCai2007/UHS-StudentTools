@@ -65,7 +65,17 @@ class _TeachAssistOverviewContainerState extends State<TeachAssistOverviewContai
         height: 300,
         margin: const EdgeInsets.all(10),
         padding: const EdgeInsets.only(top: 30),
-        child: (TeachAssistModel.courses.isEmpty) ? NoAccountDialog() : ImageFiltered(
+        child: (TeachAssistModel.courses.isEmpty) ? NoAccountDialog() : 
+        (!coursesLoaded) ? const Center(
+          child: AspectRatio(
+            aspectRatio: 1 / 1,
+            child: Padding(
+              padding: EdgeInsets.all(50),
+              child: CircularProgressIndicator(),
+            ),
+          ),
+        )  
+        : ImageFiltered(
           imageFilter: ImageFilter.blur(
             sigmaX: (sharedPrefs.blurCourseOverview) ? 10 : 0,
             sigmaY: (sharedPrefs.blurCourseOverview) ? 10 : 0,

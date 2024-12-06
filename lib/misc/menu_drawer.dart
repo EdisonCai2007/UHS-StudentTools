@@ -114,8 +114,7 @@ class MenuDrawer extends Drawer {
                       foregroundColor: Theme.of(context).colorScheme.onSurface,
                     ),
                     onPressed: () {
-                      sharedPrefs.username = '';
-                      sharedPrefs.password = '';
+                      sharedPrefs.studentData = '';
                       TeachAssistModel.clearCourses();
                       PageNavigator.navigatePage(context, const LoginScreen());
                     },
