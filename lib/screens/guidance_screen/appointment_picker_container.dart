@@ -96,7 +96,10 @@ class _AppointmentPickerContainerState extends State<AppointmentPickerContainer>
                 ),
               ),
               onTap: selectDate,
-            ) : Center(child: UserOfflineDialog()),
+            ) : FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Center(child: UserOfflineDialog())
+            ),
 
             searchController.text != ''
                 ? dateSchedule.isEmpty
