@@ -1,7 +1,5 @@
-# WolfPackApp
 <h1 align="center"> Wolfpackapp </h1> <br>
 
-Student Developed Mobile App for Student Life at UHS
 <p align="center">
   <a>
     <img src="https://github.com/EdisonCai2007/UHS-StudentTools/blob/master/assets/logo.png" height="300" alt="Wolfpackapp Logo"/>
