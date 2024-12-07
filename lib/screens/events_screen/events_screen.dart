@@ -282,7 +282,7 @@ class _EventsScreenState extends State<EventsScreen> {
                                           ? Text('Tomorrow', style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w500, color: Colors.redAccent))
                                           : (DateTime.parse(_events[index].startDate).difference(DateTime.now()).inHours / 24).ceil() == 0
                                           ? Text('Today', style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w500, color: Colors.redAccent))
-                                          : Text('The Past', style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w500, color: Colors.redAccent))
+                                          : Text('Ends in ${(DateTime.parse(_events[index].endDate).difference(DateTime.now()).inHours / 24).ceil()} Days', style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w500, color: Colors.redAccent))
                                     ),
                                   ),
                                 ],

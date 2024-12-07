@@ -43,7 +43,7 @@ app.*.map.json
 /android/app/release
 
 # account_model
-account_model
+/lib/models_services/account_model.dart
 
 # .env
 .env
