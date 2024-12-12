@@ -47,6 +47,7 @@ Future<List<String?>> authorizeUser(String username, String password) async {
       return ['Failed to Authorize User'];
     }
   } catch (e) {
+      print(e);
       return ['Error: Couldn\'t Connect to the Internet'];
   }
 }
@@ -96,6 +97,9 @@ Future<String> fetchCourse(username,password, subjectId) async {
       if (response.statusCode == 200) {
         return response.body;
       } else {
+        if (json.decode(sharedPrefs.courseData).containsKey(subjectId.toString())) {
+          return json.decode(sharedPrefs.courseData)[subjectId.toString()];
+        }
         throw Exception('Failed to load TeachAssist Marks');
       }
     } catch (e) {
@@ -108,7 +112,8 @@ Future<String> fetchCourse(username,password, subjectId) async {
 }
 
 Future<dom.Document> fetchGuidanceDate(username, password, date) async {
-  final cookies =  await authorizeUser(username, password);
+  final cookies = await authorizeUser(username, password);
+  
   try {
     http.Response response = await http.get(
       Uri.parse(
@@ -237,9 +242,11 @@ class TeachAssistModel {
   static List<String>? rawData;
   static List<String>? oldData;
   static List<String?> subjectIds = [];
+  static List<String?> oldSubjectIds = [];
 
   Future init() async {
     final fetchedData = await fetchMarks(sharedPrefs.username, sharedPrefs.password);
+    
     rawData = fetchedData.querySelectorAll('body > div > div > div > table > tbody > tr > td')
         .map((element) => element.text.trim().replaceAll(RegExp('[\t\n]'), ''))
         .toList();
@@ -249,6 +256,10 @@ class TeachAssistModel {
         .toList() : null;
 
     subjectIds = fetchedData.querySelectorAll('body > div > div > div > table > tbody > tr > td')
+        .map((element) => element.children.isNotEmpty ? element.children[element.children.length-1].attributes['href'] : null)
+        .toList();
+        
+    oldSubjectIds = dom.Document.html(sharedPrefs.studentData).querySelectorAll('body > div > div > div > table > tbody > tr > td')
         .map((element) => element.children.isNotEmpty ? element.children[element.children.length-1].attributes['href'] : null)
         .toList();
 
@@ -278,13 +289,13 @@ class TeachAssistModel {
 
         if (rawData![i * 3 + 2].contains('=')) { // Current Mark Available
           courses[i]["Course Average"] = rawData![i * 3 + 2]
-              .substring(rawData![i * 3 + 2].indexOf('=')+1,rawData![i * 3 + 2].lastIndexOf('%'));
+              .substring(rawData![i * 3 + 2].indexOf('=')+2,rawData![i * 3 + 2].lastIndexOf('%'));
         } else if (oldData!= null && oldData![i * 3 + 2].contains('=')) { // Old Mark Available
-          courses[i]["Course Average"] = oldData![i * 3 + 2]
-              .substring(oldData![i * 3 + 2].indexOf('=')+1,oldData![i * 3 + 2].lastIndexOf('%'));
+          courses[i]["Course Average"] = '0${oldData![i * 3 + 2]
+              .substring(oldData![i * 3 + 2].indexOf('=')+2,oldData![i * 3 + 2].lastIndexOf('%'))}';
         } else if (rawData![i * 3 + 2].contains('MARK')) { // Term Mark Available
-          courses[i]["Course Average"] = rawData![i * 3 + 2]
-              .substring(rawData![i * 3 + 2].indexOf(':')+1,rawData![i * 3 + 2].indexOf('%'));
+          courses[i]["Course Average"] = '0${rawData![i * 3 + 2]
+              .substring(rawData![i * 3 + 2].indexOf(':')+2,rawData![i * 3 + 2].indexOf('%'))}';
         } else { // No Marks Available
           courses[i]["Course Average"] = null;
         }
@@ -300,16 +311,17 @@ class TeachAssistModel {
           .substring(oldData![i * 3].indexOf('  - ')+8);
         courses[i]["Semester"] = oldData![i * 3 + 1].substring(6,7) == '9' ? 1 : 2;
       
-      if (oldData!= null && oldData![i * 3 + 2].contains('=')) { // Old Mark Available
-          courses[i]["Course Average"] = oldData![i * 3 + 2]
-              .substring(oldData![i * 3 + 2].indexOf('=')+1,oldData![i * 3 + 2].lastIndexOf('%'));
+        if (oldData!= null && oldData![i * 3 + 2].contains('=')) { // Old Mark Available
+          courses[i]["Course Average"] = '0${oldData![i * 3 + 2]
+              .substring(oldData![i * 3 + 2].indexOf('=')+2,oldData![i * 3 + 2].lastIndexOf('%'))}';
         } else { // No Marks Available
           courses[i]["Course Average"] = null;
         }
         
       }
 
-      courses[i]["Subject ID"] = ((subjectIds[i * 3 + 2] ?? '').contains('=')) ? subjectIds[i * 3 + 2]!.substring(subjectIds[i * 3 + 2]!.indexOf('=')+1, subjectIds[i * 3 + 2]!.indexOf('&')): null;
+      courses[i]["Subject ID"] = ((subjectIds[i * 3 + 2] ?? '').contains('=')) ? subjectIds[i * 3 + 2]!.substring(subjectIds[i * 3 + 2]!.indexOf('=')+1, subjectIds[i * 3 + 2]!.indexOf('&')) :
+      (oldSubjectIds.isNotEmpty && (oldSubjectIds[i * 3 + 2] ?? '').contains('=')) ? oldSubjectIds[i * 3 + 2]!.substring(oldSubjectIds[i * 3 + 2]!.indexOf('=')+1, oldSubjectIds[i * 3 + 2]!.indexOf('&')) : null;
 
       if (courses[i]["Subject ID"] != null) {
         jsonData[courses[i]["Subject ID"]] = await fetchCourse(sharedPrefs.username, sharedPrefs.password, courses[i]["Subject ID"]);

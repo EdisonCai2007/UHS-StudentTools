@@ -126,8 +126,8 @@ class _CourseOverviewContainerState extends State<CourseOverviewContainer> {
                         backgroundColor: Theme.of(context).colorScheme.tertiary,
                         percent: double.parse(widget.course['Course Average']) / 100,
                         center: Text('${double.parse(widget.course['Course Average']).toStringAsFixed(1)}%',
-                            style: GoogleFonts.lato(
-                                fontSize: 24, fontWeight: FontWeight.w600)),
+                            style: GoogleFonts.roboto(
+                                fontSize: 20, fontWeight: FontWeight.w600)),
                         linearGradient: LinearGradient(
                             begin: Alignment.topRight,
                             end: Alignment.center,
@@ -139,6 +139,24 @@ class _CourseOverviewContainerState extends State<CourseOverviewContainer> {
                         curve: Curves.easeInOut,
                         rotateLinearGradient: true,
                         circularStrokeCap: CircularStrokeCap.round),
+                  ),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Tooltip(
+                      message: "Mark may not\nbe up to date",
+                      textAlign: TextAlign.center,
+                      textStyle: GoogleFonts.roboto(
+                        fontSize: 14, fontWeight: FontWeight.w600),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.secondary.withOpacity(0.8),
+                      ),
+                      triggerMode: TooltipTriggerMode.tap,
+                      child: (widget.course['Course Average'][0] == '0') ?
+                      Icon(
+                        Icons.error,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ) : null,
+                    ),
                   ),
                 ],
               ) :

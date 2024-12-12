@@ -36,7 +36,7 @@ class _AppointmentOverviewContainerState extends State<AppointmentOverviewContai
             child: FittedBox (
               fit: BoxFit.scaleDown,
               child: Text('Appointments',
-                  style: GoogleFonts.lato(fontSize: 50, fontWeight: FontWeight.w900)),
+                  style: GoogleFonts.roboto(fontSize: 50, fontWeight: FontWeight.w900)),
             ),
           ),
 
@@ -53,7 +53,7 @@ class _AppointmentOverviewContainerState extends State<AppointmentOverviewContai
       return FittedBox (
         fit: BoxFit.scaleDown,
         child: Text('Loading Appointments...',
-          style: GoogleFonts.lato(fontSize: 20, fontWeight: FontWeight.w500)),
+          style: GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w500)),
       );
     } else if (appointmentList.isNotEmpty) {
       return Container(
@@ -73,7 +73,7 @@ class _AppointmentOverviewContainerState extends State<AppointmentOverviewContai
                 child: FittedBox (
                   fit: BoxFit.scaleDown,
                   child: Text(appointmentList[0]['Name']!,
-                    style: GoogleFonts.lato(fontSize: 20, fontWeight: FontWeight.w500)),
+                    style: GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w500)),
                 ),
               ),
             ),
@@ -91,7 +91,7 @@ class _AppointmentOverviewContainerState extends State<AppointmentOverviewContai
                   FittedBox (
                     fit: BoxFit.scaleDown,
                     child: Text(appointmentList[0]['Date']!,
-                      style: GoogleFonts.lato(fontSize: 20, fontWeight: FontWeight.w500)),
+                      style: GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w500)),
                   ),
 
                   const SizedBox(height: 20)
@@ -100,7 +100,7 @@ class _AppointmentOverviewContainerState extends State<AppointmentOverviewContai
                   //   child: FittedBox (
                   //     fit: BoxFit.scaleDown,
                   //     child: Text('See More',
-                  //       style: GoogleFonts.lato(fontSize: 14, fontWeight: FontWeight.w500)),
+                  //       style: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.w500)),
                   //   ),
                   // ),
                 ],
@@ -113,7 +113,7 @@ class _AppointmentOverviewContainerState extends State<AppointmentOverviewContai
       return FittedBox (
         fit: BoxFit.scaleDown,
         child: Text('You have no appointments this month',
-          style: GoogleFonts.lato(fontSize: 20, fontWeight: FontWeight.w500)),
+          style: GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w500)),
       );
     }
   }

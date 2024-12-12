@@ -29,25 +29,29 @@ class _CoursesScreenState extends State<CoursesScreen> {
     super.initState();
 
     int numCourses = 0;
+    int prevPeriod = 0;
     for (final course in TeachAssistModel.courses) {
       double prevAverage = average;
+      int period = int.parse(course['Period'][0]);
 
-      if (course['Semester'] == 1) {
+      if (period >= prevPeriod) {
         average += double.parse(course['Course Average'] ?? '-1');
-
         if (average >= prevAverage) {
           numCourses++;
         } else {
           average++;
         }
+      } else {
+        break;
       }
+      prevPeriod = period;
     }
     average /= numCourses;
   }
 
   Future<void> refreshPage() async {
     setState(() {
-      
+      TeachAssistModel().init();
     });
   }
 
@@ -64,7 +68,7 @@ class _CoursesScreenState extends State<CoursesScreen> {
       ####################
       */
         appBar: AppBar(
-          title: Text('Courses', style: GoogleFonts.lato(fontSize: 20)),
+          title: Text('Courses', style: GoogleFonts.roboto(fontSize: 20)),
           foregroundColor: Theme.of(context).colorScheme.onSurface,
           centerTitle: true,
           shape: const Border(
@@ -146,8 +150,8 @@ class _CoursesScreenState extends State<CoursesScreen> {
                               backgroundColor: Theme.of(context).colorScheme.tertiary,
                               percent: (!average.isNaN ? average : 0) / 100,
                               center: Text('${average.toStringAsFixed(1)}%',
-                                  style: GoogleFonts.lato(
-                                      fontSize: 30, fontWeight: FontWeight.w800)),
+                                  style: GoogleFonts.roboto(
+                                      fontSize: 30, fontWeight: FontWeight.w600)),
                               linearGradient: LinearGradient(
                                   begin: Alignment.topRight,
                                   end: Alignment.center,

@@ -44,7 +44,7 @@ class _ContactTeachersScreenState extends State<ContactTeachersScreen> {
       ####################
       */
         appBar: AppBar(
-          title: Text('Teachers', style: GoogleFonts.lato(fontSize: 20)),
+          title: Text('Teachers', style: GoogleFonts.roboto(fontSize: 20)),
           foregroundColor: Theme.of(context).colorScheme.onSurface,
           centerTitle: true,
           shape: const Border(
@@ -107,7 +107,7 @@ class _ContactTeachersScreenState extends State<ContactTeachersScreen> {
                                   Expanded(
                                     flex: 3,
                                     child: Text("${teachers[index]['First Name']} ${teachers[index]['Last Name']}",
-                                        style: GoogleFonts.lato(
+                                        style: GoogleFonts.roboto(
                                             fontSize: 20, fontWeight: FontWeight.w600)
                                     ),
                                   ),

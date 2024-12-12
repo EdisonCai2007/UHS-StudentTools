@@ -93,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               alignment: Alignment.topRight,
                               child: TextButton(
                                 child: Text('Sign In as Guest',
-                                  style: GoogleFonts.lato(
+                                  style: GoogleFonts.roboto(
                                     color: Theme.of(context).colorScheme.secondary,
                                     fontSize: 14, fontWeight: FontWeight.w600,
                                     decoration: TextDecoration.underline,
@@ -131,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               child: FittedBox(
                                 fit: BoxFit.fitHeight,
                                 child: Text('Sign In',
-                                    style: GoogleFonts.lato(
+                                    style: GoogleFonts.roboto(
                                         color: Theme.of(context).colorScheme.primary,
                                         fontSize: 20, fontWeight: FontWeight.w600)),
                               ),
@@ -304,7 +304,7 @@ class InvalidLoginAlert extends StatelessWidget {
       actions: [
         TextButton(
           child: Text('RETRY',
-            style: GoogleFonts.lato(
+            style: GoogleFonts.roboto(
             fontSize: 16, fontWeight: FontWeight.w900,
             color: Theme.of(context).colorScheme.secondary)
           ),
@@ -327,7 +327,7 @@ class TeachAssistErrorAlert extends StatelessWidget {
       actions: [
         TextButton(
           child: Text('RETRY',
-            style: GoogleFonts.lato(
+            style: GoogleFonts.roboto(
             fontSize: 16, fontWeight: FontWeight.w900,
             color: Theme.of(context).colorScheme.secondary)
           ),
@@ -350,7 +350,7 @@ class ConnectionErrorAlert extends StatelessWidget {
       actions: [
         TextButton(
           child: Text('RETRY',
-            style: GoogleFonts.lato(
+            style: GoogleFonts.roboto(
             fontSize: 16, fontWeight: FontWeight.w900,
             color: Theme.of(context).colorScheme.secondary)
           ),

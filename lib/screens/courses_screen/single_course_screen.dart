@@ -72,6 +72,8 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
   }
 
   void parseCourse(dom.Document data) {
+    courseData = [];
+
     final rawData = data.querySelectorAll('body > div > div > div > div > table > tbody > tr')
         .map((element) => element.children)
         .toList();
@@ -133,6 +135,7 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
   
   resetAverage() {
     categories.updateAll((key, value) => [0,0]);
+    categoryTrend.updateAll((key, value) => []);
     for (final assignment in tempCourseData) {
       double earnedPercentage = 0;
       double weightPercentage = 0;
@@ -144,18 +147,20 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
           if (category.value[2] > 0) {
             categories[category.key]![0] += category.value[0] / category.value[1] * category.value[2];
             categories[category.key]![1] += category.value[2];
-
-            categoryTrend[category.key]!.add([
-            (categoryTrend[category.key]!.isEmpty ? 0.0 : categoryTrend[category.key]!.last[0]) + category.value[0],
-            (categoryTrend[category.key]!.isEmpty ? 0.0 : categoryTrend[category.key]!.last[1]) + category.value[1],
-            (categoryTrend[category.key]!.isEmpty ? 0.0 : categoryTrend[category.key]!.last[2]) + category.value[2]
-          ]);
+            
+            setState(() {
+              categoryTrend[category.key]!.add([
+                (categoryTrend[category.key]!.isEmpty ? 0.0 : categoryTrend[category.key]!.last[0]) + category.value[0],
+                (categoryTrend[category.key]!.isEmpty ? 0.0 : categoryTrend[category.key]!.last[1]) + category.value[1],
+                (categoryTrend[category.key]!.isEmpty ? 0.0 : categoryTrend[category.key]!.last[2]) + category.value[2]
+              ]);
+            });
           }
         }
       }
 
       setState(() {
-        assignmentAverages[assignment.title] = earnedPercentage / ((weightPercentage > 0) ? weightPercentage : 1);
+        assignmentAverages[assignment.title] = (weightPercentage > 0) ? earnedPercentage / weightPercentage : -1;
       });
     }
 
@@ -178,33 +183,34 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
     setState(() {
       tempCourseData.removeWhere((element) => element.id == id);
     });
-    categories.updateAll((key, value) => [0,0,0]);
-    for (final assignment in tempCourseData) {
-      if (assignment.id != id) {
-        for (final category in assignment.categories.entries) {
-          if (category.value.isNotEmpty) {
-            if (category.value[2] > 0) {
-              categories[category.key]![0] += category.value[0];
-              categories[category.key]![1] += category.value[1];
-              categories[category.key]![2] += category.value[2];
-            }
-          }
-        }
-      }
-    }
+    resetAverage();
+    // categories.updateAll((key, value) => [0,0]);
+    // for (final assignment in tempCourseData) {
+    //   if (assignment.id != id) {
+    //     for (final category in assignment.categories.entries) {
+    //       if (category.value.isNotEmpty) {
+    //         if (category.value[2] > 0) {
+    //           categories[category.key]![0] += category.value[0];
+    //           categories[category.key]![1] += category.value[1];
+    //           categories[category.key]![2] += category.value[2];
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
 
-    double earnedPercentage = 0.0;
-    double weightPercentage = 0.0;
-    for (final category in categories.entries) {
-      if (category.value.isNotEmpty && category.value[2] > 0) {
-        earnedPercentage += category.value[0] / category.value[1] * category.value[2];
-        weightPercentage += category.value[2];
-      }
-    }
+    // double earnedPercentage = 0.0;
+    // double weightPercentage = 0.0;
+    // for (final category in categories.entries) {
+    //   if (category.value.isNotEmpty && category.value[2] > 0) {
+    //     earnedPercentage += category.value[0] / category.value[1] * category.value[2];
+    //     weightPercentage += category.value[2];
+    //   }
+    // }
 
-    setState(() {
-      courseAverage = (earnedPercentage / weightPercentage) * 100; 
-    });
+    // setState(() {
+    //   courseAverage = (earnedPercentage / weightPercentage) * 100; 
+    // });
   }
 
   addAssignment() {
@@ -334,6 +340,10 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
                     ],
                   ),
                 ),
+
+                SizedBox(height: 10),
+
+                CategoryTrends(categoryTrend: categoryTrend),
           
                 Padding(
                   padding: const EdgeInsets.all(10),
@@ -547,6 +557,118 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
   }
 }
 
+class CategoryTrends extends StatefulWidget {
+  const CategoryTrends({
+    super.key,
+    required this.categoryTrend,
+  });
+
+  final Map<String, List<List<double>>> categoryTrend;
+
+  @override
+  State<CategoryTrends> createState() => _CategoryTrendsState();
+}
+
+class _CategoryTrendsState extends State<CategoryTrends> {
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Center(
+          child: SizedBox(
+            height: 120,
+            width: widget.categoryTrend.length*50,
+            child: BarChart(
+              BarChartData(
+                barTouchData: BarTouchData(touchTooltipData: BarTouchTooltipData(
+                  tooltipMargin: 0,
+                  tooltipPadding: EdgeInsets.zero,
+                  getTooltipColor: (group) => Colors.transparent,
+                  getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                    return BarTooltipItem(
+                      (group.barRods[rodIndex].toY != 40.2665) ? '${(group.barRods[rodIndex].toY - 40.2665).toStringAsFixed(1)}%' : 'N/A', GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w600)
+                    );
+                  },
+                )),
+                maxY: 140.2665,
+                minY: 0,
+                backgroundColor: Colors.transparent,
+                gridData: FlGridData(show: false),
+                borderData: FlBorderData(border: Border(bottom: BorderSide(width: 2,color: Theme.of(context).colorScheme.tertiary))),
+                barGroups: widget.categoryTrend.entries.map((entry) {
+                  int index = widget.categoryTrend.keys.toList().indexOf(entry.key);
+                  List<double> value = (entry.value.isNotEmpty) ? entry.value.last : [0,0,-1];
+          
+                  return BarChartGroupData(
+                    showingTooltipIndicators: [0],
+                    x: index,
+                    barRods: [
+                      BarChartRodData(
+                        toY: (value[2] > 0) ? double.parse((value[0] / value[1] * 100).toStringAsFixed(1))+40.2665 : 40.2665,
+                        color: Theme.of(context).colorScheme.secondary,
+                        width: 40,
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(4)),
+                      ),
+                    ],
+                  );
+                }).toList(),
+                  
+                titlesData: FlTitlesData(
+                  show: false,
+                )
+              ),
+            ),
+          ),
+        ),
+
+        // Text Only
+        Center(
+          child: SizedBox(
+            height: 110,
+            width: widget.categoryTrend.length*50,
+            child: BarChart(
+              BarChartData(
+                gridData: FlGridData(show: false),
+                borderData: FlBorderData(show: false),
+                barGroups: widget.categoryTrend.entries.map((entry) {
+                  int index = widget.categoryTrend.keys.toList().indexOf(entry.key);
+                  return BarChartGroupData(
+                    x: index,
+                    barRods: [
+                      BarChartRodData(
+                        toY: 0,
+                        color: Theme.of(context).colorScheme.secondary,
+                        width: 40,
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(4)),
+                      ),
+                    ],
+                  );
+                }).toList(),
+                  
+                titlesData: FlTitlesData(
+                  leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      getTitlesWidget: (value, meta) {
+                        return SideTitleWidget(
+                          child: Text('${widget.categoryTrend.keys.toList()[value.floor()].split('/').map((l) => l[0]).join(' / ')}',
+                          style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w600),), axisSide: meta.axisSide);
+                      },
+                    )
+                    )
+                )
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class AssignmentOverview extends StatefulWidget {
   AssignmentOverview({
     super.key,
@@ -649,7 +771,7 @@ class _AssignmentOverviewState extends State<AssignmentOverview> {
                             padding: const EdgeInsets.all(5),
                             child: FittedBox(
                               fit: BoxFit.fitHeight,
-                              child: Text('${(widget.assignmentAverages[widget.assignment.title]!*100).toStringAsFixed(1)}%',
+                              child: Text(widget.assignmentAverages[widget.assignment.title]! >= 0 ? '${(widget.assignmentAverages[widget.assignment.title]!*100).toStringAsFixed(1)}%' : 'Formative',
                                   style: GoogleFonts.roboto(
                                       fontSize: 16, fontWeight: FontWeight.w800))
                             ),
@@ -705,7 +827,7 @@ class _AssignmentOverviewState extends State<AssignmentOverview> {
                     padding: EdgeInsets.zero,
                     lineHeight: 8,
                     backgroundColor: Theme.of(context).colorScheme.tertiary,
-                    percent: widget.assignmentAverages[widget.assignment.title]!,
+                    percent: widget.assignmentAverages[widget.assignment.title]! >= 0 ? widget.assignmentAverages[widget.assignment.title]! : 0,
                     linearGradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.center,
@@ -739,7 +861,7 @@ class _AssignmentOverviewState extends State<AssignmentOverview> {
                             Expanded(
                               flex: 1,
                               child: Text(
-                                '${category.key.split(' ').map((l) => l[0]).join()} ${(category.value[2] > 0) ? '(Weight: ${category.value[2].toStringAsFixed(1)}' : '(No Weight'})',
+                                '${category.key.split('/').map((l) => l[0]).join(' / ')} ${(category.value[2] > 0) ? '(Weight: ${category.value[2].toStringAsFixed(1)}' : '(No Weight'})',
                                 style: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.w500),
                               ),
                             ),
