@@ -44,6 +44,7 @@ Future<List<String?>> authorizeUser(String username, String password) async {
       //print("cookies === $cookies");
       return cookies;
     } else {
+      print(res.statusCode);
       return ['Failed to Authorize User'];
     }
   } catch (e) {
@@ -289,13 +290,13 @@ class TeachAssistModel {
 
         if (rawData![i * 3 + 2].contains('=')) { // Current Mark Available
           courses[i]["Course Average"] = rawData![i * 3 + 2]
-              .substring(rawData![i * 3 + 2].indexOf('=')+2,rawData![i * 3 + 2].lastIndexOf('%'));
+              .substring(rawData![i * 3 + 2].indexOf('=')+2,rawData![i * 3 + 2].lastIndexOf('%')).trim();
         } else if (oldData!= null && oldData![i * 3 + 2].contains('=')) { // Old Mark Available
           courses[i]["Course Average"] = '0${oldData![i * 3 + 2]
-              .substring(oldData![i * 3 + 2].indexOf('=')+2,oldData![i * 3 + 2].lastIndexOf('%'))}';
+              .substring(oldData![i * 3 + 2].indexOf('=')+2,oldData![i * 3 + 2].lastIndexOf('%')).trim()}';
         } else if (rawData![i * 3 + 2].contains('MARK')) { // Term Mark Available
           courses[i]["Course Average"] = '0${rawData![i * 3 + 2]
-              .substring(rawData![i * 3 + 2].indexOf(':')+2,rawData![i * 3 + 2].indexOf('%'))}';
+              .substring(rawData![i * 3 + 2].indexOf(':')+2,rawData![i * 3 + 2].indexOf('%')).trim()}';
         } else { // No Marks Available
           courses[i]["Course Average"] = null;
         }
@@ -313,7 +314,7 @@ class TeachAssistModel {
       
         if (oldData!= null && oldData![i * 3 + 2].contains('=')) { // Old Mark Available
           courses[i]["Course Average"] = '0${oldData![i * 3 + 2]
-              .substring(oldData![i * 3 + 2].indexOf('=')+2,oldData![i * 3 + 2].lastIndexOf('%'))}';
+              .substring(oldData![i * 3 + 2].indexOf('=')+2,oldData![i * 3 + 2].lastIndexOf('%')).trim()}';
         } else { // No Marks Available
           courses[i]["Course Average"] = null;
         }
