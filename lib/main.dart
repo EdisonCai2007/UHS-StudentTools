@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:wolfpackapp/models_services/account_model.dart';
+import 'package:wolfpackapp/models_services/club_announcements_model.dart';
 import 'package:wolfpackapp/models_services/teachassist_model.dart';
 import 'package:wolfpackapp/models_services/uhs_teachers_model.dart';
 import 'package:wolfpackapp/screens/guidance_screen/appointment_list.dart';
@@ -42,6 +43,7 @@ Future main() async {
   }
 
   await UHSTeachersModel().init();
+  await ClubAnnouncementsModel().init();
   await AccountModel().init();
 
   runApp(

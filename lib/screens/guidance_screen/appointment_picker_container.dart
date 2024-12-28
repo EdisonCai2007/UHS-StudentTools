@@ -236,32 +236,31 @@ class _AppointmentPickerContainerState extends State<AppointmentPickerContainer>
                       ),
                       onPressed: () async {
                         if (dateSchedule[counselor]['type'] == 'guidance') {
-                          showDialog(context: context, builder: (context) =>
-                            AppointmentConfirmation(data: dateSchedule[counselor], itemNum: i),
-                        );
+                          // showDialog(context: context, builder: (context) =>
+                          // AppointmentConfirmation(data: dateSchedule[counselor], itemNum: i));
                         
-                        await _fetchGuidanceTime(counselor, i);
+                          await _fetchGuidanceTime(counselor, i);
+                    
+                          final labels = guidanceTimeHtmlData
+                              .querySelectorAll('body > div > form > label')
+                              .map((element) => element.innerHtml.trim())
+                              .toList();
+                          final values = guidanceTimeHtmlData
+                              .querySelectorAll('body > div > form > input')
+                              .map((element) => element.attributes['value']!)
+                              .toList();
+                    
+                          checkListItems = [];
+                          for (int j = 0; j < labels.length; j++) {
+                            checkListItems.add({
+                              'label': labels[j],
+                              'value': values[j + 6],
+                              'selected': false,
+                            });
+                          }
                   
-                        final labels = guidanceTimeHtmlData
-                            .querySelectorAll('body > div > form > label')
-                            .map((element) => element.innerHtml.trim())
-                            .toList();
-                        final values = guidanceTimeHtmlData
-                            .querySelectorAll('body > div > form > input')
-                            .map((element) => element.attributes['value']!)
-                            .toList();
-                  
-                        checkListItems = [];
-                        for (int j = 0; j < labels.length; j++) {
-                          checkListItems.add({
-                            'label': labels[j],
-                            'value': values[j + 6],
-                            'selected': false,
-                          });
-                        }
-                  
-                        if (!context.mounted) return;
-                        showDialog(context: context, builder: (context) =>
+                          if (!context.mounted) return;
+                          showDialog(context: context, builder: (context) =>
                             AppointmentOptionAlert(
                               checkListItems: checkListItems,
                               dt: dateSchedule[counselor]['data'][i].substring(dateSchedule[counselor]['data'][i].indexOf('dt=') + 3,
@@ -325,66 +324,68 @@ class _AppointmentOptionAlertState extends State<AppointmentOptionAlert> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('SELECT AN OPTION'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Column(
-            children: List.generate(widget.checkListItems.length,
-              (index) => CheckboxListTile(
-                controlAffinity: ListTileControlAffinity.leading,
-                dense: true,
-                title: Text(widget.checkListItems[index]['label'],
-                  style: GoogleFonts.roboto(
-                  fontSize: 16, fontWeight: FontWeight.w800,
-                  color: Theme.of(context).colorScheme.primary)),
-                checkboxShape: const CircleBorder(),
-                value: widget.checkListItems[index]['selected'],
-                onChanged: (value) {
-                  setState(() {
-                    for (var element in widget.checkListItems) {
-                      element['selected'] = false;
-                    }
-                    widget.checkListItems[index]['selected'] = value;
-                  });
-                }
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Column(
+              children: List.generate(widget.checkListItems.length,
+                (index) => CheckboxListTile(
+                  controlAffinity: ListTileControlAffinity.leading,
+                  dense: true,
+                  title: Text(widget.checkListItems[index]['label'],
+                    style: GoogleFonts.roboto(
+                    fontSize: 16, fontWeight: FontWeight.w800,
+                    color: Theme.of(context).colorScheme.primary)),
+                  checkboxShape: const CircleBorder(),
+                  value: widget.checkListItems[index]['selected'],
+                  onChanged: (value) {
+                    setState(() {
+                      for (var element in widget.checkListItems) {
+                        element['selected'] = false;
+                      }
+                      widget.checkListItems[index]['selected'] = value;
+                    });
+                  }
+                ),
               ),
             ),
-          ),
-
-          const SizedBox(
-            height: 30,
-          ),
-
-          CheckboxListTile(
-              controlAffinity: ListTileControlAffinity.leading,
-              dense: true,
-              title: Text('Check this box if your parent will be a part of the meeting',
-                  style: GoogleFonts.roboto(
-                      fontSize: 16, fontWeight: FontWeight.w800,
-                      color: Theme.of(context).colorScheme.primary)),
-              value: withParent,
-              onChanged: (value) {
-                setState(() {
-                  withParent = value!;
-                });
-              }
-          ),
-
-          CheckboxListTile(
-              controlAffinity: ListTileControlAffinity.leading,
-              dense: true,
-              title: Text('Request Online Video Meeting',
-                  style: GoogleFonts.roboto(
-                      fontSize: 16, fontWeight: FontWeight.w800,
-                      color: Theme.of(context).colorScheme.primary)),
-              value: online,
-              onChanged: (value) {
-                setState(() {
-                  online = value!;
-                });
-              }
-          ),
-        ],
+        
+            const SizedBox(
+              height: 30,
+            ),
+        
+            CheckboxListTile(
+                controlAffinity: ListTileControlAffinity.leading,
+                dense: true,
+                title: Text('Check this box if your parent will be a part of the meeting',
+                    style: GoogleFonts.roboto(
+                        fontSize: 16, fontWeight: FontWeight.w800,
+                        color: Theme.of(context).colorScheme.primary)),
+                value: withParent,
+                onChanged: (value) {
+                  setState(() {
+                    withParent = value!;
+                  });
+                }
+            ),
+        
+            CheckboxListTile(
+                controlAffinity: ListTileControlAffinity.leading,
+                dense: true,
+                title: Text('Request Online Video Meeting',
+                    style: GoogleFonts.roboto(
+                        fontSize: 16, fontWeight: FontWeight.w800,
+                        color: Theme.of(context).colorScheme.primary)),
+                value: online,
+                onChanged: (value) {
+                  setState(() {
+                    online = value!;
+                  });
+                }
+            ),
+          ],
+        ),
       ),
       actions: [
         TextButton(

@@ -5,7 +5,6 @@ import 'package:wolfpackapp/misc/shared_prefs.dart';
 
 class WelcomeContainer extends Container {
 
-  //TODO: CHECK IF SINGLE "d" PARAMETER WORKS FOR DOUBLE DIGIT DAYS
   final String date = DateFormat("MMMM d, yyyy").format(DateTime.now());
   final String day = DateFormat("EEEE").format(DateTime.now());
 

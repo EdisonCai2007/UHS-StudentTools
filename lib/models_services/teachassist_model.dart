@@ -318,7 +318,6 @@ class TeachAssistModel {
         } else { // No Marks Available
           courses[i]["Course Average"] = null;
         }
-        
       }
 
       courses[i]["Subject ID"] = ((subjectIds[i * 3 + 2] ?? '').contains('=')) ? subjectIds[i * 3 + 2]!.substring(subjectIds[i * 3 + 2]!.indexOf('=')+1, subjectIds[i * 3 + 2]!.indexOf('&')) :

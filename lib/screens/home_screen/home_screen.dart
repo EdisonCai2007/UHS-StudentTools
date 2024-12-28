@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wolfpackapp/misc/page_navigator.dart';
+import 'package:wolfpackapp/screens/home_screen/home_screen_containers/announcements_overview_container.dart';
 
 import '../../misc/menu_drawer.dart';
 import 'home_screen_containers/welcome_container.dart';
@@ -168,7 +169,7 @@ class HomeScreen extends StatelessWidget {
 
                   //Second Row
                   const Padding(
-                    padding: EdgeInsets.all(20),
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -186,6 +187,16 @@ class HomeScreen extends StatelessWidget {
                       ],
                     ),
                   ),
+
+                  // Third Row
+                  const Row(
+                      children: [
+                        // Announcements Overview Container
+                        Expanded(
+                          flex: 1,
+                          child: AnnouncementsOverviewContainer(),
+                        ),
+                      ]),
                 ],
               ),
             ],
