@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:wolfpackapp/misc/internet_connection.dart';
 import 'package:wolfpackapp/misc/page_navigator.dart';
 import 'package:wolfpackapp/models_services/uhs_teachers_model.dart';
@@ -132,22 +132,36 @@ class _ContactTeachersScreenState extends State<ContactTeachersScreen> {
                                       children: [
                                         const Text('GAPPS'),
 
-                                        IconButton(
-                                            icon: const Icon(Icons.email_outlined),
-                                            onPressed: () async {
-                                              await launchUrl(Uri.parse('mailto:${teachers[index]['Email']}'));
-                                            }
+                                        GestureDetector(
+                                          onTap: () async {
+                                            await Clipboard.setData(ClipboardData(text: '${teachers[index]['Email']}'));
+                                          },
+                                          child: Tooltip(
+                                            triggerMode: TooltipTriggerMode.tap,
+                                            message: 'Copied!',
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(5),
+                                              child: Icon(Icons.copy),
+                                            )
+                                          ),
                                         ),
 
                                         const SizedBox(width: 15),
 
                                         const Text('YRDSB'),
 
-                                        IconButton(
-                                            icon: const Icon(Icons.email_outlined),
-                                            onPressed: () async {
-                                              await launchUrl(Uri.parse('mailto:${teachers[index]['Email']}'.replaceAll('gapps.', '')));
-                                            }
+                                        GestureDetector(
+                                          onTap: () async {
+                                            await Clipboard.setData(ClipboardData(text: '${teachers[index]['Email']}'.replaceAll('gapps.', '')));
+                                          },
+                                          child: Tooltip(
+                                            triggerMode: TooltipTriggerMode.tap,
+                                            message: 'Copied!',
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(5),
+                                              child: Icon(Icons.copy),
+                                            )
+                                          ),
                                         ),
                                       ],
                                     ),

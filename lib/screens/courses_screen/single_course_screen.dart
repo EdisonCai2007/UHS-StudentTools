@@ -167,7 +167,7 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
     double categoryEarnedPercentage = 0.0;
     double categoryWeightPercentage = 0.0;
     for (final category in categories.entries) {
-      if (category.value.isNotEmpty && category.value[1] > 0) {
+      if (category.value.isNotEmpty && category.value[1] > 0 && categoryTotal[category.key] != null) {
         categoryTotal[category.key]![0] = categories[category.key]![0] / categories[category.key]![1] * 100;
         categoryEarnedPercentage += categoryTotal[category.key]![0] * categoryTotal[category.key]![1];
         categoryWeightPercentage += categoryTotal[category.key]![1];
@@ -450,7 +450,7 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
                 (showTrends) ? Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: GridView.builder(
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 10, mainAxisSpacing: 20),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 1, crossAxisSpacing: 10, mainAxisSpacing: 30),
                       padding: const EdgeInsets.all(10),
                       physics: const BouncingScrollPhysics(),
                       shrinkWrap: true,
@@ -472,6 +472,8 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
                             if (mark < trendMin) trendMin = mark;
                           }
                         }
+
+                        if (trends.length == 1) trends.add(trends[0]);
                               
                         return (trends.isNotEmpty) ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -490,55 +492,56 @@ class _SingleCourseScreenState extends State<SingleCourseScreen> {
                             Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.only(top: 10),
-                                child: AspectRatio(
-                                  aspectRatio: 1.2,
-                                  child: LineChart(
-                                      LineChartData(
-                                        gridData: FlGridData(
-                                            drawVerticalLine: false,
-                                            horizontalInterval: ((trendMax - trendMin) / 5).ceilToDouble() + 1,
-                                        ),
-                                        titlesData: FlTitlesData(
-                                          topTitles: const AxisTitles(
-                                              sideTitles: SideTitles(showTitles: false)
-                                          ),
-                                          bottomTitles: const AxisTitles(
-                                              sideTitles: SideTitles(showTitles: false)
-                                          ),
-                                          rightTitles: const AxisTitles(
-                                              sideTitles: SideTitles(showTitles: false)
-                                          ),
-                                          leftTitles: AxisTitles(
-                                            sideTitles: SideTitles(
-                                              showTitles: true,
-                                              maxIncluded: false,
-                                              minIncluded: false,
-                                              interval: ((trendMax - trendMin) / 5).ceilToDouble() + 1,
-                                              reservedSize: 25,
-                                              getTitlesWidget: (value, meta) => Text('${value.ceil()}%',
-                                                style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w600),
-                                              ),
-                                            ),
+                                child: LineChart(
+                                  LineChartData(
+                                    gridData: FlGridData(
+                                        drawVerticalLine: false,
+                                        horizontalInterval: ((trendMax - trendMin) / 5).ceilToDouble() + 1,
+                                    ),
+                                    titlesData: FlTitlesData(
+                                      topTitles: const AxisTitles(
+                                          sideTitles: SideTitles(showTitles: false)
+                                      ),
+                                      bottomTitles: const AxisTitles(
+                                          sideTitles: SideTitles(showTitles: false)
+                                      ),
+                                      rightTitles: const AxisTitles(
+                                          sideTitles: SideTitles(showTitles: false)
+                                      ),
+                                      leftTitles: AxisTitles(
+                                        sideTitles: SideTitles(
+                                          showTitles: true,
+                                          maxIncluded: false,
+                                          minIncluded: false,
+                                          interval: ((trendMax - trendMin) / 5).ceilToDouble() + 1,
+                                          reservedSize: 25,
+                                          getTitlesWidget: (value, meta) => Text('${value.ceil()}%',
+                                            style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w600),
                                           ),
                                         ),
-                                        lineBarsData: [
-                                          LineChartBarData(
-                                            isCurved: true,
-                                            spots: trends,
-                                            color: Theme.of(context).colorScheme.secondary,
-                                          )
-                                        ],
-                                        lineTouchData: const LineTouchData(
-                                            touchTooltipData: LineTouchTooltipData(
-                                              tooltipRoundedRadius: 20,
-                                            )
-                                        ),
-                                        maxY: min(100.5, trendMax+3.09),
-                                        minY: max(-0.5, trendMin-3.09),
-                                        maxX: (trends.length > 1) ? trends.length-1 : trends.length-0,
-                                        minX: (trends.length > 1) ? 0 : -1,
-                
+                                      ),
+                                    ),
+                                    lineBarsData: [
+                                      LineChartBarData(
+                                        isCurved: true,
+                                        spots: trends,
+                                        color: Theme.of(context).colorScheme.secondary,
+                                        barWidth: 5,
+                                        dotData: FlDotData(
+                                          show: false,
+                                        )
                                       )
+                                    ],
+                                    lineTouchData: const LineTouchData(
+                                        touchTooltipData: LineTouchTooltipData(
+                                          tooltipRoundedRadius: 20,
+                                        )
+                                    ),
+                                    maxY: min(100.5, trendMax+3.09),
+                                    minY: max(-0.5, trendMin-3.09),
+                                    maxX: (trends.length > 1) ? trends.length-1 : trends.length-0,
+                                    minX: (trends.length > 1) ? 0 : -1,
+                                              
                                   ),
                                 ),
                               ),

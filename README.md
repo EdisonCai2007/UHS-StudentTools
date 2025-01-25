@@ -7,11 +7,11 @@
 </p>
 <p align="center">
   <a href="https://apps.apple.com/ca/app/wolfpackapp2025/id6686409670?platform=iphone" style="text-decoration: none;">
-    <img alt="Download on the App Store" title="App Store" src="http://i.imgur.com/0n2zqHD.png" width="140">
+    <img alt="Download on the App Store" title="App Store" src="https://github.com/EdisonCai2007/UHS-StudentTools/blob/master/assets/readme_assets/applestore.png" width="140">
   </a>
 
   <a href="#" style="text-decoration: none;">
-    <img alt="Get it on Google Play" title="Google Play" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Google_Play_Store_badge_EN.svg/800px-Google_Play_Store_badge_EN.svg.png" width="140">
+    <img alt="Get it on Google Play" title="Google Play" src="https://github.com/EdisonCai2007/UHS-StudentTools/blob/master/assets/readme_assets/googleplay.png" width="140">
   </a>
 </p>
 
@@ -29,8 +29,8 @@ The wolfpackapp allows students to schedule GUIDANCE APPOINTMENTS from the palm 
 Need to email a teacher? The wolfpackapp contains the largest database of over 200+ teachers across YRDSB.
 
 <p align="center">
-  <a href="https://apps.apple.com/ca/app/teachassist-for-yrdsb/id1479482556">
-    <img alt="Wolfpackapp Banner" title="Banner" src="https://i.imgur.com/D9bhQGi.png">
+  <a href="https://apps.apple.com/ca/app/wolfpackapp/id6686409670?platform=iphone">
+    <img alt="Wolfpackapp Banner" title="Banner" src="https://github.com/EdisonCai2007/UHS-StudentTools/blob/master/assets/readme_assets/banner.png">
   </a>
 </p>
 

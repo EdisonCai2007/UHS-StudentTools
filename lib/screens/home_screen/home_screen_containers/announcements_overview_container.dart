@@ -39,6 +39,79 @@ class _AnnouncementsOverviewContainerState extends State<AnnouncementsOverviewCo
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 50),
+                child: Container(
+                  height: 10,
+                  decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.secondary,
+                  borderRadius: BorderRadius.circular(5)
+                ),
+                ),
+              ),
+
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 60,
+                    width: 60,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.secondary,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Center(
+                      child: Text('📣',style: GoogleFonts.roboto(
+                        fontSize: 35, fontWeight: FontWeight.w600)),
+                    ),
+                  ),
+
+                  IconButton(
+                    icon: Icon(
+                      Icons.arrow_back_ios_new,
+                      color: Theme.of(context).colorScheme.secondary),
+                    onPressed: () {
+                      setState(() {
+                        if (aIndex > 0) aIndex--;
+                        else aIndex = announcements.length-1;
+                      });
+                    }
+                  ),
+                  Expanded(
+                    child: ElevatedButton(
+                      style: Theme.of(context).elevatedButtonTheme.style!.copyWith(
+                        backgroundColor: MaterialStatePropertyAll(Colors.transparent),
+                        elevation: MaterialStatePropertyAll(0),
+                        side: MaterialStatePropertyAll(BorderSide(color: Theme.of(context).colorScheme.tertiary,width: 1)),
+                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                      ),
+                      onPressed: () {
+                                    
+                      },
+                      child: Text('View More',
+                        style: GoogleFonts.roboto(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontSize: 14, fontWeight: FontWeight.w800)),
+                    ),
+                  ),
+                                    
+                  IconButton(
+                    icon: Icon(
+                      Icons.arrow_forward_ios,
+                      color: Theme.of(context).colorScheme.secondary),
+                    onPressed: () {
+                      setState(() {
+                        if (aIndex < announcements.length-1) aIndex++;
+                        else aIndex = 0;
+                      });
+                    }
+                  ),
+                ],
+              ),
+            ],
+          ),
 
           /*
           ###################
@@ -46,7 +119,7 @@ class _AnnouncementsOverviewContainerState extends State<AnnouncementsOverviewCo
           ###################
           */
           Padding(
-            padding: const EdgeInsets.only(top: 10),
+            padding: const EdgeInsets.only(top: 15),
             child: Container(
               alignment: Alignment.topLeft,
               child: Text(announcements[aIndex].title,
@@ -57,88 +130,49 @@ class _AnnouncementsOverviewContainerState extends State<AnnouncementsOverviewCo
             ),
           ),
 
-          Padding(
-            padding: const EdgeInsets.only(left: 10),
-            child: Container(
-              alignment: Alignment.topLeft,
-              child: FittedBox(
-                fit: BoxFit.fitHeight,
-                child: Text(announcements[aIndex].date,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.roboto(
-                        fontSize: 16, fontWeight: FontWeight.w400)),
-              ),
+          Container(
+            alignment: Alignment.topLeft,
+            child: FittedBox(
+              fit: BoxFit.fitHeight,
+              child: Text(announcements[aIndex].date,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.roboto(
+                      fontSize: 16, fontWeight: FontWeight.w400)),
             ),
           ),
+
+          // Padding(
+          //   padding: const EdgeInsets.only(top: 10),
+          //   child: Container(
+          //     height: 5,
+          //     color: Theme.of(context).colorScheme.secondary,
+          //   ),
+          // ),
 
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: Container(
               alignment: Alignment.topLeft,
               child: Text(announcements[aIndex].body,
-                  maxLines: 6,
+                  maxLines: 5,
                   overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.roboto(
-                      fontSize: 14, fontWeight: FontWeight.w400)),
+                  style: GoogleFonts.domine(
+                      fontSize: 14, fontWeight: FontWeight.w400, height: 1.5)),
             ),
           ),
 
           Chip(
-            label: Text('~ ${announcements[aIndex].clubName}'),
+            label: Text(
+              '~ ${announcements[aIndex].clubName}',
+              style: GoogleFonts.roboto(
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                color: ThemeData.estimateBrightnessForColor(Color(int.parse(announcements[aIndex].clubColour, radix: 16))) == Brightness.dark ? Colors.white : Colors.black,
+              )
+            ),
+            backgroundColor: Color(int.parse(announcements[aIndex].clubColour, radix: 16)),
           ),
-
-          Row(
-            children: [
-              IconButton(
-                  icon: Icon(
-                    Icons.arrow_back_ios,
-                    color: Theme.of(context).colorScheme.secondary),
-                  onPressed: () {
-                    setState(() {
-                      if (aIndex > 0) aIndex--;
-                      else aIndex = announcements.length-1;
-                    });
-                  }
-              ),
-
-              Expanded(
-                child: ElevatedButton(
-                  style: Theme.of(context).elevatedButtonTheme.style!.copyWith(
-                    backgroundColor: MaterialStatePropertyAll(Colors.transparent),
-                    elevation: MaterialStatePropertyAll(0),
-                    side: MaterialStatePropertyAll(BorderSide(color: Theme.of(context).colorScheme.tertiary,width: 1)),
-                    shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)))
-                  ),
-                  onPressed: () {
-
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: FittedBox(
-                      fit: BoxFit.fitHeight,
-                      child: Text('View More',
-                          style: GoogleFonts.roboto(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontSize: 14, fontWeight: FontWeight.w800)),
-                    ),
-                  ),
-                ),
-              ),
-
-              IconButton(
-                  icon: Icon(
-                    Icons.arrow_forward_ios,
-                    color: Theme.of(context).colorScheme.secondary),
-                  onPressed: () {
-                    setState(() {
-                      if (aIndex < announcements.length-1) aIndex++;
-                      else aIndex = 0;
-                    });
-                  }
-              ),
-            ],
-          )
         ],
       ),
     );
