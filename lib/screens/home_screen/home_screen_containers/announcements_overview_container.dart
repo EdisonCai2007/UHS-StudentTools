@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:wolfpackapp/misc/internet_connection.dart';
 import 'package:wolfpackapp/misc/page_navigator.dart';
 import 'package:wolfpackapp/models_services/club_announcement.dart';
 import 'package:wolfpackapp/models_services/club_announcements_model.dart';
 import 'package:wolfpackapp/screens/announcements_screen/announcements_screen.dart';
+import 'package:wolfpackapp/screens/user_offline_dialog.dart';
 
 class AnnouncementsOverviewContainer extends StatefulWidget {
   const AnnouncementsOverviewContainer({super.key});
@@ -16,12 +18,18 @@ class AnnouncementsOverviewContainer extends StatefulWidget {
 class _AnnouncementsOverviewContainerState extends State<AnnouncementsOverviewContainer> {
   List<ClubAnnouncement> announcements = [];
   int aIndex = 0; // Announcement Index
+  bool online = false;
 
   @override
   void initState() {
+    _checkUserConnection();
     super.initState();
     announcements = ClubAnnouncementsModel.announcements;
     aIndex = announcements.length-1;
+  }
+
+  void _checkUserConnection() async {
+    online = await checkUserConnection();
   }
 
   @override
@@ -120,7 +128,7 @@ class _AnnouncementsOverviewContainerState extends State<AnnouncementsOverviewCo
           #=-=-= Title =-=-=#
           ###################
           */
-          Padding(
+          online ? Padding(
             padding: const EdgeInsets.only(top: 15),
             child: Container(
               alignment: Alignment.topLeft,
@@ -130,9 +138,14 @@ class _AnnouncementsOverviewContainerState extends State<AnnouncementsOverviewCo
                   style: GoogleFonts.roboto(
                       fontSize: 24, fontWeight: FontWeight.w600)),
             ),
+          ) : Padding(
+            padding: const EdgeInsets.symmetric(vertical: 30),
+            child: Center(
+                child: UserOfflineDialog()
+              ),
           ),
 
-          Container(
+          online ? Container(
             alignment: Alignment.topLeft,
             child: FittedBox(
               fit: BoxFit.fitHeight,
@@ -142,7 +155,7 @@ class _AnnouncementsOverviewContainerState extends State<AnnouncementsOverviewCo
                   style: GoogleFonts.roboto(
                       fontSize: 16, fontWeight: FontWeight.w400)),
             ),
-          ),
+          ) : SizedBox.shrink(),
 
           // Padding(
           //   padding: const EdgeInsets.only(top: 10),
@@ -152,7 +165,7 @@ class _AnnouncementsOverviewContainerState extends State<AnnouncementsOverviewCo
           //   ),
           // ),
 
-          Padding(
+          online ? Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: Container(
               alignment: Alignment.topLeft,
@@ -162,9 +175,9 @@ class _AnnouncementsOverviewContainerState extends State<AnnouncementsOverviewCo
                   style: GoogleFonts.domine(
                       fontSize: 14, fontWeight: FontWeight.w400, height: 1.5)),
             ),
-          ),
+          ) : SizedBox.shrink(),
 
-          Chip(
+          online? Chip(
             label: Text(
               '~ ${announcements[aIndex].clubName}',
               style: GoogleFonts.roboto(
@@ -174,7 +187,7 @@ class _AnnouncementsOverviewContainerState extends State<AnnouncementsOverviewCo
               )
             ),
             backgroundColor: Color(int.parse(announcements[aIndex].clubColour, radix: 16)),
-          ),
+          ) : SizedBox.shrink(),
         ],
       ),
     );

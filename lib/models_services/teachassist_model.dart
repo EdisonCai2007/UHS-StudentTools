@@ -134,7 +134,7 @@ Future<dom.Document> fetchGuidanceDate(username, password, date) async {
       throw Exception('Failed to load Guidance Appointments');
     }
   } catch (_) {
-    rethrow;
+    return dom.Document.html("error");
   }
 }
 
