@@ -4,6 +4,7 @@ import 'package:wolfpackapp/models_services/account_model.dart';
 import 'package:wolfpackapp/models_services/club_announcements_model.dart';
 import 'package:wolfpackapp/models_services/teachassist_model.dart';
 import 'package:wolfpackapp/models_services/uhs_teachers_model.dart';
+import 'package:wolfpackapp/screens/announcements_screen/announcements_screen.dart';
 import 'package:wolfpackapp/screens/guidance_screen/appointment_list.dart';
 import 'package:wolfpackapp/screens/resources_screen/resources_screen.dart';
 import 'package:wolfpackapp/misc/shared_prefs.dart';
@@ -105,9 +106,10 @@ class MyApp extends riverpod.ConsumerWidget {
       routes: {
         '/loginScreen': (context) => const LoginScreen(),
         '/homeScreen': (context) => const HomeScreen(),
-        '/contactTeachersScreen': (context) => const ContactTeachersScreen(),
-        '/guidanceScreen': (context) => const GuidanceScreen(),
         '/coursesScreen': (context) => const CoursesScreen(),
+        '/guidanceScreen': (context) => const GuidanceScreen(),
+        '/announcementsScreen': (context) => const AnnouncementsScreen(),
+        '/contactTeachersScreen': (context) => const ContactTeachersScreen(),
         '/resourcesScreen': (context) => const ResourcesScreen(),
         '/settingsScreen': (context) => const SettingsScreen(),
         '/eventsScreen': (context) => const EventsScreen(),

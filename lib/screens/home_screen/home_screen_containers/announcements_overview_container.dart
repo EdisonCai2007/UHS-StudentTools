@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:wolfpackapp/misc/page_navigator.dart';
 import 'package:wolfpackapp/models_services/club_announcement.dart';
 import 'package:wolfpackapp/models_services/club_announcements_model.dart';
+import 'package:wolfpackapp/screens/announcements_screen/announcements_screen.dart';
 
 class AnnouncementsOverviewContainer extends StatefulWidget {
   const AnnouncementsOverviewContainer({super.key});
@@ -88,7 +90,7 @@ class _AnnouncementsOverviewContainerState extends State<AnnouncementsOverviewCo
                         shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                       ),
                       onPressed: () {
-                                    
+                        PageNavigator.navigatePage(context, const AnnouncementsScreen());
                       },
                       child: Text('View More',
                         style: GoogleFonts.roboto(
