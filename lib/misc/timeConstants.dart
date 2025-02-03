@@ -62,7 +62,7 @@ class TimeConstants {
 
     if (period != '') {
       for (var course in TeachAssistModel.courses) {
-        if (course['Period'].contains(period) && course['Semester'] == 1) {
+        if (course['Period'].contains(period) && course['Semester'] == 2) {
           return ['${course['Code']} : ${course['Name']}',
             'Period ${course['Period'].toString().substring(1,course['Period'].toString().length-1).replaceAll(',', ' & ')}',
           'Rm. ${course['Room']}'];

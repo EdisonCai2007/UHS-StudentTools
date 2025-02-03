@@ -23,13 +23,18 @@ class _AnnouncementsOverviewContainerState extends State<AnnouncementsOverviewCo
   @override
   void initState() {
     _checkUserConnection();
-    super.initState();
     announcements = ClubAnnouncementsModel.announcements;
     aIndex = announcements.length-1;
+    super.initState();
   }
 
   void _checkUserConnection() async {
-    online = await checkUserConnection();
+    var _online = await checkUserConnection();
+    setState(() {
+      online = _online;
+      announcements = ClubAnnouncementsModel.announcements;
+      aIndex = announcements.length-1;
+    });
   }
 
   @override
