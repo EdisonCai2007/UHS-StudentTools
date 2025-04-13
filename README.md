@@ -9,10 +9,6 @@
   <a href="https://apps.apple.com/ca/app/wolfpackapp2025/id6686409670?platform=iphone" style="text-decoration: none;">
     <img alt="Download on the App Store" title="App Store" src="https://github.com/EdisonCai2007/UHS-StudentTools/blob/master/assets/readme_assets/applestore.png" width="140">
   </a>
-
-  <a href="#" style="text-decoration: none;">
-    <img alt="Get it on Google Play" title="Google Play" src="https://github.com/EdisonCai2007/UHS-StudentTools/blob/master/assets/readme_assets/googleplay.png" width="140">
-  </a>
 </p>
 
 <p align="center">
